@@ -5,10 +5,14 @@ import:
 # TODO: update version, maybe use origin too
 - package: github.com/openshift/origin
   version: v3.6.0
-  repo:    git@github.com:openshift/origin.git
+  repo:    https://github.com/openshift/origin.git
   vcs:     git
 - package: github.com/Sirupsen/logrus
   version: v0.11.5
   repo:    https://github.com/Sirupsen/logrus.git
+  vcs:     git
+- package: github.com/go-sql-driver/mysql
+  version: v1.3
+  repo:    https://github.com/go-sql-driver/mysql.git
   vcs:     git
 
