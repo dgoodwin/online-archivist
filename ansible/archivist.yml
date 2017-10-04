@@ -34,3 +34,7 @@
       osoa_namespace_low_watermark: "{{ online_archivist_namespace_low_watermark }}"
       osoa_min_inactive_days: "{{ online_archivist_min_inactive_days }}"
       osoa_max_inactive_days: "{{ online_archivist_max_inactive_days }}"
+      osoa_mysql_deploy: "{{ online_archivist_mysql_deploy }}"
+      osoa_mysql_username: "{{ online_archivist_mysql_username }}"
+      osoa_mysql_password: "{{ online_archivist_mysql_password }}"
+      osoa_mysql_database: "{{ online_archivist_mysql_database }}"

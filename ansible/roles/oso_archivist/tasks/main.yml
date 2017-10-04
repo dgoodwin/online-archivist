@@ -8,9 +8,23 @@
   - osoa_namespace_low_watermark
   - osoa_min_inactive_days
   - osoa_max_inactive_days
+  - osoa_mysql_username
+  - osoa_mysql_password
+  - osoa_mysql_database
 
 - include: uninstall.yml
   when: osoa_uninstall | bool
+
+# Optionally deploy a MySQL pod to use if requested.
+- include: mysql.yml
+  when: osoa_mysql_deploy | bool
+
+- name: Ensure MySQL host is defined
+  fail:
+    msg: "Please specify a value for {{ item }}"
+  when: item is undefined
+  with_items:
+  - osoh_mysql_host
 
 - debug: msg="Deploying {{ osoa_appname}} from {{ osoa_git_repo }} ref {{osoa_git_ref }}"
 
@@ -18,7 +32,6 @@
   copy:
     src: archivist-template.yaml
     dest: "{{ osoa_template_path }}"
-    #  register: copy_template_out
 
 # This task should correctly only indicate a change if the underlying template changed.
 - name: create template

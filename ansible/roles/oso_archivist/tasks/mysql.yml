@@ -1,0 +1,25 @@
+---
+# Optional tasks which deploy MySQL from the deployed openshift template. Used for development.
+- fail:
+    msg: "Cannot specify MySQL host when deploying MySQL"
+  when: osoh_mysql_host is defined
+
+# TODO: skip if mysql deployment exists?
+# NOTE: directly to oc process here because the oc_process lib_openshift module doesn't work with the syntax
+# used below to process a template from a foreign namespace, but in this namespace.
+# TODO: I don't think we know if anything changed or not here, apply doesn't seem to respond. It does however nicely keep our app up and running if nothing changed.
+- name: Process MySQL template
+  shell: "oc process openshift//mysql-persistent -n {{ osoa_namespace }} -p DATABASE_SERVICE_NAME={{ osoa_appname }}-mysql -p MYSQL_USER={{ osoa_mysql_username }} -p MYSQL_PASSWORD={{ osoa_mysql_password }} -p MYSQL_DATABASE={{ osoa_mysql_database }} | oc apply -f -"
+  register: mysql_process
+
+- name: Lookup MySQL service IP and port
+  oc_obj:
+    state: list
+    name: "{{ osoa_appname }}-mysql"
+    kind: Service
+    namespace: "{{ osoa_namespace }}"
+  register: mysql_service
+
+- set_fact:
+    osoa_mysql_host: "{{ mysql_service.results.results[0].spec.clusterIP }}"
+    osoa_mysql_port: "{{ mysql_service.results.results[0].spec.ports[0].port }}"

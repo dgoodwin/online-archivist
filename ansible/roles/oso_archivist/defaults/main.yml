@@ -14,3 +14,10 @@ osoa_namespace: "openshift-infra"
 
 # If true, will completely uninstall app before running rest of role:
 osoa_uninstall: false
+
+# If true, will deploy MySQL from the OpenShift template and use it for database.
+# If false, we will use the connection params and expect the database to exist and
+# have schema populated.
+osoa_mysql_deploy: false
+
+osoa_mysql_port: 3306
