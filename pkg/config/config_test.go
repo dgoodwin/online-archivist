@@ -47,6 +47,11 @@ clusters:
   - very-important
   - special
 dryRun: false
+database:
+  name: archivist
+  username: archivist
+  password: thisistotallyfake
+  address: 127.0.0.1:5432
 monitorCheckInterval: 12h`,
 			expectedConfig: ArchivistConfig{
 				LogLevel: "info",
@@ -62,7 +67,13 @@ monitorCheckInterval: 12h`,
 						ProtectedNamespaces: []string{"default", "very-important", "special"},
 					},
 				},
-				DryRun:               false,
+				DryRun: false,
+				Database: DatabaseConfig{
+					Name:     "archivist",
+					Username: "archivist",
+					Password: "thisistotallyfake",
+					Address:  "127.0.0.1:5432",
+				},
 				MonitorCheckInterval: monitorCheckInterval1,
 			},
 		},
@@ -70,7 +81,12 @@ monitorCheckInterval: 12h`,
 			name: "default config",
 			configStr: `logLevel: info
 clusters:
-- name: test cluster`,
+- name: test cluster
+database:
+  name: archivist
+  username: archivist
+  password: thisistotallyfake
+  address: 127.0.0.1:5432`,
 			expectedConfig: ArchivistConfig{
 				LogLevel: "info",
 				Clusters: []ClusterConfig{
@@ -84,6 +100,12 @@ clusters:
 						MinInactiveDuration: minInactiveDuration2,
 						ProtectedNamespaces: []string{"default", "openshift-infra"},
 					},
+				},
+				Database: DatabaseConfig{
+					Name:     "archivist",
+					Username: "archivist",
+					Password: "thisistotallyfake",
+					Address:  "127.0.0.1:5432",
 				},
 				MonitorCheckInterval: monitorCheckInterval2,
 			},
@@ -108,6 +130,23 @@ clusters:
 - minInactiveDays: 30
 maxInactiveDays: 60`,
 			expectedErrContains: "cluster must have a name",
+		},
+		{
+			name: "database config required",
+			configStr: `clusters:
+- name: test cluster
+`,
+			expectedErrContains: "database configuration incomplete",
+		},
+		{
+			name: "database password required",
+			configStr: `clusters:
+- name: test cluster
+database:
+  name: archivist
+  username: archivist
+  address: 127.0.0.1:5432`,
+			expectedErrContains: "database configuration incomplete",
 		},
 	}
 

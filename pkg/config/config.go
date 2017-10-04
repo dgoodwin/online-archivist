@@ -43,6 +43,20 @@ type ClusterConfig struct {
 	ProtectedNamespaces []string `yaml:"protectedNamespaces"`
 }
 
+// DatabaseConfig contains information to connect to the database where we'll
+// syncronize the status of backups/restores, and monitor for requests to
+// initiate unarchival.
+type DatabaseConfig struct {
+	// Username for database.
+	Username string `yaml:"username"`
+	// Password for database.
+	Password string `yaml:"password"`
+	// Address (TCP) for database. (i.e. 127.0.0.1:5432)
+	Address string `yaml:"address"`
+	// Name of the database to use.
+	Name string `yaml:"name"`
+}
+
 // ArchivistConfig is the top level configuration object for all components used in archival.
 type ArchivistConfig struct {
 	// LogLevel is the desired log level for the pods. (debug, info, warn, error, fatal, panic)
@@ -56,6 +70,8 @@ type ArchivistConfig struct {
 
 	// MonitorCheckInterval is the interval at which the archivist will run
 	MonitorCheckInterval MyDuration `yaml:"monitorCheckInterval"`
+
+	Database DatabaseConfig `yaml:"database"`
 }
 
 // NewArchivistConfigFromString creates a new configuration from a yaml string. (Mainly used in testing.)
@@ -142,6 +158,9 @@ func (cfg *ArchivistConfig) Validate() error {
 			return fmt.Errorf("MaxInactiveTime (%d) must be greater than or equal to MinInactiveTime (%d)",
 				cc.MaxInactiveDuration, cc.MinInactiveDuration)
 		}
+	}
+	if cfg.Database.Name == "" || cfg.Database.Username == "" || cfg.Database.Password == "" || cfg.Database.Address == "" {
+		return fmt.Errorf("database configuration incomplete")
 	}
 	return nil
 }
