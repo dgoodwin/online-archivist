@@ -24,6 +24,14 @@ parameters:
   required: true
 - name: MAX_INACTIVE_DAYS
   required: true
+- name: MYSQL_DATABASE
+  required: true
+- name: MYSQL_USERNAME
+  required: true
+- name: MYSQL_PASSWORD
+  required: true
+- name: MYSQL_ADDRESS
+  required: true
 
 objects:
 
@@ -113,6 +121,11 @@ objects:
       - openshift
       - kube-system
       - logging
+      database:
+        name: ${MYSQL_DATABASE}
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+        address: ${MYSQL_ADDRESS}
 
 - kind: "DeploymentConfig"
   apiVersion: v1

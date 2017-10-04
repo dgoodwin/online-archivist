@@ -57,3 +57,7 @@
       NAMESPACE_LOW_WATERMARK: "{{ osoa_namespace_low_watermark }}"
       MIN_INACTIVE_DAYS: "{{ osoa_min_inactive_days }}"
       MAX_INACTIVE_DAYS: "{{ osoa_max_inactive_days }}"
+      MYSQL_DATABASE: "{{ osoa_mysql_database }}"
+      MYSQL_USERNAME: "{{ osoa_mysql_username }}"
+      MYSQL_PASSWORD: "{{ osoa_mysql_password }}"
+      MYSQL_ADDRESS: "{{ osoa_mysql_host }}:{{ osoa_mysql_port }}"
