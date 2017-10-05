@@ -15,4 +15,7 @@ import:
   version: v1.3
   repo:    https://github.com/go-sql-driver/mysql.git
   vcs:     git
-
+- package: github.com/mattes/migrate
+  version: v3.0.1
+  repo:    https://github.com/mattes/migrate.git
+  vcs:     git
