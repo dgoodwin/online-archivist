@@ -150,16 +150,10 @@ func (a *ClusterMonitor) Run() {
 	tickerTime := time.Duration(duration)
 	ticker := time.NewTicker(tickerTime)
 
-	go func() {
-		for t := range ticker.C {
-			log.Info("Checking capacity at: ", t)
-			go a.checkCapacity()
-		}
-	}()
-	// Will run the ClusterMonitor at a input time interval
-	// currently, each will stop after 10 minutes for testing purposes but this can be easily changed below
-	time.Sleep(time.Minute * 10)
-	ticker.Stop()
+	for t := range ticker.C {
+		log.Info("Checking capacity at: ", t)
+		go a.checkCapacity()
+	}
 }
 
 // checkCapacity checks the capacity by all configured metrics and determines what (if any) namespaces need to
@@ -286,11 +280,10 @@ func (a *ClusterMonitor) getNamespacesToArchive(checkTime time.Time) ([]LastActi
 
 	dryRun := a.cfg.DryRun
 	if dryRun == false {
-		// here we would set up anything else needed in order to take the project snapshot and move to S3 before moving into archival specifics?
-		capLog.Infoln("actual archiving will occur.")
-
+		// TODO: create backup resources for Ark here
+		capLog.Infoln("archiving projects")
 	} else {
-		capLog.Infoln("logging without actual archival will occur.")
+		capLog.Infoln("dry-run mode, skipping archival")
 	}
 
 	newNSCount = len(namespaces) - len(namespacesToArchive)

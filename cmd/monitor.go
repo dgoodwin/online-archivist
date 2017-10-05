@@ -5,6 +5,7 @@ import (
 
 	"github.com/openshift/online-archivist/pkg/clustermonitor"
 	"github.com/openshift/online-archivist/pkg/config"
+	"github.com/openshift/online-archivist/pkg/dbsync"
 
 	osclient "github.com/openshift/origin/pkg/client"
 	"github.com/openshift/origin/pkg/cmd/util/clientcmd"
@@ -33,13 +34,19 @@ var clusterMonitorCmd = &cobra.Command{
 		_, _, oc, kc, err := createClients()
 
 		if err != nil {
-			log.Panicf("error creating OpenShift/Kubernetes clients: %s", err)
+			log.Fatalf("error creating OpenShift/Kubernetes clients: %s", err)
 		}
 
-		activityMonitor := clustermonitor.NewClusterMonitor(archivistCfg, archivistCfg.Clusters[0], oc, kc)
-		activityMonitor.Run()
-
+		cm := clustermonitor.NewClusterMonitor(archivistCfg, archivistCfg.Clusters[0], oc, kc)
+		go cm.Run()
 		log.Infoln("cluster monitor running")
+
+		dbs := dbsync.NewDBSyncer(archivistCfg)
+		go dbs.Run()
+
+		// Let all goroutines run forever
+		c := make(chan struct{})
+		<-c
 	},
 }
 
@@ -60,7 +67,7 @@ func CreateClientsForConfig(dcc kclientcmd.ClientConfig) (*restclient.Config, *c
 
 	clientConfig, err := dcc.ClientConfig()
 	if err != nil {
-		log.Panicf("error creating cluster clientConfig: %s", err)
+		log.Fatalf("error creating cluster clientConfig: %s", err)
 	}
 
 	log.WithFields(log.Fields{
@@ -80,16 +87,15 @@ func loadConfig(configFile string) config.ArchivistConfig {
 		var err error
 		archivistCfg, err = config.NewArchivistConfigFromFile(configFile)
 		if err != nil {
-			log.Panicf("invalid configuration: %s", err)
+			log.Fatalf("invalid configuration: %s", err)
 		}
 	} else {
 		archivistCfg = config.NewDefaultArchivistConfig()
 	}
 	if lvl, err := log.ParseLevel(archivistCfg.LogLevel); err != nil {
-		log.Panic(err)
+		log.Fatal(err)
 	} else {
 		log.SetLevel(lvl)
 	}
-	log.Infoln("using configuration:", archivistCfg)
 	return archivistCfg
 }
