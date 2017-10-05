@@ -9,7 +9,7 @@
 # used below to process a template from a foreign namespace, but in this namespace.
 # TODO: I don't think we know if anything changed or not here, apply doesn't seem to respond. It does however nicely keep our app up and running if nothing changed.
 - name: Process MySQL template
-  shell: "oc process openshift//mysql-persistent -n {{ osoa_namespace }} -p DATABASE_SERVICE_NAME={{ osoa_appname }}-mysql -p MYSQL_USER={{ osoa_mysql_username }} -p MYSQL_PASSWORD={{ osoa_mysql_password }} -p MYSQL_DATABASE={{ osoa_mysql_database }} | oc apply -f -"
+  shell: "oc process {{ osoa_mysql_template }} -n {{ osoa_namespace }} -p DATABASE_SERVICE_NAME={{ osoa_appname }}-mysql -p MYSQL_USER={{ osoa_mysql_username }} -p MYSQL_PASSWORD={{ osoa_mysql_password }} -p MYSQL_DATABASE={{ osoa_mysql_database }} -p MYSQL_ROOT_PASSWORD={{osoa_mysql_password}} | oc apply -f -"
   register: mysql_process
 
 - name: Lookup MySQL service IP and port

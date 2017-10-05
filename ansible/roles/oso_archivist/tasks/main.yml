@@ -28,6 +28,11 @@
 
 - debug: msg="Deploying {{ osoa_appname}} from {{ osoa_git_repo }} ref {{osoa_git_ref }}"
 
+- name: Ensure template directory exists
+  file:
+    path: "{{ osoa_template_path | dirname }}"
+    state: directory
+
 - name: copy archivist template
   copy:
     src: archivist-template.yaml
