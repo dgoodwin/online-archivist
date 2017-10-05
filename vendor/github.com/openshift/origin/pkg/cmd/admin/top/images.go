@@ -39,7 +39,7 @@ var (
 
 	topImagesExample = templates.Examples(`
 		# Show usage statistics for Images
-	%[1]s %[2]s`)
+  	%[1]s %[2]s`)
 )
 
 // NewCmdTopImages implements the OpenShift cli top images command.

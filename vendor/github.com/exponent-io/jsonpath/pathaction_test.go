@@ -196,10 +196,10 @@ func TestPathActionJsonSubObjects(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         {
@@ -254,10 +254,10 @@ func TestPathActionSeekThenScan(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         {
@@ -312,10 +312,10 @@ func TestPathActionSeekOffsetThenScan(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         {
@@ -370,10 +370,10 @@ func TestPathActionSeekThenScanThenScan(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         {
@@ -445,10 +445,10 @@ func TestPathActionSeekThenScanHetero(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         ["other","random","stuff"],
@@ -507,10 +507,10 @@ func TestPathActionNested(t *testing.T) {
 	j := []byte(`
     {
       "set": "cars",
-	"data": [
+    	"data": [
         {
           "make": "Porsche",
-		"model": "356 Coupé",
+      		"model": "356 Coupé",
           "years": { "from": 1948, "to": 1965}
         },
         {

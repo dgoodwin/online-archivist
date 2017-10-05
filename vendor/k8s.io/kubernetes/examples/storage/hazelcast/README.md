@@ -43,7 +43,7 @@ metadata:
   labels:
     name: hazelcast
   name: hazelcast
-spec:
+spec: 
   ports:
     - port: 5701
   selector:
@@ -74,24 +74,24 @@ Deployments will "adopt" existing pods that match their selector query, so let's
 ```yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
-metadata:
+metadata: 
   name: hazelcast
-  labels:
+  labels: 
     name: hazelcast
-spec:
-  template:
-    metadata:
-      labels:
+spec: 
+  template: 
+    metadata: 
+      labels: 
         name: hazelcast
-    spec:
-      containers:
+    spec: 
+      containers: 
       - name: hazelcast
         image: quay.io/pires/hazelcast-kubernetes:0.8.0
         imagePullPolicy: Always
         env:
         - name: "DNS_DOMAIN"
           value: "cluster.local"
-        ports:
+        ports: 
         - name: hazelcast
           containerPort: 5701
 ```

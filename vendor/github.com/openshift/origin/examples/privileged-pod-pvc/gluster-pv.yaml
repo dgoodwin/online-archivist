@@ -7,7 +7,7 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteMany
-  glusterfs:
+  glusterfs: 
     endpoints: gluster-cluster
     path: gv0
     readOnly: false

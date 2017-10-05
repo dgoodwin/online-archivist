@@ -47,3 +47,4 @@ CPU consumed per namespace on the cluster.
 > drop_common_labels(sort_desc(sum without (cpu) (rate(container_cpu_usage_seconds_total{container_name="prometheus"}[5m]))))
 
 CPU per instance of Prometheus container.
+

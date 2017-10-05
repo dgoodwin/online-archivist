@@ -102,3 +102,4 @@ message ResourceQuotaStatusByNamespace {
   // Status indicates how many resources have been consumed by this project
   optional k8s.io.kubernetes.pkg.api.v1.ResourceQuotaStatus status = 2;
 }
+

@@ -196,11 +196,11 @@ window.OPENSHIFT_CONFIG = {
     }
   },
   auth: {
-	oauth_authorize_uri: "{{ .OAuthAuthorizeURI | js}}",
+  	oauth_authorize_uri: "{{ .OAuthAuthorizeURI | js}}",
 	oauth_token_uri: "{{ .OAuthTokenURI | js}}",
-	oauth_redirect_base: "{{ .OAuthRedirectBase | js}}",
-	oauth_client_id: "{{ .OAuthClientID | js}}",
-	logout_uri: "{{ .LogoutURI | js}}"
+  	oauth_redirect_base: "{{ .OAuthRedirectBase | js}}",
+  	oauth_client_id: "{{ .OAuthClientID | js}}",
+  	logout_uri: "{{ .LogoutURI | js}}"
   },
   {{ with .LimitRequestOverrides }}
   limitRequestOverrides: {

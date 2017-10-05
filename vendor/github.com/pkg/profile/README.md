@@ -25,7 +25,7 @@ func main() {
 options
 -------
 
-What to profile is controlled by config value passed to profile.Start.
+What to profile is controlled by config value passed to profile.Start. 
 By default CPU profiling is enabled.
 
 ```go

@@ -17,3 +17,4 @@ if [ -f /usr/bin/generate_openshift_service ]
 then
   sudo /usr/bin/generate_openshift_service
 fi
+

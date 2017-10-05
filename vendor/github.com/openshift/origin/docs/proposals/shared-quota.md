@@ -8,7 +8,7 @@ By associating projects to owners using structured labels, it becomes possible t
 
 ## Types
 ```go
-// ClusterResourceQuota mirrors ResourceQuota at a cluster scope.  This object is easily convertible to
+// ClusterResourceQuota mirrors ResourceQuota at a cluster scope.  This object is easily convertible to 
 // synthetic ResourceQuota object to allow quota evaluation re-use.
 type ClusterResourceQuota struct {
 	unversioned.TypeMeta
@@ -23,7 +23,7 @@ type ClusterResourceQuota struct {
 
 type ClusterResourceQuotaSpec struct {
 	// Selector is the label selector used to match projects.  It is not allowed to be empty
-	// and should only select active projects on the scale of dozens (though it can select
+	// and should only select active projects on the scale of dozens (though it can select 
 	// many more less active projects).  These projects will contend on object creation through
 	// this resource.
 	Selector map[string]string
@@ -36,8 +36,8 @@ type ClusterResourceQuotaStatus struct {
 	// Overall defines the actual enforced quota and its current usage across all namespaces
 	Overall kapi.ResourceQuotaStatus
 
-	// ByNamespace slices the usage by namespace.  This division allows for quick resolution of
-	// deletion reconciliation inside of a single namespace without requiring a recalculation
+	// ByNamespace slices the usage by namespace.  This division allows for quick resolution of 
+	// deletion reconciliation inside of a single namespace without requiring a recalculation 
 	// across all namespaces.  This map can be used to pull the deltas for a given namespace.
 	ByNamespace map[string]kapi.ResourceQuotaStatus
 }
@@ -69,7 +69,7 @@ We can't reasonably do this globally, since not all cluster-admins will want to 
 a project that admin has to inspect all his quota allocation limits and create and modify resource quota documents to match before he can do anything in his project.  This requires a pretty significant understanding
 of the overall quota system before a project-admin can do anything.
 
-By contrast, the shared quota approach doesn't require any action in "normal" usage by a project-admin.  The cluster-admin is the only one who has to worry about particulars and
+By contrast, the shared quota approach doesn't require any action in "normal" usage by a project-admin.  The cluster-admin is the only one who has to worry about particulars and 
 a project-admin just uses his project.  If he wants to, he can set up resourcequota objects to constraint particular projects and keep them from using all of his quota.
 Using this approach, he can overcommit his clusterresourcequota.
 

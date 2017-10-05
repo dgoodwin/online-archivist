@@ -25,3 +25,4 @@ import (
 func TestRoundTripTypes(t *testing.T) {
 	apitesting.RoundTripTestForAPIGroup(t, Install, nil)
 }
+

@@ -166,7 +166,7 @@ var (
 
 	rolloutStatusExample = templates.Examples(`
 		# Watch the status of the latest rollout
-	%[1]s rollout status dc/nginx`)
+  	%[1]s rollout status dc/nginx`)
 )
 
 // NewCmdRolloutStatus is a wrapper for the Kubernetes cli rollout status command

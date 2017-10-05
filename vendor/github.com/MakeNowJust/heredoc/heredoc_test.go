@@ -24,7 +24,7 @@ var tests = []testCase{
 		Bar`,
 		"Foo\nBar"},
 	{`Foo
-
+			
 		Bar
 		`,
 		"Foo\n\t\nBar\n"},

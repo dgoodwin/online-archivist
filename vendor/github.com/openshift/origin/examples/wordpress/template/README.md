@@ -34,3 +34,8 @@ You should not need to change any other values.
 
 
 Note: this template uses an EmptyDir volume type for database storage.  This type of storage is not persisted.  If you want to ensure the database content is not lost, modify the template to user a persistent volume claim type instead.
+
+
+
+
+

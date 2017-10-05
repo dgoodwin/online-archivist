@@ -71,3 +71,4 @@ message InternalAuthenticateRequest {
   // simple_token is generated in API layer (etcdserver/v3_server.go)
   string simple_token = 3;
 }
+

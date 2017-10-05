@@ -7,7 +7,7 @@ I'm co-learning golang with [R00x](https://github.com/lor00x). Have a look at hi
 
 **ldapserver** is a helper library for building server software capable of speaking the LDAP protocol. This could be an alternate implementation of LDAP, a custom LDAP proxy or even a completely different backend capable of "masquerading" its API as a LDAP Server.
 
-The package supports
+The package supports 
 * All basic LDAP Operations (bind, search, add, compare, modify, delete, extended)
 * SSL
 * StartTLS

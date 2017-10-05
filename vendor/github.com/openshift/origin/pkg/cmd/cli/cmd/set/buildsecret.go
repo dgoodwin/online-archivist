@@ -34,7 +34,7 @@ var (
 		on which to set or remove secrets. Alternatively, all build configs in the namespace can
 		be selected with the --all flag.`)
 
-	buildSecretExample = templates.Examples(`
+	buildSecretExample = templates.Examples(`  
 		# Clear push secret on a build config
 		%[1]s build-secret --push --remove bc/mybuild
 

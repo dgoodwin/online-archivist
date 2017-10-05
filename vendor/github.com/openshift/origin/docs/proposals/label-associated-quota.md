@@ -46,11 +46,11 @@ type NamespacedResourceList struct{
 
 ## Enforcement
 `ResourceQuotaAllocation` will be enforced using an admission plugin that watches creates and updates to the `resourcequota.spec`, combines the change with a cache of all other `resourcequota`
-in the project, finds the associated project,  uses that project's labels to find matching `resourcequotaallocations`, makes sure that all quota'd resources are below the upper threshold,
+in the project, finds the associated project,  uses that project's labels to find matching `resourcequotaallocations`, makes sure that all quota'd resources are below the upper threshold, 
 updates the affected `resourcequotaallocations.status`, and allows it.  To reduce update noise, we store the last `resourcequota.spec` on the `resourcequotaallocationstatus` to allow us to know whether the change matters to us.
 Getting the max of everything allows individual `resourcequota` to not have to specify every possible resource from the `resourcequotaallocation`.
 If you are reducing usage, then the action will be allowed regardless of the current usage.
-Because this is an admisson plugin on a kube resource, if you run against an external kube, `ResourceQuotaAllocations` will not be enforced.
+Because this is an admisson plugin on a kube resource, if you run against an external kube, `ResourceQuotaAllocations` will not be enforced.  
 
 In addition, a standard controller must also be written.  It should watch changes to `namespace.labels` to determine when new projects need to be taken into account or old projects no longer apply.
 Similar to regular quota, it makes sense to periodically re-sync.  If we expect large numbers of project with infrequent overlaps, then `resourcequotaallocations` to `resourcequota` makes sense, otherwise do the reverse.
@@ -65,3 +65,4 @@ In the longer term, we could support permissions based on label selectors.
 
 Cluster-scoped `resourcequotaallocation` resources which apply to a particular project will be projected into namespaces under the namespace-scoped  `localresourcequotaallocation` resource.
 This allows the ACL rule inside of a project to be "get, list" on "localresourcequotaallocations".  That way a user can predict whether his `resourcequota` modification will succeed or fail.
+

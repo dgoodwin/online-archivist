@@ -230,7 +230,7 @@ var (
 	that exist off platform, on other clusters, or locally.`)
 
 	serviceExternalNameExample = templates.Examples(`
-	# Create a new ExternalName service named my-ns
+	# Create a new ExternalName service named my-ns 
 	kubectl create service externalname my-ns --external-name bar.com`)
 )
 

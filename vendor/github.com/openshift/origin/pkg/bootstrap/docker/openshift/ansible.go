@@ -36,7 +36,7 @@ nodes
 [OSEv3:vars]
 #openshift_release={{.OSERelease}}
 
-openshift_deployment_type={{.OSEDeploymentType}}
+openshift_deployment_type={{.OSEDeploymentType}} 
 
 openshift_metrics_install_metrics=True
 openshift_metrics_image_prefix={{.MetricsImagePrefix}}
@@ -60,7 +60,7 @@ nodes
 [OSEv3:vars]
 #openshift_release={{.OSERelease}}
 
-openshift_deployment_type={{.OSEDeploymentType}}
+openshift_deployment_type={{.OSEDeploymentType}} 
 
 openshift_logging_image_prefix={{.LoggingImagePrefix}}
 openshift_logging_image_version={{.LoggingImageVersion}}

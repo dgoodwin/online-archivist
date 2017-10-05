@@ -28,7 +28,7 @@ var (
 
 	buildLogsExample = templates.Examples(`
 		# Stream logs from container
-	%[1]s build-logs 566bed879d2d`)
+  	%[1]s build-logs 566bed879d2d`)
 )
 
 // NewCmdBuildLogs implements the OpenShift cli build-logs command

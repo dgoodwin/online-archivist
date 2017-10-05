@@ -36,7 +36,7 @@ var (
 		as a new entrypoint command on the image with the --command argument, or as a set of
 		arguments to the image's entrypoint (default).`)
 
-	buildHookExample = templates.Examples(`
+	buildHookExample = templates.Examples(`  
 		# Clear post-commit hook on a build config
 	  %[1]s build-hook bc/mybuild --post-commit --remove
 

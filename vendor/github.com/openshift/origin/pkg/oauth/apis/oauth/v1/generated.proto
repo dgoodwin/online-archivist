@@ -205,3 +205,4 @@ message ScopeRestriction {
   // ClusterRole describes a set of restrictions for cluster role scoping.
   optional ClusterRoleScopeRestriction clusterRole = 2;
 }
+

@@ -63,7 +63,7 @@ function move() {
 	find ${endingPath}/v1 -maxdepth 1 -name "*.go" | xargs sed -i "s|Convert_api_|Convert_$2_|g"
 	find ${endingPath}/v1 -maxdepth 1 -name "*.go" | xargs sed -i "s|_To_api_|_To_$2_|g"
 	find ${endingPath}/v1 -maxdepth 1 -name "*.go" | xargs sed -i "s|autoConvert_api_|autoConvert_$2_|g"
-
+	
 	find ${OS_ROOT} -path ./vendor -prune -o -path ./cmd/service-catalog -prune -o -path ./cmd/cluster-capacity -prune -o -name "*.go" -print0 | xargs -0 sed -i "s|${startingPackagePrefix}|${endingPackagePrefix}|g"
 	# find ${OS_ROOT} -path ./vendor -prune -o -path ./cmd/service-catalog -prune -o -path ./cmd/cluster-capacity -prune -o -name "*.sh" -print0 | xargs -0 sed -i "s|${startingPackagePrefix}|${endingPackagePrefix}|g"
 }

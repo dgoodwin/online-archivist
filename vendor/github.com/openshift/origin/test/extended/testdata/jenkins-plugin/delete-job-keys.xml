@@ -14,8 +14,8 @@
 
         <com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterList>
           <namespace>${PROJECT_NAME}</namespace>
-          <types>is,bc</types>
-          <keys>forcepull-extended-test-builder,forcepull-bldr</keys>
+          <types>is,bc</types>                                                                                                                                                                                                             
+          <keys>forcepull-extended-test-builder,forcepull-bldr</keys>                                                                                                                                                                                                                 
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterList>
 
     </builders>

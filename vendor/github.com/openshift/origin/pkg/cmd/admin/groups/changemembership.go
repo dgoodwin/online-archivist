@@ -29,7 +29,7 @@ var (
 
 	addExample = templates.Examples(`
 		# Add user1 and user2 to my-group
-	%[1]s my-group user1 user2`)
+  	%[1]s my-group user1 user2`)
 
 	removeLong = templates.LongDesc(`
 		Remove users from a group.
@@ -38,7 +38,7 @@ var (
 
 	removeExample = templates.Examples(`
 		# Remove user1 and user2 from my-group
-	%[1]s my-group user1 user2`)
+  	%[1]s my-group user1 user2`)
 )
 
 type GroupModificationOptions struct {

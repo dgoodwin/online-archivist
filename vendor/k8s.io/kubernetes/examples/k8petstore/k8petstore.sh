@@ -25,9 +25,9 @@ kubectl="kubectl"
 VERSION="r.2.8.19"
 PUBLIC_IP="10.1.4.89" # ip which we use to access the Web server.
 _SECONDS=1000          # number of seconds to measure throughput.
-FE="1"                # amount of Web server
+FE="1"                # amount of Web server  
 LG="1"                # amount of load generators
-SLAVE="1"             # amount of redis slaves
+SLAVE="1"             # amount of redis slaves 
 TEST="1"              # 0 = Don't run tests, 1 = Do run tests.
 NS="k8petstore"       # namespace
 
@@ -35,9 +35,9 @@ kubectl="${1:-$kubectl}"
 VERSION="${2:-$VERSION}"
 PUBLIC_IP="${3:-$PUBLIC_IP}" # ip which we use to access the Web server.
 _SECONDS="${4:-$_SECONDS}"   # number of seconds to measure throughput.
-FE="${5:-$FE}"       # amount of Web server
+FE="${5:-$FE}"       # amount of Web server  
 LG="${6:-$LG}"        # amount of load generators
-SLAVE="${7:-$SLAVE}"     # amount of redis slaves
+SLAVE="${7:-$SLAVE}"     # amount of redis slaves 
 TEST="${8:-$TEST}"      # 0 = Don't run tests, 1 = Do run tests.
 NS="${9:-$NS}"          # namespace
 
@@ -66,7 +66,7 @@ $kubectl create -f ns.json
 esac
 }
 
-function create {
+function create { 
 
 cat << EOF > fe-rc.json
 {
@@ -280,7 +280,7 @@ function pollfor {
     if [ $i -eq 1000 ]; then
        pass_http=1
     fi
-
+    
 }
 
 function tests {
@@ -290,7 +290,7 @@ function tests {
     for i in `seq 1 $_SECONDS`;
      do
         echo "curl : $PUBLIC_IP:3000 , $i of $_SECONDS"
-        curr_cnt="`curl --max-time 1 "$PUBLIC_IP:3000/llen"`"
+        curr_cnt="`curl --max-time 1 "$PUBLIC_IP:3000/llen"`" 
         ### Write CSV File of # of trials / total transcations.
         echo "$i $curr_cnt" >> result
         echo "total transactions so far : $curr_cnt"
@@ -312,7 +312,7 @@ create
 
 pollfor
 
-if [[ $pass_http -eq 1 ]]; then
+if [[ $pass_http -eq 1 ]]; then 
     echo "Passed..."
 else
     exit 1

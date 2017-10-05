@@ -28,17 +28,17 @@ import (
 	"k8s.io/kubernetes/pkg/util/exec"
 )
 
-var tcClassOutput = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
+var tcClassOutput = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
 `
 
-var tcClassOutput2 = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:5 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
+var tcClassOutput2 = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:5 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
 `
 
 func TestNextClassID(t *testing.T) {
@@ -135,11 +135,11 @@ func TestHexCIDR(t *testing.T) {
 	}
 }
 
-var tcFilterOutput = `filter parent 1: protocol ip pref 1 u32
-filter parent 1: protocol ip pref 1 u32 fh 800: ht divisor 1
-filter parent 1: protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 flowid 1:1
+var tcFilterOutput = `filter parent 1: protocol ip pref 1 u32 
+filter parent 1: protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter parent 1: protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 flowid 1:1 
   match ac110002/ffffffff at 16
-filter parent 1: protocol ip pref 1 u32 fh 800::801 order 2049 key ht 800 bkt 0 flowid 1:2
+filter parent 1: protocol ip pref 1 u32 fh 800::801 order 2049 key ht 800 bkt 0 flowid 1:2 
   match 01020000/ffff0000 at 16
 `
 

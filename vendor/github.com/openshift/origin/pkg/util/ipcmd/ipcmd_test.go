@@ -52,11 +52,11 @@ func ensureTestResults(t *testing.T, fexec *exec.FakeExec) {
 
 func TestGetAddresses(t *testing.T) {
 	fexec := normalSetup()
-	addTestResult(t, fexec, "/sbin/ip addr show dev lo", `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default
+	addTestResult(t, fexec, "/sbin/ip addr show dev lo", `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
+    inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
 `, nil)
 	itx := NewTransaction(fexec, "lo")

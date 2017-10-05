@@ -11,7 +11,7 @@ import (
 var serviceAccountNames = sets.NewString("aggregated-logging-kibana", "aggregated-logging-curator", "aggregated-logging-elasticsearch", fluentdServiceAccountName)
 
 const serviceAccountsMissing = `
-Did not find ServiceAccounts: %s.  The logging infrastructure will not function
+Did not find ServiceAccounts: %s.  The logging infrastructure will not function 
 properly without them.  You may need to re-run the installer.
 `
 

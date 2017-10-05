@@ -131,3 +131,4 @@ message JobTemplateSpec {
   // +optional
   optional k8s.io.kubernetes.pkg.apis.batch.v1.JobSpec spec = 2;
 }
+

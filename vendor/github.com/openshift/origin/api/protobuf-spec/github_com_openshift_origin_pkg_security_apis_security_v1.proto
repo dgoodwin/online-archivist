@@ -255,3 +255,4 @@ message SupplementalGroupsStrategyOptions {
   // supplemental group then supply a single range with the same start and end.
   repeated IDRange ranges = 2;
 }
+

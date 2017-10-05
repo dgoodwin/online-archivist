@@ -51,7 +51,7 @@ The library follows the RFC recommendations, but allows some differences, like p
 			ad, err := treq.GetToken()
 			if err == nil {
 				w.Write([]byte(fmt.Sprintf("Access token: %+v\n\n", ad)))
-
+				
 				// use the token in ad.AccessToken
 			} else {
 				w.Write([]byte(fmt.Sprintf("ERROR: %s\n", err)))

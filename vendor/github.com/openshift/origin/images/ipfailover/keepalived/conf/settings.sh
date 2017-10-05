@@ -57,7 +57,7 @@ HA_CHECK_SCRIPT="${OPENSHIFT_HA_CHECK_SCRIPT:-""}"
 
 # Optional notify script is called when a state transition occurs
 # Transition to MASTER, or to BACKUP, or to FAULT
-# The parameters to the script are passed in by keepalived:
+# The parameters to the script are passed in by keepalived: 
 #  $1 - "GROUP"|"INSTANCE"
 #  $2 - name of group or instance
 #  $3 - target state of transition ("MASTER"|"BACKUP"|"FAULT")
@@ -108,3 +108,4 @@ SMTP_CONNECT_TIMEOUT=30
 #  specify a src_addr for multicast/unicast vrrp packets.
 #     MULTICAST_SOURCE_IPADDRESS="1.2.3.4"
 #     UNICAST_SOURCE_IPADDRESS="1.2.3.4"
+

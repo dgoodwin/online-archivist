@@ -46,3 +46,4 @@ items:
     to:
       kind: Service
       name: idling-echo
+

@@ -11,7 +11,7 @@ const defaultGrantTemplateString = `<!DOCTYPE html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
-      Authorize
+      Authorize 
       {{ if and .ServiceAccountName .ServiceAccountNamespace }}
         service account {{ .ServiceAccountName }} in project {{ .ServiceAccountNamespace }}
       {{ else }}
@@ -86,13 +86,13 @@ const defaultGrantTemplateString = `<!DOCTYPE html>
     {{ end }}
 
     is requesting
-
+    
     {{ if .GrantedScopes }}
       additional permissions
     {{ else }}
       permission
     {{ end }}
-
+    
     to access your account (<span class="identifier-highlight">{{ .Values.UserName }}</span>)
   </h3>
 

@@ -34,7 +34,7 @@ var (
 
 	imageStreamExample = templates.Examples(`
 		# Create a new image stream
-	%[1]s mysql`)
+  	%[1]s mysql`)
 )
 
 type CreateImageStreamOptions struct {

@@ -80,7 +80,7 @@ To run this example:
 
 1. Ensure that you have a running OpenShift environment as described in the basic example
 2. Create a new project for your pipeline on the OpenShift web console:
-   1. Login
+   1. Login 
    2. Click on *New Project*
    3. Enter a project name
    4. Click *Create*
@@ -94,7 +94,7 @@ To run this example:
 10. Navigate to *Builds* -> *Pipelines*
 11. Click on *Start Pipeline* next to *openshift-jee-sample*
 
-On the first pipeline run, there will be a delay as Jenkins is instantiated for the project.
+On the first pipeline run, there will be a delay as Jenkins is instantiated for the project. 
 When the pipeline completes, the openshift-jee-sample application should be deployed and running.
 
 ## Orchestration Pipeline Example
@@ -107,7 +107,7 @@ To run this example:
 
 1. Ensure that you have a running OpenShift environment as described in the basic example
 2. Create a new project for your pipeline on the OpenShift web console:
-   1. Login
+   1. Login 
    2. Click on *New Project*
    3. Enter a project name
    4. Click *Create*
@@ -121,14 +121,14 @@ To run this example:
 10. Navigate to *Builds* -> *Pipelines*
 11. Click on *Start Pipeline* next to *mapsapp-pipeline*
 
-On the first pipeline run, there will be a delay as Jenkins is instantiated for the project. The pipeline will instantiate
-other pipelines and those will in turn instantiate OpenShift objects. Once the pipeline has completed, a maps frontend
+On the first pipeline run, there will be a delay as Jenkins is instantiated for the project. The pipeline will instantiate 
+other pipelines and those will in turn instantiate OpenShift objects. Once the pipeline has completed, a maps frontend 
 should be running with 2 backends: nationalparks and mlbparks.
 
 
 ## Blue Green Deployment Example
 
-The `bluegreen-pipeline.yaml` template contains a pipeline that demonstrates alternating blue/green
+The `bluegreen-pipeline.yaml` template contains a pipeline that demonstrates alternating blue/green 
 deployments with a manual approval step. The template contains three routes, one main route, and 2
 other routes; one prefixed by `blue` and the other one prefixed by `green`. Each time the pipeline
 is run, it will alternate between building the green or the blue service. You can verify the running
@@ -139,7 +139,7 @@ To run this example:
 
 1. Create a fork of https://github.com/openshift/nodejs-ex.git
 2. Create a new project for your pipeline on the OpenShift web console:
-   1. Login
+   1. Login 
    2. Click on *New Project*
    3. Enter a project name
    4. Click *Create*
@@ -156,7 +156,7 @@ To run this example:
 13. Push a change to your fork of the nodejs-ex repository
 14. Start the pipeline again. Go back to step 11 and repeat.
 
-On the first pipeline run, there will be a delay as Jenkins is instantiated for the project.
+On the first pipeline run, there will be a delay as Jenkins is instantiated for the project. 
 
 ## OpenShift Client Plugin Example
 
@@ -179,10 +179,11 @@ To run this example:
 
     At this point if you run `oc get pods` you should see a jenkins pod, or at least a jenkins-deploy pod. This pod was created as a result of the new pipeline buildconfig being defined.
 
-On the first pipeline run, there will be a delay as Jenkins is instantiated for the project.
+On the first pipeline run, there will be a delay as Jenkins is instantiated for the project. 
 
 3. Launch a new build
 
         $ oc start-build sample-pipeline-openshift-client-plugin
 
     Jenkins will: create an instance of the sample-pipeline-openshift-client-plugin job, and trigger various builds and deployments in openshift.
+

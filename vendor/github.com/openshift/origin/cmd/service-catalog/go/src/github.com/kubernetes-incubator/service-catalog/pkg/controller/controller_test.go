@@ -204,8 +204,8 @@ const alphaParameterSchemaCatalogBytes = `{
     "requires": ["route_forwarding"],
     "bindable": true,
     "metadata": {
-	"a": "b",
-	"c": "d"
+    	"a": "b",
+    	"c": "d"
     },
     "dashboard_client": {
       "id": "398e2f8e-XXXX-XXXX-XXXX-19a71ecbcf64",
@@ -218,13 +218,13 @@ const alphaParameterSchemaCatalogBytes = `{
       "id": "d3031751-XXXX-XXXX-XXXX-a42377d3320e",
       "description": "description1",
       "metadata": {
-	"b": "c",
-	"d": "e"
+      	"b": "c",
+      	"d": "e"
       },
       "schemas": {
-	"service_instance": {
-		  "create": {
-			"parameters": {
+      	"service_instance": {
+	  	  "create": {
+	  	  	"parameters": {
 	          "$schema": "http://json-schema.org/draft-04/schema",
 	          "type": "object",
 	          "title": "Parameters",
@@ -261,21 +261,21 @@ const alphaParameterSchemaCatalogBytes = `{
 	            "name",
 	            "protocol"
 	          ]
-			}
-		  },
-		  "update": {
-			"parameters": {
-			  "baz": "zap"
-		    }
-		  }
-	},
-	"service_binding": {
-	  "create": {
-			"parameters": {
-		  "zoo": "blu"
-	    }
-	  }
-	}
+	  	  	}
+	  	  },
+	  	  "update": {
+	  	  	"parameters": {
+	  		  "baz": "zap"
+	  	    }
+	  	  }
+      	},
+      	"service_binding": {
+      	  "create": {
+	  	  	"parameters": {
+      	  	  "zoo": "blu"
+      	    }
+      	  }
+      	}
       }
     }]
   }]

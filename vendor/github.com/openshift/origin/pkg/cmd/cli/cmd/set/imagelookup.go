@@ -43,7 +43,7 @@ var (
 		will import the latest MySQL image from the DockerHub, set that image stream to handle the
 		"mysql" name within the project, and then launch a deployment that points to the image we
 		imported.
-
+		
 		You may also force image lookup for all of the images on a resource with this command. An
 		annotation is placed on the object which forces an image stream tag lookup in the current
 		namespace for any image that matches, regardless of whether the image stream has lookup

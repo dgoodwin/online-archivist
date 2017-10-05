@@ -54,7 +54,7 @@ For more details about the design and features of this project see the
 
 We are currently working toward a beta-quality release to be used in conjunction with
 Kubernetes 1.6. See the
-[milestones list](https://github.com/kubernetes-incubator/service-catalog/milestones?direction=desc&sort=due_date&state=open)
+[milestones list](https://github.com/kubernetes-incubator/service-catalog/milestones?direction=desc&sort=due_date&state=open) 
 for information about the issues and PRs in current and future milestones.
 
 **NOTE**: Some fields in our API will still be considered **ALPHA** after the

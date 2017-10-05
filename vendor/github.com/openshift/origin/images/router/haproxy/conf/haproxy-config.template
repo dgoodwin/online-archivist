@@ -1,7 +1,7 @@
 {{/*
     haproxy-config.cfg: contains the main config with helper backends that are used to terminate
-					encryption before finally sending to a host_be which is the backend that is the final
-					backend for a route and contains all the endpoints for the service
+    					encryption before finally sending to a host_be which is the backend that is the final
+    					backend for a route and contains all the endpoints for the service
 */}}
 {{- define "/var/lib/haproxy/conf/haproxy.config" }}
 {{- $workingDir := .WorkingDir }}
@@ -625,7 +625,7 @@ backend be_tcp:{{$cfgIdx}}
 
 {{/*
     os_sni_passthrough.map: contains a mapping of routes that expect to have an sni header and should be passed
-					through to the host_be.  Driven by the termination type of the ServiceAliasConfigs
+    					through to the host_be.  Driven by the termination type of the ServiceAliasConfigs
 */}}
 {{ define "/var/lib/haproxy/conf/os_sni_passthrough.map" -}}
 {{     range $idx, $cfg := .State -}}

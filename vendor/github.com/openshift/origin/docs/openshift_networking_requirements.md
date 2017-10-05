@@ -6,7 +6,7 @@ OpenShift networking has certain requirements over and above kubernetes essentia
 
 ## CNI is the recommended way
 
-Any external networking solution can be used to plumb networking for OpenShift as long as it follows the 'CNI' spec. Then, OpenShift needs to be launched with 'networkPluginName: "cni"' in the master/node config yaml files.
+Any external networking solution can be used to plumb networking for OpenShift as long as it follows the 'CNI' spec. Then, OpenShift needs to be launched with 'networkPluginName: "cni"' in the master/node config yaml files. 
 Example:
 ```
 networkConfig:

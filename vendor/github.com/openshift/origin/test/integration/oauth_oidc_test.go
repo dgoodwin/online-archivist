@@ -50,8 +50,8 @@ func TestOAuthOIDC(t *testing.T) {
 	// Additional claims in userInfo (sub claim must match)
 	userinfoResponse := `{
 		"sub": "mysub",
-		"mynameclaim":"myname",
-		"myusernameclaim":"myusername"
+	 	"mynameclaim":"myname",
+	 	"myusernameclaim":"myusername"
 	}`
 
 	// Write cert we're going to use to verify OIDC server requests

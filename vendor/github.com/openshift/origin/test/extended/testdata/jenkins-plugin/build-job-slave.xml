@@ -1,19 +1,19 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>nodejs</assignedNode>
-  <canRoam>false</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
+<?xml version='1.0' encoding='UTF-8'?>                                                                                                                                                                                                                         
+<project>                                                                                                                                                                                                                                                      
+  <actions/>                                                                                                                                                                                                                                                   
+  <description></description>                                                                                                                                                                                                                                  
+  <keepDependencies>false</keepDependencies>                                                                                                                                                                                                                   
+  <properties/>                                                                                                                                                                                                                                                
+  <scm class="hudson.scm.NullSCM"/>                                                                                                                                                                                                                            
+  <assignedNode>nodejs</assignedNode>                                                                                                                                                                                                                          
+  <canRoam>false</canRoam>                                                                                                                                                                                                                                     
+  <disabled>false</disabled>                                                                                                                                                                                                                                   
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>                                                                                                                                                                                   
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>                                                                                                                                                                                       
+  <triggers/>                                                                                                                                                                                                                                                  
+  <concurrentBuild>false</concurrentBuild>                                                                                                                                                                                                                     
   <builders>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftScaler>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <depCfg>frontend</depCfg>
@@ -40,7 +40,7 @@
           <waitUnit>sec</waitUnit>
           <depCfg>frontend</depCfg>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <svcName>frontend</svcName>
@@ -65,8 +65,8 @@
             <replicaCount>0</replicaCount>
             <authToken></authToken>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
-
-  </builders>
-  <publishers/>
-  <buildWrappers/>
+    
+  </builders>                                                                                                                                                                                                                                                  
+  <publishers/>                                                                                                                                                                                                                                                
+  <buildWrappers/>                                                                                                                                                                                                                                             
 </project>

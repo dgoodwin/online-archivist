@@ -64,7 +64,7 @@ function create_pv() {
   local name="${2}"
 
   setup_pv_dir "${basedir}/${name}"
-  if ! oc get pv "${name}" &> /dev/null; then
+  if ! oc get pv "${name}" &> /dev/null; then 
     generate_pv "${basedir}" "${name}" | oc create -f -
   else
     echo "persistentvolume ${name} already exists"

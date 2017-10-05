@@ -58,3 +58,4 @@ func TestCloneTLSConfig(t *testing.T) {
 		t.Errorf("New fields seen in http.Transport: %v\nAdd to CopyClientTLSConfig if client-relevant, then add to expected list in TestCopyClientTLSConfig", extra.List())
 	}
 }
+

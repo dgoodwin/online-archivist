@@ -18,4 +18,4 @@ if [[ -f secret1  ]]; then
 else
     echo "Unable to locate testsecret2 fixture files"
     exit 2
-fi
+fi 

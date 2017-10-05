@@ -17,7 +17,7 @@
     "source": {
       "binary": {
         "asFile": ""
-      }
+      }          
     },
     "strategy": {
       "type": "Docker",
@@ -31,3 +31,4 @@
     }
   }
 }
+    

@@ -21,7 +21,7 @@ This raft implementation is a full feature implementation of Raft protocol. Feat
 
 - Leader election
 - Log replication
-- Log compaction
+- Log compaction 
 - Membership changes
 - Leadership transfer extension
 - Efficient linearizable read-only queries served by both the leader and followers
@@ -40,7 +40,7 @@ This raft implementation also includes a few optional enhancements:
 - Batching log entries to reduce disk synchronized I/O
 - Writing to leader's disk in parallel
 - Internal proposal redirection from followers to leader
-- Automatic stepping down when the leader loses quorum
+- Automatic stepping down when the leader loses quorum 
 
 ## Notable Users
 
@@ -166,7 +166,7 @@ To propose changes to the state machine from the node to take application data, 
 	n.Propose(ctx, data)
 ```
 
-If the proposal is committed, data will appear in committed entries with type raftpb.EntryNormal. There is no guarantee that a proposed command will be committed; the command may have to be reproposed after a timeout.
+If the proposal is committed, data will appear in committed entries with type raftpb.EntryNormal. There is no guarantee that a proposed command will be committed; the command may have to be reproposed after a timeout. 
 
 To add or remove node in a cluster, build ConfChange struct 'cc' and call:
 

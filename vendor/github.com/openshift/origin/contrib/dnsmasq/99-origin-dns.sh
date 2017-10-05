@@ -26,7 +26,7 @@ cd /etc/sysconfig/network-scripts
 [ -f ../network ] && . ../network
 
 if [[ $2 =~ ^(up|dhcp4-change)$ ]]; then
-  # couldn't find an existing method to determine if the interface owns the
+  # couldn't find an existing method to determine if the interface owns the 
   # default route
   def_route=$(/sbin/ip route list match 0.0.0.0/0 | awk '{print $3 }')
   def_route_int=$(/sbin/ip route get to ${def_route} | awk '{print $3}')

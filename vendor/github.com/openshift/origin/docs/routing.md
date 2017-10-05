@@ -346,7 +346,7 @@ When debugging the router it is sometimes useful to inspect these files.  For ex
 $ oc get pods -n default
 NAME                      READY     STATUS    RESTARTS   AGE
 router-1-2sqao            1/1       Running   0          1m
-$ oc rsh -n default router-1-2sqao
+$ oc rsh -n default router-1-2sqao 
 ```
 
 Listed below are the files used for configuration.

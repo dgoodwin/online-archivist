@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script will either enable, or disable, the updating
+# This script will either enable, or disable, the updating 
 #  of openshift rpms via yum
 #
 ##############
@@ -65,7 +65,7 @@ function status() {
     # slashpackage escapes * from variable package
     slashpackage=$(echo ${package} | sed 's|\*|\\\*|g')
     if ! grep exclude= "${CONF_FILE}" | grep -q " ${slashpackage} " ; then
-      >&2 echo "unexclude -- At least one package not excluded"
+      >&2 echo "unexclude -- At least one package not excluded" 
       return 1
     fi
   done

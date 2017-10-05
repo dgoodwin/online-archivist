@@ -75,7 +75,7 @@
       "metadata": {
         "name": "test"
       }
-    },
+    },    
     {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",

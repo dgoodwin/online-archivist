@@ -151,7 +151,7 @@ $(BINDIR)/e2e.test: .init
 		--go-header-file "vendor/github.com/kubernetes/repo-infra/verify/boilerplate/boilerplate.go.txt" \
 		--input-dirs "$(SC_PKG)/pkg/apis/servicecatalog" \
 		--input-dirs "$(SC_PKG)/pkg/apis/servicecatalog/v1alpha1" \
-		--extra-peer-dirs "$(SC_PKG)/pkg/apis/servicecatalog" \
+	  	--extra-peer-dirs "$(SC_PKG)/pkg/apis/servicecatalog" \
 		--extra-peer-dirs "$(SC_PKG)/pkg/apis/servicecatalog/v1alpha1" \
 		--output-file-base "zz_generated.defaults"
 	# Generate deep copies

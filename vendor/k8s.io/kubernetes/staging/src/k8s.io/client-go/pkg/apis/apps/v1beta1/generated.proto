@@ -339,3 +339,4 @@ message StatefulSetStatus {
   // Replicas is the number of actual replicas.
   optional int32 replicas = 2;
 }
+

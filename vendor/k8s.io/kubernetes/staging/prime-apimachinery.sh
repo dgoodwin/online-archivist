@@ -77,4 +77,5 @@ git checkout cmd/libs/go2idl/set-gen/main.go
 
 # now run gofmt to get the sorting right
 echo "running gofmt"
-gofmt -s -w ${KUBE_ROOT}/cmd ${KUBE_ROOT}/examples ${KUBE_ROOT}/federation ${KUBE_ROOT}/pkg ${KUBE_ROOT}/plugin ${KUBE_ROOT}/test
+gofmt -s -w ${KUBE_ROOT}/cmd ${KUBE_ROOT}/examples ${KUBE_ROOT}/federation ${KUBE_ROOT}/pkg ${KUBE_ROOT}/plugin ${KUBE_ROOT}/test 
+

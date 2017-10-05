@@ -10,3 +10,4 @@ REGISTRY_MIDDLEWARE_REPOSITORY_OPENSHIFT_ENFORCEQUOTA=false
 ##
 #REGISTRY_HTTP_TLS_CERTIFICATE=/etc/atomic-registry/registry/registry.crt
 #REGISTRY_HTTP_TLS_KEY=/etc/atomic-registry/registry/registry.key
+

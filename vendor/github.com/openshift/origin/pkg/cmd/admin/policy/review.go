@@ -36,13 +36,13 @@ var (
 	reviewExamples = templates.Examples(`# Check whether Service Accounts sa1 and sa2 can admit a Pod with TemplatePodSpec specified in my_resource.yaml
 	# Service Account specified in myresource.yaml file is ignored
 	$ %[1]s -z sa1,sa2 -f my_resource.yaml
-
+	
 	# Check whether Service Accounts system:serviceaccount:bob:default can admit a Pod with TemplatePodSpec specified in my_resource.yaml
 	$  %[1]s -z system:serviceaccount:bob:default -f my_resource.yaml
 
 	# Check whether Service Account specified in my_resource_with_sa.yaml can admit the Pod
 	$ %[1]s -f my_resource_with_sa.yaml
-
+	
 	# Check whether default Service Account can admit the Pod, default is taken since no Service Account is defined in myresource_with_no_sa.yaml
 	$  %[1]s -f myresource_with_no_sa.yaml
 	`)

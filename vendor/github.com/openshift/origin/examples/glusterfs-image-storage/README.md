@@ -5,7 +5,7 @@
   * OSE 3.x
   * GlusterFS volume Created and Started
   * glusterfs-client installed on all Nodes
-
+  
 ### DNS Configuration
 
 Before we can initiate the docker-registry, the dnsmasq.service and the openshift DNS collision on port 53 must be corrected.
@@ -36,7 +36,7 @@ bogus-priv
 ```
 
 ##### Edit /etc/origin/master/master-config.yaml
-
+ 
 Change
 ```
 dnsConfig:
@@ -80,3 +80,4 @@ oc create -f gluster-pvc.yaml
 ##### Start the Docker Registry
 
 Refer to the latest [Origin Docs](https://docs.openshift.org/latest/install_config/install/docker_registry.html "Deploying A Docker Registry") for deployment instructions.  See the [Production Use](https://docs.openshift.org/latest/install_config/install/docker_registry.html#production-use "Production-Use") section to implement the registry using the persistent volume claim.
+

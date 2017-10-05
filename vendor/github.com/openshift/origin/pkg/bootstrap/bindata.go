@@ -5210,7 +5210,7 @@ objects:
                 def tag="blue"
                 def altTag="green"
                 def verbose="${VERBOSE}"
-
+        
                 node {
                   project = env.PROJECT_NAME
                   stage("Initialize") {
@@ -5223,21 +5223,21 @@ objects:
                     sh "oc get route ${tag}-${appName} -n ${project} -o jsonpath='{ .spec.host }' --loglevel=4 > routehost"
                     routeHost = readFile('routehost').trim()
                   }
-
+        
                   stage("Build") {
                     echo "building tag ${tag}"
                     openshiftBuild buildConfig: appName, showBuildLogs: "true", verbose: verbose
                   }
-
+        
                   stage("Deploy Test") {
                     openshiftTag srcStream: appName, srcTag: 'latest', destinationStream: appName, destinationTag: tag, verbose: verbose
                     openshiftVerifyDeployment deploymentConfig: "${appName}-${tag}", verbose: verbose
                   }
-
+        
                   stage("Test") {
                     input message: "Test deployment: http://${routeHost}. Approve?", id: "approval"
                   }
-
+        
                   stage("Go Live") {
                     sh "oc set -n ${project} route-backends ${appName} ${appName}-${tag}=100 ${appName}-${altTag}=0 --loglevel=4"
                   }
@@ -5248,7 +5248,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
       type: JenkinsPipeline
     triggers:
     - github:
@@ -5715,21 +5715,21 @@ objects:
                 def project = ""
                 node {
                   project = "${env.PROJECT_NAME}"
-
+        
                   stage('Create NationalParks back-end') {
                     def nationalParksURL = "${NATIONALPARKS_GIT_URI}"
                     def nationalParksBranch = "${NATIONALPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${nationalParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "nationalparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${nationalParksURL}"]]])
                     sh "oc new-app -f nationalparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${nationalParksURL} -p GIT_REF=${nationalParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create MLBParks back-end') {
                     def mlbParksURL = "${MLBPARKS_GIT_URI}"
                     def mlbParksBranch = "${MLBPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${mlbParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "mlbparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${mlbParksURL}"]]])
                     sh "oc new-app -f mlbparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${mlbParksURL} -p GIT_REF=${mlbParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create ParksMap front-end') {
                     def parksMapURL = "${PARKSMAP_GIT_URI}"
                     def parksMapBranch = "${PARKSMAP_GIT_REF}"
@@ -5737,7 +5737,7 @@ objects:
                     sh "oc new-app -f parksmap/ose3/pipeline-buildconfig-template.json -p GIT_URI=${parksMapURL} -p GIT_REF=${parksMapBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
                 }
-
+        
                 stage('Build Back-ends') {
                   parallel (
                     "nationalparks": {
@@ -5752,7 +5752,7 @@ objects:
                     }
                   )
                 }
-
+        
                 node {
                   stage('Build Front-end') {
                     openshiftBuild buildConfig: "parksmap-pipeline", namespace: project
@@ -5764,7 +5764,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
     triggers:
     - github:
         secret: ${GITHUB_TRIGGER_SECRET}
@@ -6218,7 +6218,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
       type: JenkinsPipeline
     triggers:
     - github:
@@ -13300,7 +13300,7 @@ objects:
     name: service-catalog-controller
   userNames:
     - system:serviceaccount:service-catalog:service-catalog-controller
-
+  
 - kind: Role
   apiVersion: v1
   metadata:
@@ -13384,7 +13384,7 @@ objects:
       spec:
         serviceAccountName: service-catalog-apiserver
         containers:
-        - command:
+        - command: 
           - apiserver
           args:
           - --admission-control
@@ -13490,7 +13490,7 @@ objects:
       spec:
         serviceAccountName: service-catalog-controller
         containers:
-        - command:
+        - command: 
           - controller-manager
           args:
           - -v
@@ -13858,3 +13858,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

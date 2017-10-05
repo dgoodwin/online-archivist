@@ -31,7 +31,7 @@ var (
 
 	userExample = templates.Examples(`
 		# Create a user with the username "ajones" and the display name "Adam Jones"
-	%[1]s ajones --full-name="Adam Jones"`)
+  	%[1]s ajones --full-name="Adam Jones"`)
 )
 
 type CreateUserOptions struct {

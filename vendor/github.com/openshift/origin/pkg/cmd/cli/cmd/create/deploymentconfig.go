@@ -28,7 +28,7 @@ var (
 
 	deploymentConfigExample = templates.Examples(`
 		# Create an nginx deployment config named my-nginx
-	%[1]s my-nginx --image=nginx`)
+  	%[1]s my-nginx --image=nginx`)
 )
 
 type CreateDeploymentConfigOptions struct {

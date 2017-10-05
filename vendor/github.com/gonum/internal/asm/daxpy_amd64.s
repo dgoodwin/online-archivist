@@ -7,11 +7,11 @@
 // which is distributed under these terms:
 //
 // Copyright (c) 2012 The Go Authors. All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-//
+// 
 //    * Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
 //    * Redistributions in binary form must reproduce the above
@@ -21,7 +21,7 @@
 //    * Neither the name of Google Inc. nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
-//
+// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -51,7 +51,7 @@ TEXT ·DaxpyUnitary(SB),NOSPLIT,$0
 	MOVQ x+8(FP), R8
 	MOVQ y+32(FP), R9
 	MOVQ z+56(FP), R10
-
+	
 	MOVQ $0, SI				// i = 0
 	SUBQ $2, DI				// n -= 2
 	JL V1					// if n < 0 goto V1
@@ -63,7 +63,7 @@ U1:	// n >= 0
 	MULPD X7, X0
 	ADDPD X0, X1
 	MOVUPD X1, 0(R10)(SI*8)
-
+	
 	ADDQ $2, SI				// i += 2
 	SUBQ $2, DI				// n -= 2
 	JGE U1					// if n >= 0 goto U1
@@ -71,7 +71,7 @@ U1:	// n >= 0
 V1:
 	ADDQ $2, DI				// n += 2
 	JLE E1					// if n <= 0 goto E1
-
+	
 	// y[i] += alpha * x[i] for last iteration if n is odd.
 	MOVSD 0(R8)(SI*8), X0
 	MOVSD 0(R9)(SI*8), X1
@@ -101,7 +101,7 @@ TEXT ·DaxpyInc(SB),NOSPLIT,$0
 	ADDQ R12, BX			// nextY += incX
 	SHLQ $1, R11			// indX *= 2
 	SHLQ $1, R12			// indY *= 2
-
+	
 	SUBQ $2, CX				// n -= 2
 	JL V2					// if n < 0 goto V2
 
@@ -111,7 +111,7 @@ U2:	// n >= 0
 	MOVHPD 0(R9)(DI*8), X1
 	MOVLPD 0(R8)(AX*8), X0
 	MOVLPD 0(R9)(BX*8), X1
-
+	
 	MULPD X7, X0
 	ADDPD X0, X1
 	MOVHPD X1, 0(R9)(DI*8)
@@ -128,7 +128,7 @@ U2:	// n >= 0
 V2:
 	ADDQ $2, CX				// n += 2
 	JLE E2					// if n <= 0 goto E2
-
+	
 	// y[i] += alpha * x[i] for the last iteration if n is odd.
 	MOVSD 0(R8)(SI*8), X0
 	MOVSD 0(R9)(DI*8), X1

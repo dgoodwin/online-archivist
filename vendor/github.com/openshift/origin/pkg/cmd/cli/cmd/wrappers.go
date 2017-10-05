@@ -103,7 +103,7 @@ var (
 
 	patchExample = templates.Examples(`
 		# Partially update a node using strategic merge patch
-	%[1]s patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}'`)
+  	%[1]s patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}'`)
 )
 
 // NewCmdPatch is a wrapper for the Kubernetes cli patch command

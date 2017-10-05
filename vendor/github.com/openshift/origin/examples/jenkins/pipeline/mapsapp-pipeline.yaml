@@ -64,21 +64,21 @@ objects:
                 def project = ""
                 node {
                   project = "${env.PROJECT_NAME}"
-
+        
                   stage('Create NationalParks back-end') {
                     def nationalParksURL = "${NATIONALPARKS_GIT_URI}"
                     def nationalParksBranch = "${NATIONALPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${nationalParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "nationalparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${nationalParksURL}"]]])
                     sh "oc new-app -f nationalparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${nationalParksURL} -p GIT_REF=${nationalParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create MLBParks back-end') {
                     def mlbParksURL = "${MLBPARKS_GIT_URI}"
                     def mlbParksBranch = "${MLBPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${mlbParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "mlbparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${mlbParksURL}"]]])
                     sh "oc new-app -f mlbparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${mlbParksURL} -p GIT_REF=${mlbParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create ParksMap front-end') {
                     def parksMapURL = "${PARKSMAP_GIT_URI}"
                     def parksMapBranch = "${PARKSMAP_GIT_REF}"
@@ -86,7 +86,7 @@ objects:
                     sh "oc new-app -f parksmap/ose3/pipeline-buildconfig-template.json -p GIT_URI=${parksMapURL} -p GIT_REF=${parksMapBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
                 }
-
+        
                 stage('Build Back-ends') {
                   parallel (
                     "nationalparks": {
@@ -101,7 +101,7 @@ objects:
                     }
                   )
                 }
-
+        
                 node {
                   stage('Build Front-end') {
                     openshiftBuild buildConfig: "parksmap-pipeline", namespace: project
@@ -113,7 +113,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
     triggers:
     - github:
         secret: ${GITHUB_TRIGGER_SECRET}

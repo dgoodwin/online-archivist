@@ -18,12 +18,12 @@ function detect {
   local detectionScript=${DETECTION_SCRIPT:-}
   local buildStrategy=${BUILD_STRATEGY:-}
   local strategyArg=""
-  if [[ -n "$buildStrategy" ]]; then
+  if [[ -n "$buildStrategy" ]]; then 
     strategyArg="--strategy=${buildStrategy}"
   fi
 
-  # The purpose of using a custom detection script is that users can customize the
-  # 'detect-language' script to return the image that's appropriate for their needs.
+  # The purpose of using a custom detection script is that users can customize the 
+  # 'detect-language' script to return the image that's appropriate for their needs. 
   # It is possible to just have new-app do code detection. In that case, just set
   # the DETECTION_SCRIPT variable to an empty string.
   if [[ -z $detectionScript ]]; then

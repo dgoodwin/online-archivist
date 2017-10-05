@@ -9,9 +9,9 @@ source "$(dirname "${BASH_SOURCE}")/lib/init.sh"
 if [[ $# -eq 0 || ! -f "${OS_OUTPUT}/deps" ]]; then
   echo "Generating dependency graph ..." 1>&2
   mkdir -p "${OS_OUTPUT}"
-  go list -f '{{.ImportPath}}{{.Imports}}' ./pkg/... ./cmd/... | tr '[]' '  ' |
+  go list -f '{{.ImportPath}}{{.Imports}}' ./pkg/... ./cmd/... | tr '[]' '  ' | 
     grep -vE '^github.com/openshift/origin/cmd/(service-catalog|cluster-capacity)' |
-    sed -e 's|github.com/openshift/origin/vendor/||g' |
+    sed -e 's|github.com/openshift/origin/vendor/||g' | 
     sed -e 's|github.com/openshift/origin/pkg/build/vendor/||g' > "${OS_OUTPUT}/deps"
 fi
 
@@ -19,10 +19,10 @@ if [[ $# -eq 0 ]]; then
   echo "Dependencies generated to ${OS_OUTPUT}/deps"
   echo
   echo "Install digraph with: go get -u golang.org/x/tools/cmd/digraph"
-  echo
+  echo 
   echo "To see the list of all dependencies of a package: "
   echo "  hack/deps.sh forward github.com/openshift/origin/cmd/openshift"
-  echo
+  echo 
   echo "To see how a package was included into a binary (one particular way): "
   echo "  hack/deps.sh somepath github.com/openshift/origin/cmd/openshift FULL_PACKAGE_NAME"
   exit 0

@@ -152,7 +152,7 @@ items:
         kind: ImageStreamTag
         name: test2:latest
     resources: {}
-    source:
+    source: 
       git:
         uri: https://github.com/openshift/origin
       type: Git

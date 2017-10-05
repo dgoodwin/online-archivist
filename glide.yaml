@@ -8,7 +8,7 @@ import:
   repo:    https://github.com/openshift/origin.git
   vcs:     git
 - package: github.com/Sirupsen/logrus
-  version: v0.11.5
+  version: v1.0.3
   repo:    https://github.com/Sirupsen/logrus.git
   vcs:     git
 - package: github.com/go-sql-driver/mysql

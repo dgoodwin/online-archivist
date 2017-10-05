@@ -31,7 +31,7 @@ var (
 
 	clusterQuotaExample = templates.Examples(`
 		# Create a cluster resource quota limited to 10 pods
-	%[1]s limit-bob --project-annotation-selector=openshift.io/requester=user-bob --hard=pods=10`)
+  	%[1]s limit-bob --project-annotation-selector=openshift.io/requester=user-bob --hard=pods=10`)
 )
 
 type CreateClusterQuotaOptions struct {

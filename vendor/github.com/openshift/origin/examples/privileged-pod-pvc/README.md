@@ -19,17 +19,17 @@ _If the pod is not run as privileged, skip the **Edit Privileged scc** section_
 _**Note:**_ This section assumes there are not yet basic users.  If you have a basic user and that user has a project, skip this section.
 
 `$ oc login -u tom -p tom`
-
-   Where "tom" is an arbitrary user name and password.
-
+    
+   Where "tom" is an arbitrary user name and password. 
+   
    Next, create the project as tom:
-
+   
 ```bash
 $ oc new-project <project_name> \
 --description="<description>" \
 --display-name="<display_name>"
 ```
-
+   
    _At a minimum, only `<project_name>` is required._
 
    Basic-users are bound to the project-admin role at project creation so there is no need to manually bind them.
@@ -103,7 +103,7 @@ $ oc rsh <pod_name>
 ```
 
 Examine the output for the gluster volume.
-
+    
 	192.168.59.102:gv0 on /mnt/gluster type fuse.gluster (rw,relatime,user_id=0,group_id=0,default_permissions,allow_other,max_read=131072)
 
 
@@ -115,3 +115,4 @@ For more info on:
 
 * Setting pv/pvc's for other volume providers see [Configuring Persistent Storage](https://docs.openshift.org/latest/install_config/persistent_storage/index.html)
 * SCC's, see [Managing Security Context Contraints](https://docs.openshift.org/latest/admin_guide/manage_scc.html)
+

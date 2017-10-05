@@ -194,7 +194,7 @@
       ``` bash
       $ kubectl get pod pvpod
       NAME      READY     STATUS    RESTARTS   AGE
-      pvpod       1/1     Running   0          48m
+      pvpod       1/1     Running   0          48m        
       ```
 
 ### Storage Class
@@ -220,7 +220,7 @@
       This field is optional. If not specified as shown in example 1, the volume will be created on the datastore specified in the vsphere config file used to initialize the vSphere Cloud Provider.
 
       Example 2:
-
+ 
       ```yaml
       kind: StorageClass
       apiVersion: storage.k8s.io/v1beta1
@@ -242,12 +242,12 @@
       Verifying storage class is created:
 
       ``` bash
-      $ kubectl describe storageclass fast
+      $ kubectl describe storageclass fast 
       Name:		fast
       Annotations:	<none>
       Provisioner:	kubernetes.io/vsphere-volume
       Parameters:	diskformat=zeroedthick
-      No events.
+      No events.        
       ```
 
   2. Create Persistent Volume Claim.
@@ -350,7 +350,7 @@
       ``` bash
       $ kubectl get pod pvpod
       NAME      READY     STATUS    RESTARTS   AGE
-      pvpod       1/1     Running   0          48m
+      pvpod       1/1     Running   0          48m        
       ```
 
 

@@ -71,13 +71,13 @@ message Parameter {
   // from an input value specified by From field. The result string is
   // stored into Value field. If empty, no generator is being used, leaving
   // the result Value untouched. Optional.
-  //
+  // 
   // The only supported generator is "expression", which accepts a "from"
   // value in the form of a simple regular expression containing the
   // range expression "[a-zA-Z0-9]", and the length expression "a{length}".
-  //
+  // 
   // Examples:
-  //
+  // 
   // from             | value
   // -----------------------------
   // "test[0-9]{1}x"  | "test7x"
@@ -203,3 +203,4 @@ message TemplateList {
   // Items is a list of templates
   repeated Template items = 2;
 }
+

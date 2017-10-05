@@ -17,3 +17,4 @@ executionRules:
   - key: images.openshift.io/deny-execution
     value: "true"
   skipOnResolutionFailure: true
+

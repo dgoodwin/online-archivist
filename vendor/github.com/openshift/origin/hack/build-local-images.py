@@ -166,10 +166,10 @@ def add_to_context(context_dir, source, destination, container_destination):
     sytem at the correct destination.
     """
     debug("Adding file:\n\tfrom {}\n\tto {}\n\tincluding in container at {}".format(
-	source,
-	join(context_dir, destination),
+    	source,
+    	join(context_dir, destination),
 		container_destination)
-	)
+   	)
     absolute_destination = abspath(join(context_dir, destination))
     if isdir(source):
         dir_util.copy_tree(source, absolute_destination)

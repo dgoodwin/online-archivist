@@ -33,7 +33,7 @@ var (
 
 	rolloutLatestExample = templates.Examples(`
 		# Start a new rollout based on the latest images defined in the image change triggers.
-	%[1]s rollout latest dc/nginx`)
+  	%[1]s rollout latest dc/nginx`)
 )
 
 // RolloutLatestOptions holds all the options for the `rollout latest` command.

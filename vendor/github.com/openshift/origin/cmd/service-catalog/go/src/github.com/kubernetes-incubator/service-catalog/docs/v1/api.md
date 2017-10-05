@@ -56,7 +56,7 @@ The service catalog controller has a watch on the `Instance` resource and
 receives an `ADD` watch event. The controller then attempts to provision a new
 instance of the service via the corresponding service broker:
 
-1.  The controller calls the provision endpoint on the broker
+1.  The controller calls the provision endpoint on the broker 
 2.  The broker returns a response indicating that the broker provisioned the new
     instance, the instance was already provisioned, or the provisioning
     operation is in progress

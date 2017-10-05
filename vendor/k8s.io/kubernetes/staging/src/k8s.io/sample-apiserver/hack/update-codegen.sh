@@ -43,8 +43,8 @@ wardle/v1alpha1
 INPUT="--input ${INPUT_APIS[@]}"
 CLIENTSET_PATH="--clientset-path k8s.io/sample-apiserver/pkg/client/clientset_generated"
 
-${CLIENTGEN} ${INPUT_BASE} ${INPUT} ${CLIENTSET_PATH}
-${CLIENTGEN} --clientset-name="clientset" ${INPUT_BASE} --input wardle/v1alpha1 ${CLIENTSET_PATH}
+${CLIENTGEN} ${INPUT_BASE} ${INPUT} ${CLIENTSET_PATH} 
+${CLIENTGEN} --clientset-name="clientset" ${INPUT_BASE} --input wardle/v1alpha1 ${CLIENTSET_PATH} 
 
 
 echo "Building lister-gen"

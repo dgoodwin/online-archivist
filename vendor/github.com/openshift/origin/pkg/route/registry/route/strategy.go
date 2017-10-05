@@ -241,7 +241,7 @@ func (routeStatusStrategy) ValidateUpdate(ctx apirequest.Context, obj, old runti
 
 const emptyDestinationCertificate = `-----BEGIN COMMENT-----
 This is an empty PEM file created to provide backwards compatibility
-for reencrypt routes that have no destinationCACertificate. This
+for reencrypt routes that have no destinationCACertificate. This 
 content will only appear for routes accessed via /oapi/v1/routes.
 -----END COMMENT-----
 `

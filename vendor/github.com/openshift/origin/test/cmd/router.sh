@@ -42,7 +42,7 @@ os::cmd::expect_failure_and_text 'oadm router --dry-run --host-network=false --h
 os::cmd::expect_failure_and_text 'oadm router --dry-run --host-network=false --host-ports=false --router-canonical-hostname=1.2.3.4 -o yaml' 'error: canonical hostname must not be an IP address'
 # max_conn
 os::cmd::expect_success_and_text 'oadm router --dry-run --host-network=false --host-ports=false --max-connections=14583 -o yaml' '14583'
-# ciphers
+# ciphers 
 os::cmd::expect_success_and_text 'oadm router --dry-run --host-network=false --host-ports=false --ciphers=modern -o yaml' 'modern'
 # strict-sni
 os::cmd::expect_success_and_text 'oadm router --dry-run --host-network=false --host-ports=false --strict-sni -o yaml' 'ROUTER_STRICT_SNI'

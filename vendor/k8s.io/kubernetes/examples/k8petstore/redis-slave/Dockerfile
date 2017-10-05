@@ -20,7 +20,7 @@
 
 # Pull base image.
 #
-# Just a stub.
+# Just a stub. 
 
 FROM redis
 

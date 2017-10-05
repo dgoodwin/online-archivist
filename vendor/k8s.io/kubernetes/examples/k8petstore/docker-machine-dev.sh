@@ -26,7 +26,7 @@ function setup_vm() {
     PROVIDER=virtualbox
 
     ### Create a VM specific to this app...
-    if docker-machine ls | grep -q k8petstore ; then
+    if docker-machine ls | grep -q k8petstore ; then 
       echo "VM already exists, moving on..."
     else
       docker-machine create --driver $PROVIDER k8petstore
@@ -35,7 +35,7 @@ function setup_vm() {
 
 function setup_docker() {
 
-    ## Set the docker server, and then clean all containers...
+    ## Set the docker server, and then clean all containers... 
     eval "$(docker-machine env k8petstore)"
     docker rm -f `docker ps -a -q`
 
@@ -49,13 +49,13 @@ function build_containers() {
     popd
 
     pushd redis-master
-    docker build -t jayunit100/k8-petstore-redis-master:$version ./
+    docker build -t jayunit100/k8-petstore-redis-master:$version ./    
     popd
-
+    
     pushd redis-slave
     docker build -t jayunit100/k8-petstore-redis-slave:$version ./
     popd
-
+    
     pushd web-server
     docker build -t jayunit100/k8-petstore-web-server:$version ./
     popd
@@ -72,7 +72,7 @@ function runk8petstore() {
     echo "Running k8petstore now..."
     docker run --name redis -d -p 6379:6379 jayunit100/k8-petstore-redis-master:$version
     docker run --link redis:redis -d -e REDISMASTER_SERVICE_HOST=redis -e REDISMASTER_SERVICE_PORT=6379 -p 3000:3000 jayunit100/k8-petstore-web-server:$version
-
+    
 }
 
 

@@ -10,7 +10,7 @@ Graphic by [JonnyEtc](http://jonnyetc.deviantart.com/art/And-That-s-Why-You-Alwa
 JWW is primarily a wrapper around the excellent standard log library. It
 provides a few advantages over using the standard log library alone.
 
-1. Ready to go out of the box.
+1. Ready to go out of the box. 
 2. One library for both printing to the terminal and logging (to files).
 3. Really easy to log to either a temp file or a file you specify.
 
@@ -23,7 +23,7 @@ the following things.
 2. Allow the user to easily control what levels are printed to stdout
 3. Allow the user to easily control what levels are logged
 4. Provide an easy mechanism (like fmt.Println) to print info to the user
-   which can be easily logged as well
+   which can be easily logged as well 
 5. Due to 2 & 3 provide easy verbose mode for output and logs
 6. Not have any unnecessary initialization cruft. Just use it.
 
@@ -66,7 +66,7 @@ standard usage. Eg..
         // This error isn’t going to materially change the behavior of the
         // application, but it’s something that may not be what the user
         // expects. Under the default thresholds, Warn will be logged, but
-        // not printed to the terminal.
+        // not printed to the terminal. 
 
         jww.WARN.Println(err2)
     }
@@ -122,7 +122,7 @@ level before making any other calls if you want to see what it's up to.
 
 JWW conveniently creates a temporary file and sets the log Handle to
 a io.Writer created for it. You should call this early in your application
-initialization routine as it will only log calls made after it is executed.
+initialization routine as it will only log calls made after it is executed. 
 When this option is used, the library will fmt.Println where to find the
 log file.
 
@@ -131,7 +131,7 @@ log file.
         jww "github.com/spf13/jwalterweatherman"
     )
 
-    jww.UseTempLogFile("YourAppName")
+    jww.UseTempLogFile("YourAppName") 
 
 ```
 
@@ -146,7 +146,7 @@ Will only append to this file.
         jww "github.com/spf13/jwalterweatherman"
     )
 
-    jww.SetLogFile("/path/to/logfile")
+    jww.SetLogFile("/path/to/logfile") 
 
 ```
 

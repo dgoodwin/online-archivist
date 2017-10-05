@@ -4,7 +4,7 @@ How to use Swagger UI with go-restful
 Get the Swagger UI sources (version 1.2 only)
 
 	git clone https://github.com/wordnik/swagger-ui.git
-
+	
 The project contains a "dist" folder.
 Its contents has all the Swagger UI files you need.
 
@@ -18,9 +18,9 @@ Now, you can install the Swagger WebService for serving the Swagger specificatio
 		ApiPath:        "/apidocs.json",
 		SwaggerPath:     "/apidocs/",
 		SwaggerFilePath: "/Users/emicklei/Projects/swagger-ui/dist"}
-	swagger.InstallSwaggerService(config)
-
-
+	swagger.InstallSwaggerService(config)		
+	
+	
 Documenting Structs
 --
 
@@ -72,5 +72,5 @@ This example will generate a JSON like this
 
 Notes
 --
-- The Nickname of an Operation is automatically set by finding the name of the function. You can override it using RouteBuilder.Operation(..)
+- The Nickname of an Operation is automatically set by finding the name of the function. You can override it using RouteBuilder.Operation(..) 
 - The WebServices field of swagger.Config can be used to control which service you want to expose and document ; you can have multiple configs and therefore multiple endpoints.

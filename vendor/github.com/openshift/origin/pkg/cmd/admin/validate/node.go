@@ -29,7 +29,7 @@ var (
 
 	validateNodeConfigExample = templates.Examples(`
 		# Validate node configuration file
-	%s openshift.local.config/master/node-config.yaml`)
+  	%s openshift.local.config/master/node-config.yaml`)
 )
 
 type ValidateNodeConfigOptions struct {

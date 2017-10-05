@@ -7,3 +7,4 @@ In suite "package/name2", test case "TestOne" failed:
 	file_test.go:11: Longer
 		error
 		message.
+

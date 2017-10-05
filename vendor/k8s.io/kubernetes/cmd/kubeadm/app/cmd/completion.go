@@ -255,7 +255,7 @@ __kubeadm_quote() {
         # Leave out first character
         printf %q "${1:1}"
     else
-	printf %q "$1"
+    	printf %q "$1"
     fi
 }
 

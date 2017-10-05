@@ -39,7 +39,7 @@ function clear_routers_status() {
     local namespace="${1}"
     local route_name="${2}"
     local router_name="${3}"
-    local my_json_blob; my_json_blob=$(oc get --raw http://localhost:8001/oapi/v1/namespaces/"${namespace}"/routes/"${route_name}"/)
+    local my_json_blob; my_json_blob=$(oc get --raw http://localhost:8001/oapi/v1/namespaces/"${namespace}"/routes/"${route_name}"/) 
     local modified_json; modified_json=$(echo "${my_json_blob}" | jq '."status"."ingress"|=map(select(.routerName != "'${router_name}'"))')
     if [[ "${modified_json}" != "$(echo "${my_json_blob}" | jq '.')" ]]; then
         curl -s -X PUT http://localhost:8001/oapi/v1/namespaces/"${namespace}"/routes/"${route_name}"/status --data-binary "${modified_json}" -H "Content-Type: application/json" > /dev/null
@@ -78,7 +78,7 @@ To clear the status of all routes in namespace default:
 To clear the status of route example in namespace default:
 ./clear-route-status.sh default example
 
-NOTE: if a router that admits a route is running it will immediately update the cleared route status
+NOTE: if a router that admits a route is running it will immediately update the cleared route status 
 "
 
 if [[ ${#} -ne 2 || "${@}" == *" help "* ]]; then
@@ -94,7 +94,7 @@ fi
 if ! echo | jq '."status"."ingress"|=map(select(.routerName != "test"))' >/dev/null 2>&1; then
     printf "%s\n%s\n" "Command line JSON processor 'jq' version is incorrect." "Please install 'jq' version greater than 1.4 to use this script"
     exit 1
-fi
+fi    
 
 oc proxy > /dev/null &
 PROXY_PID="${!}"
@@ -124,3 +124,4 @@ if [[ "${route_name}" == "ALL" ]]; then
 else
     clear_status "${namespace}" "${route_name}"
 fi
+

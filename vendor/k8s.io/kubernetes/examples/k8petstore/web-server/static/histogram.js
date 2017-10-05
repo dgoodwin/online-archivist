@@ -36,3 +36,4 @@ function f(data2) {
 
     var myLineChart = new Chart(ctx).Line(data);
 }
+

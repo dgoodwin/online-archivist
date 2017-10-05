@@ -110,7 +110,7 @@ Gone are the days of needing to restart a server to have a config take effect,
 viper powered applications can read an update to a config file while running and
 not miss a beat.
 
-Simply tell the viper instance to watchConfig.
+Simply tell the viper instance to watchConfig. 
 Optionally you can provide a function for Viper to run each time a change occurs.
 
 **Make sure you add all of the configPaths prior to calling `WatchConfig()`**
@@ -298,7 +298,7 @@ type myFlagSet struct {
 
 func (f myFlagSet) VisitAll(fn func(FlagValue)) {
 	for _, flag := range flags {
-		fn(flag)
+		fn(flag)	
 	}
 }
 ```

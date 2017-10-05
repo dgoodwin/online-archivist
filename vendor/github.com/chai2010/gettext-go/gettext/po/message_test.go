@@ -59,7 +59,7 @@ FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 		},
 		MsgStr: `
 Project-Id-Version: 项目名称
-Report-Msgid-Bugs-To:
+Report-Msgid-Bugs-To: 
 POT-Creation-Date: 2011-12-12 20:03+0000
 PO-Revision-Date: 2013-12-02 17:05+0800
 Last-Translator: chai2010 <chaishushan@gmail.com>

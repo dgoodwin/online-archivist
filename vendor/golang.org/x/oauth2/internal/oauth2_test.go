@@ -18,7 +18,7 @@ func TestParseINI(t *testing.T) {
 	}{
 		{
 			`root = toor
-[foo]
+[foo]  
 bar = hop
 ini = nin
 `,

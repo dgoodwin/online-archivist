@@ -27,7 +27,7 @@ var (
 		on keys migrated from the etcd v2 schema to etcd v3 is intended to be used after that upgrade
 		is complete on events and access tokens. Keys that are already attached to a lease will be
 		ignored. If another user modifies a key while this command is running you will need to re-run.
-
+		
 		Any resource impacted by this command will be removed from etcd after the lease-duration
 		expires. Be VERY CAREFUL in which values you place to --ttl-keys-prefix, and ensure you
 		have an up to date backup of your etcd database.`)

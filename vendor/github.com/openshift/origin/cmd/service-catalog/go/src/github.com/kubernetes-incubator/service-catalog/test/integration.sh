@@ -32,3 +32,4 @@ runTests() {
 trap kube::etcd::cleanup EXIT
 
 runTests
+

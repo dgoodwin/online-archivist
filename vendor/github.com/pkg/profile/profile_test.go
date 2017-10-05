@@ -27,7 +27,7 @@ import "github.com/pkg/profile"
 
 func main() {
 	defer profile.Start().Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -43,7 +43,7 @@ import "github.com/pkg/profile"
 
 func main() {
 	defer profile.Start(profile.MemProfile).Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -59,7 +59,7 @@ import "github.com/pkg/profile"
 
 func main() {
 	defer profile.Start(profile.MemProfileRate(2048)).Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -76,7 +76,7 @@ import "github.com/pkg/profile"
 func main() {
 	defer profile.Start().Stop()
 	defer profile.Start().Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -92,7 +92,7 @@ import "github.com/pkg/profile"
 
 func main() {
 	defer profile.Start(profile.BlockProfile).Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -108,7 +108,7 @@ import "github.com/pkg/profile"
 
 func main() {
 	defer profile.Start(profile.ProfilePath(".")).Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -124,7 +124,7 @@ import "github.com/pkg/profile"
 
 func main() {
 		defer profile.Start(profile.ProfilePath("README.md")).Stop()
-}
+}	
 `,
 	checks: []checkFn{
 		NoStdout,
@@ -140,7 +140,7 @@ import "github.com/pkg/profile"
 
 func main() {
         defer profile.Start(profile.Quiet).Stop()
-}
+}       
 `,
 	checks: []checkFn{NoStdout, NoStderr, NoErr},
 }}

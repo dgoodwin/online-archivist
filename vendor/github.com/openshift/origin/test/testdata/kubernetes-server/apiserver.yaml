@@ -166,3 +166,4 @@ items:
     name: kube-apiserver
   data:
     knowntokens.csv: secret,admin,1,"group1,group2,group3"
+

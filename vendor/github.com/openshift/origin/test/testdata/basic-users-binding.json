@@ -8,10 +8,10 @@
         "resourceVersion": "42",
         "creationTimestamp": "2015-10-02T15:09:18Z",
         "labels": {
-		"custom-label":"value"
+        	"custom-label":"value"
         },
         "annotations": {
-		"custom-annotation":"value"
+        	"custom-annotation":"value"
         }
     },
     "subjects": [

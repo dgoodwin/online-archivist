@@ -217,7 +217,7 @@ cluster you regularly use and are familiar with.  One of the choices you can
 make when deploying the catalog is whether to make the API server store its
 resources in an external etcd server, or in third party resources.
 
-If you choose etcd storage, the helm chart will launch an etcd server for you
+If you choose etcd storage, the helm chart will launch an etcd server for you 
 in the same pod as the service-catalog API server. You will be responsible for
 the data in the etcd server container.
 

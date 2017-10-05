@@ -115,3 +115,4 @@ message UserList {
   // Items is the list of users
   repeated User items = 2;
 }
+

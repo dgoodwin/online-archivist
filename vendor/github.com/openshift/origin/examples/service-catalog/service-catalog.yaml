@@ -111,7 +111,7 @@ objects:
     name: service-catalog-controller
   userNames:
     - system:serviceaccount:service-catalog:service-catalog-controller
-
+  
 - kind: Role
   apiVersion: v1
   metadata:
@@ -195,7 +195,7 @@ objects:
       spec:
         serviceAccountName: service-catalog-apiserver
         containers:
-        - command:
+        - command: 
           - apiserver
           args:
           - --admission-control
@@ -301,7 +301,7 @@ objects:
       spec:
         serviceAccountName: service-catalog-controller
         containers:
-        - command:
+        - command: 
           - controller-manager
           args:
           - -v
@@ -371,3 +371,4 @@ parameters:
   name: KUBE_SYSTEM_NAMESPACE
   required: true
   value: kube-system
+  

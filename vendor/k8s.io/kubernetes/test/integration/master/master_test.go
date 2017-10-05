@@ -680,3 +680,4 @@ func TestUpdateNodeObjects(t *testing.T) {
 	}
 	wg.Wait()
 }
+

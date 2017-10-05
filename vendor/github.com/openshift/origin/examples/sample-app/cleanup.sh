@@ -11,3 +11,5 @@ mount | grep "openshift.local.volumes" | awk '{ print $3}' | xargs -l -r sudo um
 
 echo "Cleaning up openshift runtime files ..."
 sudo rm -rf openshift.local.*
+
+

@@ -51,7 +51,7 @@ server is pluggable, and we currently support the following implementations:
 The first implementation requires that the API server has access to an Etcd 3 cluster, and the
 second only requires access to the Kubernetes API to store TPRs.
 
-Even if you store data in TPRs, you should still access data via the service catalog API. It is
+Even if you store data in TPRs, you should still access data via the service catalog API. It is 
 possible to access data via the TPRs directly, but we don't recommend it.
 
 ### Install
@@ -73,7 +73,7 @@ walkthrough will stay the same.
 
 ### API Server Authentication and Authorization
 
-Authentication and authorization are disabled in the Helm chart by default. To enable them,
+Authentication and authorization are disabled in the Helm chart by default. To enable them, 
 set the `apiserver.auth.enabled` option on the Helm chart:
 
 ```console
@@ -93,7 +93,7 @@ check out the "Cleaning Up" section below. Follow those instructions before you 
 
 The service catalog API has five main concepts:
 
-- Broker Server: A server that acts as a service broker and conforms to the
+- Broker Server: A server that acts as a service broker and conforms to the 
 [Open Service Broker API](https://github.com/openservicebrokerapi/servicebroker/blob/master/spec.md)
 specification. This software could be hosted within your own Kubernetes cluster
 or elsewhere.
@@ -173,8 +173,8 @@ newly-installed executable.
 
 To configure `kubectl` to communicate with the service catalog API server, we'll have to
 get the IP address that points to the `Service` that sits in front of the API server pod(s).
-If you installed the catalog with one of the `helm install` commands above, then this service
-will be called `catalog-catalog-apiserver`, and be in the `catalog` namespace.
+If you installed the catalog with one of the `helm install` commands above, then this service 
+will be called `catalog-catalog-apiserver`, and be in the `catalog` namespace. 
 
 ### Notes on Getting the IP Address
 

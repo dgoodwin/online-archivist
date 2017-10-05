@@ -3762,7 +3762,7 @@ LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 ENV STI_SCRIPTS_PATH=/usr/libexec/s2i
 COPY scripts $STI_SCRIPTS_PATH
 RUN chown 1001 /openshifttmp
-USER 1001
+USER 1001 
 `)
 
 func testExtendedTestdataHelloBuilderDockerfileBytes() ([]byte, error) {
@@ -4019,9 +4019,9 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        pre:
+        pre: 
           failurePolicy: Abort
-          execNewPod:
+          execNewPod: 
             containerName: dc-pod
             command:
             - ls
@@ -4069,9 +4069,9 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        pre:
+        pre: 
           failurePolicy: Abort
-          execNewPod:
+          execNewPod: 
             containerName: dc-pod-old
             command:
             - ls
@@ -4108,12 +4108,12 @@ apiVersion: v1
 metadata:
   name: template
 objects:
-- kind: Pod
-  apiVersion: v1
-  metadata:
+- kind: Pod 
+  apiVersion: v1 
+  metadata: 
     name: new-pull-pod
-  spec:
-    containers:
+  spec: 
+    containers: 
     - name: new-pull-pod
       image: ${DOCKER_REGISTRY}/image-ns/busybox
       command:
@@ -4143,12 +4143,12 @@ apiVersion: v1
 metadata:
   name: template
 objects:
-- kind: Pod
-  apiVersion: v1
-  metadata:
+- kind: Pod 
+  apiVersion: v1 
+  metadata: 
     name: no-pull-pod
-  spec:
-    containers:
+  spec: 
+    containers: 
     - name: no-pull-pod
       image: ${DOCKER_REGISTRY}/image-ns/busybox
       command:
@@ -4176,12 +4176,12 @@ apiVersion: v1
 metadata:
   name: template
 objects:
-- kind: Pod
-  apiVersion: v1
-  metadata:
+- kind: Pod 
+  apiVersion: v1 
+  metadata: 
     name: old-pull-pod
-  spec:
-    containers:
+  spec: 
+    containers: 
     - name: old-pull-pod
       image: ${DOCKER_REGISTRY}/image-ns/busybox
       command:
@@ -4402,26 +4402,26 @@ func testExtendedTestdataIncrementalAuthBuildJson() (*asset, error) {
 	return a, nil
 }
 
-var _testExtendedTestdataJenkinsPluginBuildJobCloneXml = []byte(`<?xml version='1.0' encoding='UTF-8'?>
-<flow-definition plugin="workflow-job@2.8">
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties>
-    <io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty plugin="openshift-sync@0.1.1">
-      <uid></uid>
-      <namespace></namespace>
-      <name></name>
-      <resourceVersion></resourceVersion>
-    </io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty>
-    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-      <triggers/>
-    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-  </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.22">
-    <script>node{
-    openshiftBuild namespace: &apos;${PROJECT_NAME}&apos;, bldCfg: &apos;frontend&apos;, buildName: &apos;frontend-1&apos;, showBuildLogs: &apos;false&apos;, verbose: &apos;true&apos;
-}</script>
+var _testExtendedTestdataJenkinsPluginBuildJobCloneXml = []byte(`<?xml version='1.0' encoding='UTF-8'?>                                                                                                                                                                                                                         
+<flow-definition plugin="workflow-job@2.8">                                                                                                                                                                                                                    
+  <actions/>                                                                                                                                                                                                                                                   
+  <description></description>                                                                                                                                                                                                                                  
+  <keepDependencies>false</keepDependencies>                                                                                                                                                                                                                   
+  <properties>                                                                                                                                                                                                                                                 
+    <io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty plugin="openshift-sync@0.1.1">                                                                                                                                                                
+      <uid></uid>                                                                                                                                                                                                                                              
+      <namespace></namespace>                                                                                                                                                                                                                                  
+      <name></name>                                                                                                                                                                                                                                            
+      <resourceVersion></resourceVersion>                                                                                                                                                                                                                      
+    </io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty>                                                                                                                                                                                             
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>                                                                                                                                                                                
+      <triggers/>                                                                                                                                                                                                                                              
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>                                                                                                                                                                               
+  </properties>                                                                                                                                                                                                                                                
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.22">                                                                                                                                                         
+    <script>node{                                                                                                                                                                                                                                              
+    openshiftBuild namespace: &apos;${PROJECT_NAME}&apos;, bldCfg: &apos;frontend&apos;, buildName: &apos;frontend-1&apos;, showBuildLogs: &apos;false&apos;, verbose: &apos;true&apos;                                                                                     
+}</script>                                                                                                                                                                                                                                                     
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
@@ -4443,22 +4443,22 @@ func testExtendedTestdataJenkinsPluginBuildJobCloneXml() (*asset, error) {
 	return a, nil
 }
 
-var _testExtendedTestdataJenkinsPluginBuildJobSlaveXml = []byte(`<?xml version='1.0' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>nodejs</assignedNode>
-  <canRoam>false</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
+var _testExtendedTestdataJenkinsPluginBuildJobSlaveXml = []byte(`<?xml version='1.0' encoding='UTF-8'?>                                                                                                                                                                                                                         
+<project>                                                                                                                                                                                                                                                      
+  <actions/>                                                                                                                                                                                                                                                   
+  <description></description>                                                                                                                                                                                                                                  
+  <keepDependencies>false</keepDependencies>                                                                                                                                                                                                                   
+  <properties/>                                                                                                                                                                                                                                                
+  <scm class="hudson.scm.NullSCM"/>                                                                                                                                                                                                                            
+  <assignedNode>nodejs</assignedNode>                                                                                                                                                                                                                          
+  <canRoam>false</canRoam>                                                                                                                                                                                                                                     
+  <disabled>false</disabled>                                                                                                                                                                                                                                   
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>                                                                                                                                                                                   
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>                                                                                                                                                                                       
+  <triggers/>                                                                                                                                                                                                                                                  
+  <concurrentBuild>false</concurrentBuild>                                                                                                                                                                                                                     
   <builders>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftScaler>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <depCfg>frontend</depCfg>
@@ -4485,7 +4485,7 @@ var _testExtendedTestdataJenkinsPluginBuildJobSlaveXml = []byte(`<?xml version='
           <waitUnit>sec</waitUnit>
           <depCfg>frontend</depCfg>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <svcName>frontend</svcName>
@@ -4510,10 +4510,10 @@ var _testExtendedTestdataJenkinsPluginBuildJobSlaveXml = []byte(`<?xml version='
             <replicaCount>0</replicaCount>
             <authToken></authToken>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
-
-  </builders>
-  <publishers/>
-  <buildWrappers/>
+    
+  </builders>                                                                                                                                                                                                                                                  
+  <publishers/>                                                                                                                                                                                                                                                
+  <buildWrappers/>                                                                                                                                                                                                                                             
 </project>
 `)
 
@@ -4572,7 +4572,7 @@ var _testExtendedTestdataJenkinsPluginBuildJobXml = []byte(`<?xml version='1.0' 
           <waitUnit>sec</waitUnit>
           <depCfg>frontend</depCfg>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <svcName>frontend</svcName>
@@ -4776,7 +4776,7 @@ var _testExtendedTestdataJenkinsPluginCreateJobXml = []byte(`<?xml version='1.0'
     "metadata": {},
     "items": [
 	{
-
+    
 	    "kind": "ImageStream",
 	    "apiVersion": "v1",
 	    "metadata": {
@@ -4790,7 +4790,7 @@ var _testExtendedTestdataJenkinsPluginCreateJobXml = []byte(`<?xml version='1.0'
 	    "status": {
 		"dockerImageRepository": ""
 	    }
-
+    
 	},
 	{
 	    "kind": "BuildConfig",
@@ -4866,8 +4866,8 @@ var _testExtendedTestdataJenkinsPluginDeleteJobKeysXml = []byte(`<?xml version='
 
         <com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterList>
           <namespace>${PROJECT_NAME}</namespace>
-          <types>is,bc</types>
-          <keys>forcepull-extended-test-builder,forcepull-bldr</keys>
+          <types>is,bc</types>                                                                                                                                                                                                             
+          <keys>forcepull-extended-test-builder,forcepull-bldr</keys>                                                                                                                                                                                                                 
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterList>
 
     </builders>
@@ -4907,9 +4907,9 @@ var _testExtendedTestdataJenkinsPluginDeleteJobLabelsXml = []byte(`<?xml version
 
         <com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterLabels>
           <namespace>${PROJECT_NAME}</namespace>
-          <types>bc,is</types>
-          <keys>foo</keys>
-          <values>bar</values>
+          <types>bc,is</types>                                                                                                                                                                                                             
+          <keys>foo</keys>                                                                                                                                                                                                                 
+          <values>bar</values>                                                                                                                                                                                                             
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterLabels>
 
     </builders>
@@ -4955,7 +4955,7 @@ var _testExtendedTestdataJenkinsPluginDeleteJobXml = []byte(`<?xml version='1.0'
     "metadata": {},
     "items": [
 	{
-
+    
 	    "kind": "ImageStream",
 	    "apiVersion": "v1",
 	    "metadata": {
@@ -4966,7 +4966,7 @@ var _testExtendedTestdataJenkinsPluginDeleteJobXml = []byte(`<?xml version='1.0'
 	    "status": {
 		"dockerImageRepository": ""
 	    }
-
+    
 	},
 	{
 	    "kind": "BuildConfig",
@@ -5679,7 +5679,7 @@ objects:
         jenkinsfile: |-
           try {
              timeout(time: 20, unit: 'MINUTES') {
-
+        
                 node("jenkins-slave") {
                   sh "mvn --version"
                 }
@@ -5865,7 +5865,7 @@ var _testExtendedTestdataLdapLdapserverDeploymentconfigJson = []byte(`{
               },
               "initialDelaySeconds": 5,
               "timeoutSeconds": 1
-            }
+            }            
           }
         ],
         "restartPolicy": "Always",
@@ -6597,39 +6597,39 @@ var _testExtendedTestdataRun_policyParallelBcYaml = []byte(`---
   kind: "List"
   apiVersion: "v1"
   metadata: {}
-  items:
-    -
+  items: 
+    - 
       kind: "ImageStream"
       apiVersion: "v1"
-      metadata:
+      metadata: 
         name: "origin-ruby-sample"
         creationTimestamp: null
       spec: {}
-      status:
+      status: 
         dockerImageRepository: ""
-    -
+    - 
       kind: "BuildConfig"
       apiVersion: "v1"
-      metadata:
+      metadata: 
         name: "sample-parallel-build"
-      spec:
+      spec: 
         runPolicy: "Parallel"
-        triggers:
-          -
+        triggers: 
+          - 
             type: "imageChange"
             imageChange: {}
-        source:
+        source: 
           type: "Git"
-          git:
+          git: 
             uri: "git://github.com/openshift/ruby-hello-world.git"
-        strategy:
+        strategy: 
           type: "Source"
-          sourceStrategy:
-            from:
+          sourceStrategy: 
+            from: 
               kind: "DockerImage"
               name: "centos/ruby-22-centos7"
         resources: {}
-      status:
+      status: 
         lastVersion: 0
 
 `)
@@ -6653,47 +6653,47 @@ var _testExtendedTestdataRun_policySerialBcYaml = []byte(`---
   kind: "List"
   apiVersion: "v1"
   metadata: {}
-  items:
-    -
+  items: 
+    - 
       kind: "BuildConfig"
       apiVersion: "v1"
-      metadata:
+      metadata: 
         name: "sample-serial-build"
-      spec:
+      spec: 
         runPolicy: "Serial"
-        triggers:
-          -
+        triggers: 
+          - 
             type: "imageChange"
             imageChange: {}
-        source:
+        source: 
           type: "Git"
-          git:
+          git: 
             uri: "git://github.com/openshift/ruby-hello-world.git"
-        strategy:
+        strategy: 
           type: "Source"
-          sourceStrategy:
-            from:
+          sourceStrategy: 
+            from: 
               kind: "DockerImage"
               name: "centos/ruby-22-centos7"
-    -
+    - 
       kind: "BuildConfig"
       apiVersion: "v1"
-      metadata:
+      metadata: 
         name: "sample-serial-build-fail"
-      spec:
+      spec: 
         runPolicy: "Serial"
-        triggers:
-          -
+        triggers: 
+          - 
             type: "imageChange"
             imageChange: {}
-        source:
+        source: 
           type: "Git"
-          git:
+          git: 
             uri: "git://github.com/openshift/invalidrepo.git"
-        strategy:
+        strategy: 
           type: "Source"
-          sourceStrategy:
-            from:
+          sourceStrategy: 
+            from: 
               kind: "DockerImage"
               name: "centos/ruby-22-centos7"
 `)
@@ -6717,30 +6717,30 @@ var _testExtendedTestdataRun_policySerialLatestOnlyBcYaml = []byte(`---
   kind: "List"
   apiVersion: "v1"
   metadata: {}
-  items:
-    -
+  items: 
+    - 
       kind: "BuildConfig"
       apiVersion: "v1"
-      metadata:
+      metadata: 
         name: "sample-serial-latest-only-build"
-      spec:
+      spec: 
         runPolicy: "SerialLatestOnly"
-        triggers:
-          -
+        triggers: 
+          - 
             type: "imageChange"
             imageChange: {}
-        source:
+        source: 
           type: "Git"
-          git:
+          git: 
             uri: "git://github.com/openshift/ruby-hello-world.git"
-        strategy:
+        strategy: 
           type: "Source"
-          sourceStrategy:
-            from:
+          sourceStrategy: 
+            from: 
               kind: "DockerImage"
               name: "centos/ruby-22-centos7"
         resources: {}
-      status:
+      status: 
         lastVersion: 0
 
 `)
@@ -7970,7 +7970,7 @@ var _testExtendedTestdataTestBuildPostcommitJson = []byte(`{
                             "name": "busybox:1"
                         }
                     }
-                },
+                }, 
                 "resources": {},
                 "postCommit": {}
             }
@@ -8002,7 +8002,7 @@ items:
   apiVersion: v1
   metadata:
     name: origin-ruby-sample
-    creationTimestamp:
+    creationTimestamp: 
   spec: {}
   status:
     dockerImageRepository: ''
@@ -8010,7 +8010,7 @@ items:
   apiVersion: v1
   metadata:
     name: sample-build
-    creationTimestamp:
+    creationTimestamp: 
   spec:
     triggers:
     - type: imageChange
@@ -8036,7 +8036,7 @@ items:
   apiVersion: v1
   metadata:
     name: sample-s2i-build-noproxy
-    creationTimestamp:
+    creationTimestamp: 
   spec:
     triggers:
     - type: imageChange
@@ -8063,7 +8063,7 @@ items:
   apiVersion: v1
   metadata:
     name: sample-docker-build-noproxy
-    creationTimestamp:
+    creationTimestamp: 
   spec:
     triggers:
     - type: imageChange
@@ -8882,7 +8882,7 @@ var _testExtendedTestdataTestContextBuildJson = []byte(`{
       "metadata": {
         "name": "test"
       }
-    },
+    },    
     {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
@@ -9135,7 +9135,7 @@ var _testExtendedTestdataTestDockerBuildQuotaJson = []byte(`{
     "source": {
       "binary": {
         "asFile": ""
-      }
+      }          
     },
     "strategy": {
       "type": "Docker",
@@ -9487,7 +9487,7 @@ objects:
           # May not be used in combination with REQUIRE_GIT_AUTH
           - name: REQUIRE_SERVER_AUTH
             value: "-"
-
+          
           # The namespace to check authorization against when
           # REQUIRE_SERVICE_AUTH is used. Users must have 'get' on
           # 'pods' to pull and 'create' on 'pods' to push.
@@ -9686,7 +9686,7 @@ objects:
           # May not be used in combination with REQUIRE_GIT_AUTH
           #- name: REQUIRE_SERVER_AUTH
           #  value: "-"
-
+          
           # The namespace to check authorization against when
           # REQUIRE_SERVICE_AUTH is used. Users must have 'get' on
           # 'pods' to pull and 'create' on 'pods' to push.
@@ -10038,7 +10038,7 @@ var _testExtendedTestdataTestS2iBuildQuotaJson = []byte(`{
     "source": {
       "binary": {
         "asFile": ""
-      }
+      }          
     },
     "strategy": {
       "type": "Source",
@@ -10501,7 +10501,7 @@ spec:
             secretKeyRef:
               name: mysecret
               key: username
-        - name: FIELDREF_CLONE_ENV
+        - name: FIELDREF_CLONE_ENV 
           value: $(FIELDREF_ENV)
         - name: FIELDREF_CLONE_CLONE_ENV
           value: $(FIELDREF_CLONE_ENV)
@@ -19276,7 +19276,7 @@ objects:
                 def tag="blue"
                 def altTag="green"
                 def verbose="${VERBOSE}"
-
+        
                 node {
                   project = env.PROJECT_NAME
                   stage("Initialize") {
@@ -19289,21 +19289,21 @@ objects:
                     sh "oc get route ${tag}-${appName} -n ${project} -o jsonpath='{ .spec.host }' --loglevel=4 > routehost"
                     routeHost = readFile('routehost').trim()
                   }
-
+        
                   stage("Build") {
                     echo "building tag ${tag}"
                     openshiftBuild buildConfig: appName, showBuildLogs: "true", verbose: verbose
                   }
-
+        
                   stage("Deploy Test") {
                     openshiftTag srcStream: appName, srcTag: 'latest', destinationStream: appName, destinationTag: tag, verbose: verbose
                     openshiftVerifyDeployment deploymentConfig: "${appName}-${tag}", verbose: verbose
                   }
-
+        
                   stage("Test") {
                     input message: "Test deployment: http://${routeHost}. Approve?", id: "approval"
                   }
-
+        
                   stage("Go Live") {
                     sh "oc set -n ${project} route-backends ${appName} ${appName}-${tag}=100 ${appName}-${altTag}=0 --loglevel=4"
                   }
@@ -19314,7 +19314,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
       type: JenkinsPipeline
     triggers:
     - github:
@@ -19781,21 +19781,21 @@ objects:
                 def project = ""
                 node {
                   project = "${env.PROJECT_NAME}"
-
+        
                   stage('Create NationalParks back-end') {
                     def nationalParksURL = "${NATIONALPARKS_GIT_URI}"
                     def nationalParksBranch = "${NATIONALPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${nationalParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "nationalparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${nationalParksURL}"]]])
                     sh "oc new-app -f nationalparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${nationalParksURL} -p GIT_REF=${nationalParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create MLBParks back-end') {
                     def mlbParksURL = "${MLBPARKS_GIT_URI}"
                     def mlbParksBranch = "${MLBPARKS_GIT_REF}"
                     checkout([$class: "GitSCM", branches: [[name: "*/${mlbParksBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: "RelativeTargetDirectory", relativeTargetDir: "mlbparks"]], submoduleCfg: [], userRemoteConfigs: [[url: "${mlbParksURL}"]]])
                     sh "oc new-app -f mlbparks/ose3/pipeline-buildconfig-template.json -p GIT_URI=${mlbParksURL} -p GIT_REF=${mlbParksBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
-
+        
                   stage('Create ParksMap front-end') {
                     def parksMapURL = "${PARKSMAP_GIT_URI}"
                     def parksMapBranch = "${PARKSMAP_GIT_REF}"
@@ -19803,7 +19803,7 @@ objects:
                     sh "oc new-app -f parksmap/ose3/pipeline-buildconfig-template.json -p GIT_URI=${parksMapURL} -p GIT_REF=${parksMapBranch} -n ${project} --dry-run -o yaml | oc apply -f - -n ${project}"
                   }
                 }
-
+        
                 stage('Build Back-ends') {
                   parallel (
                     "nationalparks": {
@@ -19818,7 +19818,7 @@ objects:
                     }
                   )
                 }
-
+        
                 node {
                   stage('Build Front-end') {
                     openshiftBuild buildConfig: "parksmap-pipeline", namespace: project
@@ -19830,7 +19830,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
     triggers:
     - github:
         secret: ${GITHUB_TRIGGER_SECRET}
@@ -20284,7 +20284,7 @@ objects:
              echo "Caught: ${err}"
              currentBuild.result = 'FAILURE'
              throw err
-          }
+          }          
       type: JenkinsPipeline
     triggers:
     - github:
@@ -21232,3 +21232,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

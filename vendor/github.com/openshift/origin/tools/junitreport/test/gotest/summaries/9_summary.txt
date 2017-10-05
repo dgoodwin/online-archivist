@@ -13,3 +13,4 @@ In suite "package/name/nested", test case "TestTwo" was skipped:
 --- SKIP: TestTwo (0.03 seconds)
 	file_test.go:11: Skip message
 PASS
+

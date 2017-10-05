@@ -28,7 +28,7 @@ var (
 
 	userIdentityMappingExample = templates.Examples(`
 		# Map the identity "acme_ldap:adamjones" to the user "ajones"
-	%[1]s acme_ldap:adamjones ajones`)
+  	%[1]s acme_ldap:adamjones ajones`)
 )
 
 type CreateUserIdentityMappingOptions struct {

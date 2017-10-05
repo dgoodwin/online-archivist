@@ -69,7 +69,7 @@ func TestQuota(t *testing.T) {
 	clientset := clientset.NewForConfigOrDie(&restclient.Config{QPS: -1, Host: s.URL, ContentConfig: restclient.ContentConfig{GroupVersion: &api.Registry.GroupOrDie(v1.GroupName).GroupVersion}})
 	internalClientset := internalclientset.NewForConfigOrDie(&restclient.Config{QPS: -1, Host: s.URL, ContentConfig: restclient.ContentConfig{GroupVersion: &api.Registry.GroupOrDie(v1.GroupName).GroupVersion}})
 	config := &resourcequotaapi.Configuration{}
-	admission, err := resourcequota.NewResourceQuota(config, 5, admissionCh)
+	admission, err := resourcequota.NewResourceQuota(config, 5, admissionCh)	
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -77,7 +77,7 @@ func TestQuota(t *testing.T) {
 	internalInformers := internalinformers.NewSharedInformerFactory(internalClientset, controller.NoResyncPeriodFunc())
 	admission.(kubeadmission.WantsInternalKubeInformerFactory).SetInternalKubeInformerFactory(internalInformers)
 	quotaRegistry := quotainstall.NewRegistry(nil, nil)
-	admission.(kubeadmission.WantsQuotaRegistry).SetQuotaRegistry(quotaRegistry)
+ 	admission.(kubeadmission.WantsQuotaRegistry).SetQuotaRegistry(quotaRegistry)
 	defer close(admissionCh)
 
 	masterConfig := framework.NewIntegrationTestMasterConfig()
@@ -257,7 +257,7 @@ func TestQuotaLimitedResourceDenial(t *testing.T) {
 		},
 	}
 	quotaRegistry := quotainstall.NewRegistry(nil, nil)
-	admission, err := resourcequota.NewResourceQuota(config, 5, admissionCh)
+ 	admission, err := resourcequota.NewResourceQuota(config, 5, admissionCh)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

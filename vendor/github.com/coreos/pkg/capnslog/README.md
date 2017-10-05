@@ -9,9 +9,9 @@ capnslog provides a simple but consistent logging interface suitable for all kin
 
 A library should not touch log options, only generate log entries. Libraries are silent until main lets them speak.
 
-##### All log options are runtime-configurable.
+##### All log options are runtime-configurable. 
 
-Still the job of `main` to expose these configurations. `main` may delegate this to, say, a configuration webhook, but does so explicitly.
+Still the job of `main` to expose these configurations. `main` may delegate this to, say, a configuration webhook, but does so explicitly. 
 
 ##### There is one log object per package. It is registered under its repository and package name.
 
@@ -36,3 +36,4 @@ An object knows best how to print itself. Log objects can collect more interesti
   * Info: Normal, working log information, everything is fine, but helpful notices for auditing or common operations.
   * Debug: Everything is still fine, but even common operations may be logged, and less helpful but more quantity of notices.
   * Trace: Anything goes, from logging every function call as part of a common operation, to tracing execution of a query.
+

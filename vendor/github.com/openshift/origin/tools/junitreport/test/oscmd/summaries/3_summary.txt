@@ -7,3 +7,4 @@ FAILURE after 0.1234s: package/name/file.sh:23: executing 'some command' expecti
 There was no output from the command.
 There was no error output from the command.
 === END TEST CASE ===
+
