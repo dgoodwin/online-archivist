@@ -43,21 +43,25 @@ var (
 	// exposed externally.
 	DeadOpenShiftStorageVersionLevels = []string{"v1beta1", "v1beta3"}
 
-	APIGroupKube              = ""
-	APIGroupExtensions        = "extensions"
-	APIGroupApps              = "apps"
-	APIGroupAuthentication    = "authentication.k8s.io"
-	APIGroupAuthorization     = "authorization.k8s.io"
-	APIGroupImagePolicy       = "imagepolicy.k8s.io"
-	APIGroupAutoscaling       = "autoscaling"
-	APIGroupBatch             = "batch"
-	APIGroupCertificates      = "certificates.k8s.io"
-	APIGroupFederation        = "federation"
-	APIGroupPolicy            = "policy"
-	APIGroupStorage           = "storage.k8s.io"
-	APIGroupComponentConfig   = "componentconfig"
-	APIGroupAuthorizationRbac = "rbac.authorization.k8s.io"
-	APIGroupSettings          = "settings.k8s.io"
+	APIGroupKube                  = ""
+	APIGroupExtensions            = "extensions"
+	APIGroupApps                  = "apps"
+	APIGroupAdmissionRegistration = "admissionregistration.k8s.io"
+	APIGroupAPIExtensions         = "apiextensions.k8s.io"
+	APIGroupAPIRegistration       = "apiregistration.k8s.io"
+	APIGroupAuthentication        = "authentication.k8s.io"
+	APIGroupAuthorization         = "authorization.k8s.io"
+	APIGroupImagePolicy           = "imagepolicy.k8s.io"
+	APIGroupAutoscaling           = "autoscaling"
+	APIGroupBatch                 = "batch"
+	APIGroupCertificates          = "certificates.k8s.io"
+	APIGroupFederation            = "federation"
+	APIGroupNetworking            = "networking.k8s.io"
+	APIGroupPolicy                = "policy"
+	APIGroupStorage               = "storage.k8s.io"
+	APIGroupComponentConfig       = "componentconfig"
+	APIGroupAuthorizationRbac     = "rbac.authorization.k8s.io"
+	APIGroupSettings              = "settings.k8s.io"
 
 	OriginAPIGroupCore                = ""
 	OriginAPIGroupAuthorization       = "authorization.openshift.io"
@@ -76,18 +80,22 @@ var (
 
 	// Map of group names to allowed REST API versions
 	KubeAPIGroupsToAllowedVersions = map[string][]string{
-		APIGroupKube:              {"v1"},
-		APIGroupExtensions:        {"v1beta1"},
-		APIGroupApps:              {"v1beta1"},
-		APIGroupAuthentication:    {"v1", "v1beta1"},
-		APIGroupAuthorization:     {"v1", "v1beta1"},
-		APIGroupAuthorizationRbac: {"v1beta1"},
-		APIGroupAutoscaling:       {"v1"},
-		APIGroupBatch:             {"v1", "v2alpha1"}, // v2alpha1 has to stay on to keep cronjobs on for backwards compatibility
-		APIGroupCertificates:      {"v1beta1"},
-		APIGroupPolicy:            {"v1beta1"},
-		APIGroupStorage:           {"v1", "v1beta1"},
-		APIGroupSettings:          {}, // list the group, but don't enable any versions.  alpha disabled by default, but enablable via arg
+		APIGroupKube:                  {"v1"},
+		APIGroupExtensions:            {"v1beta1"},
+		APIGroupApps:                  {"v1beta1"},
+		APIGroupAdmissionRegistration: {}, // alpha disabled by default
+		APIGroupAPIExtensions:         {"v1beta1"},
+		APIGroupAPIRegistration:       {"v1beta1"},
+		APIGroupAuthentication:        {"v1", "v1beta1"},
+		APIGroupAuthorization:         {"v1", "v1beta1"},
+		APIGroupAuthorizationRbac:     {"v1beta1"},
+		APIGroupAutoscaling:           {"v1"},
+		APIGroupBatch:                 {"v1", "v2alpha1"}, // v2alpha1 has to stay on to keep cronjobs on for backwards compatibility
+		APIGroupCertificates:          {"v1beta1"},
+		APIGroupNetworking:            {"v1"},
+		APIGroupPolicy:                {"v1beta1"},
+		APIGroupStorage:               {"v1", "v1beta1"},
+		APIGroupSettings:              {}, // list the group, but don't enable any versions.  alpha disabled by default, but enablable via arg
 		// TODO: enable as part of a separate binary
 		//APIGroupFederation:  {"v1beta1"},
 	}
@@ -109,14 +117,15 @@ var (
 
 	// Map of group names to known, but disabled REST API versions
 	KubeDefaultDisabledVersions = map[string][]string{
-		APIGroupKube:              {"v1beta3"},
-		APIGroupExtensions:        {},
-		APIGroupAutoscaling:       {"v2alpha1"},
-		APIGroupBatch:             {},
-		APIGroupPolicy:            {},
-		APIGroupApps:              {},
-		APIGroupAuthorizationRbac: {"v1alpha1"},
-		APIGroupSettings:          {"v1alpha1"},
+		APIGroupKube:                  {"v1beta3"},
+		APIGroupExtensions:            {},
+		APIGroupAutoscaling:           {"v2alpha1"},
+		APIGroupBatch:                 {},
+		APIGroupPolicy:                {},
+		APIGroupApps:                  {},
+		APIGroupAdmissionRegistration: {"v1alpha1"},
+		APIGroupAuthorizationRbac:     {"v1alpha1"},
+		APIGroupSettings:              {"v1alpha1"},
 	}
 	KnownKubeAPIGroups   = sets.StringKeySet(KubeAPIGroupsToAllowedVersions)
 	KnownOriginAPIGroups = sets.StringKeySet(OriginAPIGroupsToAllowedVersions)
@@ -418,10 +427,9 @@ type MasterConfig struct {
 	// AuditConfig holds information related to auditing capabilities.
 	AuditConfig AuditConfig
 
-	// TemplateServiceBrokerConfig holds information related to the template
-	// service broker.  The broker is enabled if TemplateServiceBrokerConfig is
-	// non-nil.
-	TemplateServiceBrokerConfig *TemplateServiceBrokerConfig
+	// DisableOpenAPI avoids starting the openapi endpoint because it is very expensive.
+	// This option will be removed at a later time.  It is never serialized.
+	DisableOpenAPI bool
 }
 
 // MasterAuthConfig configures authentication options in addition to the standard
@@ -1464,12 +1472,4 @@ type DefaultAdmissionConfig struct {
 
 	// Disable turns off an admission plugin that is enabled by default.
 	Disable bool
-}
-
-// TemplateServiceBrokerConfig holds information related to the template
-// service broker
-type TemplateServiceBrokerConfig struct {
-	// TemplateNamespaces indicates the namespace(s) in which the template service
-	// broker looks for templates to serve to the catalog.
-	TemplateNamespaces []string
 }

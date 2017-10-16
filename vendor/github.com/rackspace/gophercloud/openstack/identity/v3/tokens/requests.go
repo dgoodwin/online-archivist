@@ -105,7 +105,7 @@ func (options AuthOptions) ToAuthOptionsV3Map(c *gophercloud.ServiceClient, scop
 				// Configure the request for Username and Password authentication with a DomainID.
                                 authMap["identity"] = map[string]interface{}{
 					"methods": []string{"password"},
-					"password" : map[string]interface{}{
+                                	"password" : map[string]interface{}{
                                                 "user": map[string]interface{}{
                                                         "name": &options.Username,
                                                         "password": options.Password,

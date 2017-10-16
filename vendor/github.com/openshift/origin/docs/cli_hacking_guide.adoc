@@ -6,7 +6,7 @@ This document provides information about how to *contribute* to the CLI. For usa
 
 == Getting started
 
-The OpenShift CLI is https://github.com/openshift/origin/releases[distributed as a single binary] that can act as a different tool depending on its name and/or symlinks. So if named as (or have a symlink created with the name) `oc` it will provide higher-level commands generally targeted for end-users; as `oadm` will support administrative tasks; and as `openshift` will expose the all-in-one OpenShift server and related functions.
+The OpenShift CLI is https://github.com/openshift/origin/releases[distributed as a single binary] that can act as a different tool depending on its name and/or symlinks. So if named as (or have a symlink created with the name) `oc` it will provide higher-level commands generally targeted for end-users; as `oadm` will support administrative tasks, the same as `oc adm`; and as `openshift` will expose the all-in-one OpenShift server and related functions.
 
 == Contributing
 
@@ -21,7 +21,7 @@ Commands are organized in the package structure as:
 * https://github.com/openshift/origin/tree/master/pkg/cmd[pkg/cmd]
 ** https://github.com/openshift/origin/tree/master/pkg/cmd/openshift[pkg/cmd/openshift] - `openshift` or `origin` command.
 ** https://github.com/openshift/origin/tree/master/pkg/cmd/cli[pkg/cmd/cli] - `oc` or `openshift cli`, and `kubectl` commands.
-** https://github.com/openshift/origin/tree/master/pkg/cmd/admin[pkg/cmd/admin] - `oadm` or `openshift admin` command.
+** https://github.com/openshift/origin/tree/master/pkg/cmd/admin[pkg/cmd/admin] - `oc adm` or `oadm` or `openshift admin` command.
 ** https://github.com/openshift/origin/tree/master/pkg/cmd/experimental[pkg/cmd/experimental] - `openshift ex` command.
 ** https://github.com/openshift/origin/tree/master/pkg/cmd/infra[pkg/cmd/infra]
 *** https://github.com/openshift/origin/tree/master/pkg/cmd/infra/builder[pkg/cmd/infra/builder] - `openshift-sti-build` and `openshift-docker-build` commands.
@@ -31,7 +31,7 @@ Commands are organized in the package structure as:
 
 === Command Structure
 
-For every command we have a `NewCmd<CommandName>` function that creates the command and returns a pointer to a `cobra.Command`, which can later be added to other parent commands to compose the structure tree.
+For every command we have a `NewCmd<CommandName>` function that creates the command and returns a pointer to a `cobra.Command`, which can later be added to other parent commands to compose the structure tree. 
 
 We usually have a struct with a variable to every flag and argument declared by the command (and any other variable required for the command to run). This makes tests and mocking easier. The struct exposes three functions:
 
@@ -57,7 +57,7 @@ var (
     Some long description
     for my command.`)
 
-  mineExample = templates.Examples(`
+  mineExample = templates.Examples(`  
     # Run my command's first action
     %[1]s first
 
@@ -138,7 +138,7 @@ Example:
 ====
 [source,go,numbered,options="nowrap"]
 ----
-  deployExample = templates.Examples(`
+  deployExample = templates.Examples(`  
     # Display the latest deployment for the 'database' deployment config
     %[1]s database
 
@@ -223,12 +223,12 @@ Examples:
 |=======
 |`kcmdutil.CheckErr(err error)`                                |handles an error (check for `nil` and exit the program accordingly), this should always be used instead of handling the `err` manually.
 |`kcmdutil.GetFlag<Type>(cmd *cobra.Command, flagName string)` |gets the instance of a declared flag, by type. If possible, use the link:#command-structure[struct var binding] to get flag values instead.
-|`cmdutil.IsTerminal(r io.Reader)`                             |checks if the given `io.Reader` is a terminal.
+|`cmdutil.IsTerminal(r io.Reader)`                             |checks if the given `io.Reader` is a terminal. 
 |=======
 
 === Commented Example
 
-Taking the `oc deploy` command as an example, the code structure for a command will usually look like the one below.
+Taking the `oc deploy` command as an example, the code structure for a command will usually look like the one below. 
 
 ====
 [source,go,numbered,options="nowrap"]
@@ -243,11 +243,11 @@ type DeployOptions struct {
 var (
   // 2.
   deployLong = templates.LongDesc(`
-    Some long description
-    for the deploy command.`)
+    Some long description 
+    for the deploy command.`) 
 
   // 3.
-  deployExample = templates.Examples(`
+  deployExample = templates.Examples(`  
     # Display the latest deployment for the 'database' DeploymentConfig
     %[1]s database
 
@@ -312,3 +312,7 @@ func (o DeployOptions) RunDeploy() error {
 <8> `Run<Command>() error` (e.g. `RunDeploy`, `RunCreate` and so on) does the actual command logic and returns errors as required. Notice that this method does not take anything as argument - it's expected that you previously extracted and stored in the `struct` anything that will be needed to run this command. This makes commands more easily testable once you can run and populate the command struct with the values you want to test and then just run this method and check for the returned error(s).
 <9> Try to always use the functions in `k8s.io/kubernetes/pkg/kubectl/cmd/util` to check and handle errors. It is not expected that commands call `glog.Fatalf`, `os.Exit` or anything similar directly.
 ====
+
+
+
+

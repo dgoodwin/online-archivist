@@ -2,7 +2,6 @@ package master
 
 import (
 	"crypto/tls"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -50,8 +49,7 @@ import (
 	batchv2alpha1 "k8s.io/kubernetes/pkg/apis/batch/v2alpha1"
 	"k8s.io/kubernetes/pkg/apis/componentconfig"
 	"k8s.io/kubernetes/pkg/apis/extensions"
-	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
-	kinternalclientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
+	"k8s.io/kubernetes/pkg/apis/networking"
 	"k8s.io/kubernetes/pkg/cloudprovider"
 	"k8s.io/kubernetes/pkg/master"
 	"k8s.io/kubernetes/pkg/registry/cachesize"
@@ -82,15 +80,6 @@ const originLongRunningEndpointsRE = "(/|^)(buildconfigs/.*/instantiatebinary|im
 
 var LegacyAPIGroupPrefixes = sets.NewString(apiserver.DefaultLegacyAPIPrefix, api.Prefix)
 
-// MasterConfig defines the required values to start a Kubernetes master
-type MasterConfig struct {
-	// this is a mutated copy of options!
-	// TODO stop mutating values!
-	Options configapi.KubernetesMasterConfig
-
-	Master *master.Config
-}
-
 // BuildKubeAPIserverOptions constructs the appropriate kube-apiserver run options.
 // It returns an error if no KubernetesMasterConfig was defined.
 func BuildKubeAPIserverOptions(masterConfig configapi.MasterConfig) (*kapiserveroptions.ServerRunOptions, error) {
@@ -115,6 +104,7 @@ func BuildKubeAPIserverOptions(masterConfig configapi.MasterConfig) (*kapiserver
 	server := kapiserveroptions.NewServerRunOptions()
 
 	// Adjust defaults
+	server.EnableLogsHandler = false
 	server.EventTTL = 2 * time.Hour
 	server.ServiceClusterIPRange = net.IPNet(flagtypes.DefaultIPNet(masterConfig.KubernetesMasterConfig.ServicesSubnet))
 	server.ServiceNodePortRange = *portRange
@@ -180,7 +170,7 @@ func BuildKubeAPIserverOptions(masterConfig configapi.MasterConfig) (*kapiserver
 
 // BuildStorageFactory builds a storage factory based on server.Etcd.StorageConfig with overrides from masterConfig.
 // This storage factory is used for kubernetes and origin registries. Compare pkg/util/restoptions/configgetter.go.
-func BuildStorageFactory(masterConfig configapi.MasterConfig, server *kapiserveroptions.ServerRunOptions, enforcedStorageVersions map[schema.GroupResource]schema.GroupVersion) (*apiserverstorage.DefaultStorageFactory, error) {
+func BuildStorageFactory(server *kapiserveroptions.ServerRunOptions, enforcedStorageVersions map[schema.GroupResource]schema.GroupVersion) (*apiserverstorage.DefaultStorageFactory, error) {
 	resourceEncodingConfig := apiserverstorage.NewDefaultResourceEncodingConfig(kapi.Registry)
 
 	storageGroupsToEncodingVersion, err := server.StorageSerialization.StorageGroupsToEncodingVersion()
@@ -208,11 +198,11 @@ func BuildStorageFactory(masterConfig configapi.MasterConfig, server *kapiserver
 	}
 
 	// the order here is important, it defines which version will be used for storage
-	storageFactory.AddCohabitatingResources(batch.Resource("jobs"), extensions.Resource("jobs"))
 	// keep HPAs in the autoscaling apigroup (as in upstream 1.6), but keep extension cohabitation around until origin 3.7.
 	storageFactory.AddCohabitatingResources(autoscaling.Resource("horizontalpodautoscalers"), extensions.Resource("horizontalpodautoscalers"))
 	// keep Deployments in extensions for backwards compatibility, we'll have to migrate at some point, eventually
 	storageFactory.AddCohabitatingResources(extensions.Resource("deployments"), apps.Resource("deployments"))
+	storageFactory.AddCohabitatingResources(extensions.Resource("networkpolicies"), networking.Resource("networkpolicies"))
 	storageFactory.AddCohabitatingResources(kapi.Resource("securitycontextconstraints"), securityapi.Resource("securitycontextconstraints"))
 
 	if server.Etcd.EncryptionProviderConfigFilepath != "" {
@@ -325,6 +315,8 @@ func BuildControllerManagerServer(masterConfig configapi.MasterConfig) (*cmapp.C
 	// Adjust defaults
 	cmserver.ClusterSigningCertFile = ""
 	cmserver.ClusterSigningKeyFile = ""
+	cmserver.LeaderElection.RetryPeriod = metav1.Duration{Duration: 3 * time.Second}
+	cmserver.ClusterSigningDuration = metav1.Duration{Duration: 0}
 	cmserver.Address = "" // no healthz endpoint
 	cmserver.Port = 0     // no healthz endpoint
 	cmserver.EnableGarbageCollector = true
@@ -412,8 +404,6 @@ func buildPublicAddress(masterConfig configapi.MasterConfig) (net.IP, error) {
 func buildKubeApiserverConfig(
 	masterConfig configapi.MasterConfig,
 	requestContextMapper apirequest.RequestContextMapper,
-	kubeClient kclientset.Interface,
-	internalKubeClient kinternalclientset.Interface,
 	admissionControl admission.Interface,
 	originAuthenticator authenticator.Request,
 	kubeAuthorizer authorizer.Authorizer,
@@ -433,7 +423,7 @@ func buildKubeApiserverConfig(
 		return nil, err
 	}
 
-	storageFactory, err := BuildStorageFactory(masterConfig, apiserverOptions, nil)
+	storageFactory, err := BuildStorageFactory(apiserverOptions, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -459,7 +449,7 @@ func buildKubeApiserverConfig(
 	genericConfig.DisabledPostStartHooks.Insert("extensions/third-party-resources")
 	genericConfig.AdmissionControl = admissionControl
 	genericConfig.RequestContextMapper = requestContextMapper
-	genericConfig.OpenAPIConfig = DefaultOpenAPIConfig(masterConfig)
+	genericConfig.OpenAPIConfig = defaultOpenAPIConfig(masterConfig)
 	genericConfig.SwaggerConfig = apiserver.DefaultSwaggerConfig()
 	genericConfig.SwaggerConfig.PostBuildHandler = customizeSwaggerDefinition
 	_, loopbackClientConfig, err := configapi.GetInternalKubeClient(masterConfig.MasterClients.OpenShiftLoopbackKubeConfig, masterConfig.MasterClients.OpenShiftLoopbackClientConnectionOverrides)
@@ -599,20 +589,13 @@ func buildKubeApiserverConfig(
 func BuildKubernetesMasterConfig(
 	masterConfig configapi.MasterConfig,
 	requestContextMapper apirequest.RequestContextMapper,
-	kubeClient kclientset.Interface,
-	internalKubeClient kinternalclientset.Interface,
 	admissionControl admission.Interface,
 	originAuthenticator authenticator.Request,
 	kubeAuthorizer authorizer.Authorizer,
-) (*MasterConfig, error) {
-	if masterConfig.KubernetesMasterConfig == nil {
-		return nil, errors.New("insufficient information to build KubernetesMasterConfig")
-	}
+) (*master.Config, error) {
 	apiserverConfig, err := buildKubeApiserverConfig(
 		masterConfig,
 		requestContextMapper,
-		kubeClient,
-		internalKubeClient,
 		admissionControl,
 		originAuthenticator,
 		kubeAuthorizer)
@@ -620,16 +603,16 @@ func BuildKubernetesMasterConfig(
 		return nil, err
 	}
 
-	kmaster := &MasterConfig{
-		Options: *masterConfig.KubernetesMasterConfig,
-
-		Master: apiserverConfig,
+	// we do this for integration tests to be able to turn it off for better startup speed
+	// TODO remove the entire option once openapi is faster
+	if masterConfig.DisableOpenAPI {
+		apiserverConfig.GenericConfig.OpenAPIConfig = nil
 	}
 
-	return kmaster, nil
+	return apiserverConfig, nil
 }
 
-func DefaultOpenAPIConfig(config configapi.MasterConfig) *openapicommon.Config {
+func defaultOpenAPIConfig(config configapi.MasterConfig) *openapicommon.Config {
 	securityDefinitions := spec.SecurityDefinitions{}
 	if len(config.ServiceAccountConfig.PublicKeyFiles) > 0 {
 		securityDefinitions["BearerToken"] = &spec.SecurityScheme{
@@ -661,17 +644,13 @@ func DefaultOpenAPIConfig(config configapi.MasterConfig) *openapicommon.Config {
 			},
 		}
 	}
-	if configapi.UseTLS(config.ServingInfo.ServingInfo) {
-		// No support in Swagger's OpenAPI sepc v.2 ¯\_(ツ)_/¯
-		// TODO: Add x509 specification once available
-	}
 	defNamer := apiserverendpointsopenapi.NewDefinitionNamer(kapi.Scheme)
 	return &openapicommon.Config{
 		ProtocolList:      []string{"https"},
 		GetDefinitions:    openapigenerated.GetOpenAPIDefinitions,
 		IgnorePrefixes:    []string{"/swaggerapi", "/healthz", "/controllers", "/metrics", "/version/openshift", "/brokers"},
 		GetDefinitionName: defNamer.GetDefinitionName,
-		GetOperationIDAndTags: func(servePath string, r *restful.Route) (string, []string, error) {
+		GetOperationIDAndTags: func(r *restful.Route) (string, []string, error) {
 			op := r.Operation
 			path := r.Path
 			// DEPRECATED: These endpoints are going to be removed in 1.8 or 1.9 release.
@@ -683,13 +662,11 @@ func DefaultOpenAPIConfig(config configapi.MasterConfig) *openapicommon.Config {
 				op = "createProcessedTemplateForAllNamespacesV1"
 			} else if strings.HasPrefix(path, "/apis/template.openshift.io/v1/processedtemplates") {
 				op = "createProcessedTemplateForAllNamespaces"
-			} else if strings.HasPrefix(path, "/oapi/v1/namespaces/{namespace}/generatedeploymentconfigs") {
-				op = "generateNamespacedDeploymentConfig"
 			}
 			if op != r.Operation {
 				return op, []string{}, nil
 			}
-			return apiserverendpointsopenapi.GetOperationIDAndTags(servePath, r)
+			return apiserverendpointsopenapi.GetOperationIDAndTags(r)
 		},
 		Info: &spec.Info{
 			InfoProps: spec.InfoProps{

@@ -11,6 +11,7 @@ import (
 	restclient "k8s.io/client-go/rest"
 
 	osclient "github.com/openshift/origin/pkg/client"
+	"github.com/openshift/origin/pkg/sdn"
 	sdnapi "github.com/openshift/origin/pkg/sdn/apis/network"
 	testutil "github.com/openshift/origin/test/util"
 	testserver "github.com/openshift/origin/test/util/server"
@@ -22,13 +23,8 @@ func createProject(osClient *osclient.Client, clientConfig *restclient.Config, n
 		return nil, fmt.Errorf("error creating project %q: %v", name, err)
 	}
 
-	backoff := utilwait.Backoff{
-		Duration: 100 * time.Millisecond,
-		Factor:   2,
-		Steps:    5,
-	}
 	var netns *sdnapi.NetNamespace
-	err = utilwait.ExponentialBackoff(backoff, func() (bool, error) {
+	err = utilwait.Poll(time.Second/2, 30*time.Second, func() (bool, error) {
 		netns, err = osClient.NetNamespaces().Get(name, metav1.GetOptions{})
 		if kapierrors.IsNotFound(err) {
 			return false, nil
@@ -38,31 +34,26 @@ func createProject(osClient *osclient.Client, clientConfig *restclient.Config, n
 		return true, nil
 	})
 	if err != nil {
-		return nil, fmt.Errorf("could not get NetNamepsace %q: %v", name, err)
+		return nil, fmt.Errorf("could not get NetNamespace %q: %v", name, err)
 	}
 	return netns, nil
 }
 
-func updateNetNamespace(osClient *osclient.Client, netns *sdnapi.NetNamespace, action sdnapi.PodNetworkAction, args string) (*sdnapi.NetNamespace, error) {
-	sdnapi.SetChangePodNetworkAnnotation(netns, action, args)
+func updateNetNamespace(osClient *osclient.Client, netns *sdnapi.NetNamespace, action sdn.PodNetworkAction, args string) (*sdnapi.NetNamespace, error) {
+	sdn.SetChangePodNetworkAnnotation(netns, action, args)
 	_, err := osClient.NetNamespaces().Update(netns)
 	if err != nil {
 		return nil, err
 	}
 
-	backoff := utilwait.Backoff{
-		Duration: 100 * time.Millisecond,
-		Factor:   2,
-		Steps:    5,
-	}
 	name := netns.Name
-	err = utilwait.ExponentialBackoff(backoff, func() (bool, error) {
+	err = utilwait.Poll(time.Second/2, 30*time.Second, func() (bool, error) {
 		netns, err = osClient.NetNamespaces().Get(name, metav1.GetOptions{})
 		if err != nil {
 			return false, err
 		}
 
-		if _, _, err := sdnapi.GetChangePodNetworkAnnotation(netns); err == sdnapi.ErrorPodNetworkAnnotationNotFound {
+		if _, _, err := sdn.GetChangePodNetworkAnnotation(netns); err == sdn.ErrorPodNetworkAnnotationNotFound {
 			return true, nil
 		} else {
 			return false, nil
@@ -75,13 +66,12 @@ func updateNetNamespace(osClient *osclient.Client, netns *sdnapi.NetNamespace, a
 }
 
 func TestOadmPodNetwork(t *testing.T) {
-	testutil.RequireEtcd(t)
-	defer testutil.DumpEtcdOnFailure(t)
 	masterConfig, err := testserver.DefaultMasterOptions()
 	if err != nil {
 		t.Fatalf("error creating config: %v", err)
 	}
-	masterConfig.NetworkConfig.NetworkPluginName = sdnapi.MultiTenantPluginName
+	defer testserver.CleanupMasterEtcd(t, masterConfig)
+	masterConfig.NetworkConfig.NetworkPluginName = sdn.MultiTenantPluginName
 	kubeConfigFile, err := testserver.StartConfiguredMaster(masterConfig)
 	if err != nil {
 		t.Fatalf("error starting server: %v", err)
@@ -115,7 +105,7 @@ func TestOadmPodNetwork(t *testing.T) {
 		t.Fatalf("expected unique NetIDs, got %d, %d, %d", origNetns1.NetID, origNetns2.NetID, origNetns3.NetID)
 	}
 
-	newNetns2, err := updateNetNamespace(osClient, origNetns2, sdnapi.JoinPodNetwork, "one")
+	newNetns2, err := updateNetNamespace(osClient, origNetns2, sdn.JoinPodNetwork, "one")
 	if err != nil {
 		t.Fatalf("error updating namespace: %v", err)
 	}
@@ -130,7 +120,7 @@ func TestOadmPodNetwork(t *testing.T) {
 		t.Fatalf("expected netns1 (%d) to be unchanged (%d)", newNetns1.NetID, origNetns1.NetID)
 	}
 
-	newNetns1, err = updateNetNamespace(osClient, origNetns1, sdnapi.GlobalPodNetwork, "")
+	newNetns1, err = updateNetNamespace(osClient, origNetns1, sdn.GlobalPodNetwork, "")
 	if err != nil {
 		t.Fatalf("error updating namespace: %v", err)
 	}
@@ -145,7 +135,7 @@ func TestOadmPodNetwork(t *testing.T) {
 		t.Fatalf("expected netns2 (%d) to be unchanged (%d)", newNetns2.NetID, origNetns1.NetID)
 	}
 
-	newNetns1, err = updateNetNamespace(osClient, newNetns1, sdnapi.IsolatePodNetwork, "")
+	newNetns1, err = updateNetNamespace(osClient, newNetns1, sdn.IsolatePodNetwork, "")
 	if err != nil {
 		t.Fatalf("error updating namespace: %v", err)
 	}

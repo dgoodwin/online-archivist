@@ -165,12 +165,14 @@ func Convert_image_ImageStreamSpec_To_v1_ImageStreamSpec(in *newer.ImageStreamSp
 
 func Convert_v1_ImageStreamStatus_To_image_ImageStreamStatus(in *ImageStreamStatus, out *newer.ImageStreamStatus, s conversion.Scope) error {
 	out.DockerImageRepository = in.DockerImageRepository
+	out.PublicDockerImageRepository = in.PublicDockerImageRepository
 	out.Tags = make(map[string]newer.TagEventList)
 	return s.Convert(&in.Tags, &out.Tags, 0)
 }
 
 func Convert_image_ImageStreamStatus_To_v1_ImageStreamStatus(in *newer.ImageStreamStatus, out *ImageStreamStatus, s conversion.Scope) error {
 	out.DockerImageRepository = in.DockerImageRepository
+	out.PublicDockerImageRepository = in.PublicDockerImageRepository
 	if len(in.DockerImageRepository) > 0 {
 		// ensure that stored image references have no tag or ID, which was possible from 1.0.0 until 1.0.7
 		if ref, err := newer.ParseDockerImageReference(in.DockerImageRepository); err == nil {
@@ -275,12 +277,6 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 	)
 	if err != nil {
 		// If one of the conversion functions is malformed, detect it immediately.
-		return err
-	}
-
-	if err := scheme.AddFieldLabelConversionFunc("v1", "Image",
-		oapi.GetFieldLabelConversionFunc(newer.ImageToSelectableFields(&newer.Image{}), nil),
-	); err != nil {
 		return err
 	}
 

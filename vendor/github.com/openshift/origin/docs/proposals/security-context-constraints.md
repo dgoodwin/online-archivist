@@ -300,3 +300,4 @@ set in the security context, use a pre-allocation strategy, or assume that image
 will be providing the user.  In this case, if a pod reaches the kubelet and does not have a user set
 in the security context the kubelet should inspect the image, determine if a user is set in the
 image configuration, and ensure that the value complies with the constraints.
+

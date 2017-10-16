@@ -28,17 +28,17 @@ import (
 	"k8s.io/kubernetes/pkg/util/exec"
 )
 
-var tcClassOutput = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
+var tcClassOutput = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
 `
 
-var tcClassOutput2 = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
-class htb 1:5 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b
+var tcClassOutput2 = `class htb 1:1 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:2 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:3 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:4 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
+class htb 1:5 root prio 0 rate 10000bit ceil 10000bit burst 1600b cburst 1600b 
 `
 
 func TestNextClassID(t *testing.T) {
@@ -94,19 +94,33 @@ func TestNextClassID(t *testing.T) {
 
 func TestHexCIDR(t *testing.T) {
 	tests := []struct {
+		name      string
 		input     string
 		output    string
 		expectErr bool
 	}{
 		{
-			input:  "1.2.0.0/16",
+			name:   "IPv4 masked",
+			input:  "1.2.3.4/16",
 			output: "01020000/ffff0000",
 		},
 		{
+			name:   "IPv4 host",
 			input:  "172.17.0.2/32",
 			output: "ac110002/ffffffff",
 		},
 		{
+			name:   "IPv6 masked",
+			input:  "2001:dead:beef::cafe/64",
+			output: "2001deadbeef00000000000000000000/ffffffffffffffff0000000000000000",
+		},
+		{
+			name:   "IPv6 host",
+			input:  "2001::5/128",
+			output: "20010000000000000000000000000005/ffffffffffffffffffffffffffffffff",
+		},
+		{
+			name:      "invalid CIDR",
 			input:     "foo",
 			expectErr: true,
 		},
@@ -115,31 +129,86 @@ func TestHexCIDR(t *testing.T) {
 		output, err := hexCIDR(test.input)
 		if test.expectErr {
 			if err == nil {
-				t.Error("unexpected non-error")
+				t.Errorf("case %s: unexpected non-error", test.name)
 			}
 		} else {
 			if err != nil {
-				t.Errorf("unexpected error: %v", err)
+				t.Errorf("case %s: unexpected error: %v", test.name, err)
 			}
 			if output != test.output {
-				t.Errorf("expected: %s, saw: %s", test.output, output)
-			}
-			input, err := asciiCIDR(output)
-			if err != nil {
-				t.Errorf("unexpected error: %v", err)
-			}
-			if input != test.input {
-				t.Errorf("expected: %s, saw: %s", test.input, input)
+				t.Errorf("case %s: expected: %s, saw: %s",
+					test.name, test.output, output)
 			}
 		}
 	}
 }
 
-var tcFilterOutput = `filter parent 1: protocol ip pref 1 u32
-filter parent 1: protocol ip pref 1 u32 fh 800: ht divisor 1
-filter parent 1: protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 flowid 1:1
+func TestAsciiCIDR(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		output    string
+		expectErr bool
+	}{
+		{
+			name:   "IPv4",
+			input:  "01020000/ffff0000",
+			output: "1.2.0.0/16",
+		},
+		{
+			name:   "IPv4 host",
+			input:  "ac110002/ffffffff",
+			output: "172.17.0.2/32",
+		},
+		{
+			name:   "IPv6",
+			input:  "2001deadbeef00000000000000000000/ffffffffffffffff0000000000000000",
+			output: "2001:dead:beef::/64",
+		},
+		{
+			name:   "IPv6 host",
+			input:  "20010000000000000000000000000005/ffffffffffffffffffffffffffffffff",
+			output: "2001::5/128",
+		},
+		{
+			name:      "invalid CIDR",
+			input:     "malformed",
+			expectErr: true,
+		},
+		{
+			name:      "non-hex IP",
+			input:     "nonhex/32",
+			expectErr: true,
+		},
+		{
+			name:      "non-hex mask",
+			input:     "01020000/badmask",
+			expectErr: true,
+		},
+	}
+	for _, test := range tests {
+		output, err := asciiCIDR(test.input)
+		if test.expectErr {
+			if err == nil {
+				t.Errorf("case %s: unexpected non-error", test.name)
+			}
+		} else {
+			if err != nil {
+				t.Errorf("case %s: unexpected error: %v", test.name, err)
+			}
+			if output != test.output {
+				t.Errorf("case %s: expected: %s, saw: %s",
+					test.name, test.output, output)
+			}
+		}
+	}
+}
+
+var tcFilterOutput = `filter parent 1: protocol ip pref 1 u32 
+filter parent 1: protocol ip pref 1 u32 fh 800: ht divisor 1 
+filter parent 1: protocol ip pref 1 u32 fh 800::800 order 2048 key ht 800 bkt 0 flowid 1:1 
   match ac110002/ffffffff at 16
-filter parent 1: protocol ip pref 1 u32 fh 800::801 order 2049 key ht 800 bkt 0 flowid 1:2
+filter parent 1: protocol ip pref 1 u32 fh 800::801 order 2049 key ht 800 bkt 0 flowid 1:2 
   match 01020000/ffff0000 at 16
 `
 

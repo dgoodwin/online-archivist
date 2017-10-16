@@ -3035,108 +3035,108 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: return $$[$0-1];
+case 1: return $$[$0-1]; 
 break;
-case 2: this.$ = new yy.ProgramNode([], $$[$0]);
+case 2: this.$ = new yy.ProgramNode([], $$[$0]); 
 break;
-case 3: this.$ = new yy.ProgramNode($$[$0-2], $$[$0]);
+case 3: this.$ = new yy.ProgramNode($$[$0-2], $$[$0]); 
 break;
-case 4: this.$ = new yy.ProgramNode($$[$0-1], []);
+case 4: this.$ = new yy.ProgramNode($$[$0-1], []); 
 break;
-case 5: this.$ = new yy.ProgramNode($$[$0]);
+case 5: this.$ = new yy.ProgramNode($$[$0]); 
 break;
-case 6: this.$ = new yy.ProgramNode([], []);
+case 6: this.$ = new yy.ProgramNode([], []); 
 break;
-case 7: this.$ = new yy.ProgramNode([]);
+case 7: this.$ = new yy.ProgramNode([]); 
 break;
-case 8: this.$ = [$$[$0]];
+case 8: this.$ = [$$[$0]]; 
 break;
-case 9: $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 9: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 break;
-case 10: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0]);
+case 10: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0]); 
 break;
-case 11: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0-1].inverse, $$[$0]);
+case 11: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0-1].inverse, $$[$0]); 
 break;
-case 12: this.$ = $$[$0];
+case 12: this.$ = $$[$0]; 
 break;
-case 13: this.$ = $$[$0];
+case 13: this.$ = $$[$0]; 
 break;
-case 14: this.$ = new yy.ContentNode($$[$0]);
+case 14: this.$ = new yy.ContentNode($$[$0]); 
 break;
-case 15: this.$ = new yy.CommentNode($$[$0]);
+case 15: this.$ = new yy.CommentNode($$[$0]); 
 break;
-case 16: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]);
+case 16: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]); 
 break;
-case 17: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]);
+case 17: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]); 
 break;
-case 18: this.$ = $$[$0-1];
+case 18: this.$ = $$[$0-1]; 
 break;
 case 19:
     // Parsing out the '&' escape token at this level saves ~500 bytes after min due to the removal of one parser node.
     this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], $$[$0-2][2] === '&');
-
+  
 break;
-case 20: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], true);
+case 20: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], true); 
 break;
-case 21: this.$ = new yy.PartialNode($$[$0-1]);
+case 21: this.$ = new yy.PartialNode($$[$0-1]); 
 break;
-case 22: this.$ = new yy.PartialNode($$[$0-2], $$[$0-1]);
+case 22: this.$ = new yy.PartialNode($$[$0-2], $$[$0-1]); 
 break;
-case 23:
+case 23: 
 break;
-case 24: this.$ = [[$$[$0-2]].concat($$[$0-1]), $$[$0]];
+case 24: this.$ = [[$$[$0-2]].concat($$[$0-1]), $$[$0]]; 
 break;
-case 25: this.$ = [[$$[$0-1]].concat($$[$0]), null];
+case 25: this.$ = [[$$[$0-1]].concat($$[$0]), null]; 
 break;
-case 26: this.$ = [[$$[$0-1]], $$[$0]];
+case 26: this.$ = [[$$[$0-1]], $$[$0]]; 
 break;
-case 27: this.$ = [[$$[$0]], null];
+case 27: this.$ = [[$$[$0]], null]; 
 break;
-case 28: this.$ = [[$$[$0]], null];
+case 28: this.$ = [[$$[$0]], null]; 
 break;
-case 29: $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 29: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 break;
-case 30: this.$ = [$$[$0]];
+case 30: this.$ = [$$[$0]]; 
 break;
-case 31: this.$ = $$[$0];
+case 31: this.$ = $$[$0]; 
 break;
-case 32: this.$ = new yy.StringNode($$[$0]);
+case 32: this.$ = new yy.StringNode($$[$0]); 
 break;
-case 33: this.$ = new yy.IntegerNode($$[$0]);
+case 33: this.$ = new yy.IntegerNode($$[$0]); 
 break;
-case 34: this.$ = new yy.BooleanNode($$[$0]);
+case 34: this.$ = new yy.BooleanNode($$[$0]); 
 break;
-case 35: this.$ = $$[$0];
+case 35: this.$ = $$[$0]; 
 break;
-case 36: this.$ = new yy.HashNode($$[$0]);
+case 36: this.$ = new yy.HashNode($$[$0]); 
 break;
-case 37: $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 37: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 break;
-case 38: this.$ = [$$[$0]];
+case 38: this.$ = [$$[$0]]; 
 break;
-case 39: this.$ = [$$[$0-2], $$[$0]];
+case 39: this.$ = [$$[$0-2], $$[$0]]; 
 break;
-case 40: this.$ = [$$[$0-2], new yy.StringNode($$[$0])];
+case 40: this.$ = [$$[$0-2], new yy.StringNode($$[$0])]; 
 break;
-case 41: this.$ = [$$[$0-2], new yy.IntegerNode($$[$0])];
+case 41: this.$ = [$$[$0-2], new yy.IntegerNode($$[$0])]; 
 break;
-case 42: this.$ = [$$[$0-2], new yy.BooleanNode($$[$0])];
+case 42: this.$ = [$$[$0-2], new yy.BooleanNode($$[$0])]; 
 break;
-case 43: this.$ = [$$[$0-2], $$[$0]];
+case 43: this.$ = [$$[$0-2], $$[$0]]; 
 break;
-case 44: this.$ = new yy.PartialNameNode($$[$0]);
+case 44: this.$ = new yy.PartialNameNode($$[$0]); 
 break;
-case 45: this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0]));
+case 45: this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0])); 
 break;
-case 46: this.$ = new yy.PartialNameNode(new yy.IntegerNode($$[$0]));
+case 46: this.$ = new yy.PartialNameNode(new yy.IntegerNode($$[$0])); 
 break;
-case 47: this.$ = new yy.DataNode($$[$0]);
+case 47: this.$ = new yy.DataNode($$[$0]); 
 break;
-case 48: this.$ = new yy.IdNode($$[$0]);
+case 48: this.$ = new yy.IdNode($$[$0]); 
 break;
-case 49: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2];
+case 49: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
 break;
-case 50: this.$ = [{part: $$[$0]}];
+case 50: this.$ = [{part: $$[$0]}]; 
 break;
 }
 },
@@ -3422,77 +3422,77 @@ lexer.performAction = function anonymous(yy,yy_,$avoiding_name_collisions,YY_STA
 
 var YYSTATE=YY_START
 switch($avoiding_name_collisions) {
-case 0: yy_.yytext = "\\"; return 14;
+case 0: yy_.yytext = "\\"; return 14; 
 break;
 case 1:
                                    if(yy_.yytext.slice(-1) !== "\\") this.begin("mu");
                                    if(yy_.yytext.slice(-1) === "\\") yy_.yytext = yy_.yytext.substr(0,yy_.yyleng-1), this.begin("emu");
                                    if(yy_.yytext) return 14;
-
+                                 
 break;
-case 2: return 14;
+case 2: return 14; 
 break;
 case 3:
                                    if(yy_.yytext.slice(-1) !== "\\") this.popState();
                                    if(yy_.yytext.slice(-1) === "\\") yy_.yytext = yy_.yytext.substr(0,yy_.yyleng-1);
                                    return 14;
-
+                                 
 break;
-case 4: yy_.yytext = yy_.yytext.substr(0, yy_.yyleng-4); this.popState(); return 15;
+case 4: yy_.yytext = yy_.yytext.substr(0, yy_.yyleng-4); this.popState(); return 15; 
 break;
-case 5: return 25;
+case 5: return 25; 
 break;
-case 6: return 16;
+case 6: return 16; 
 break;
-case 7: return 20;
+case 7: return 20; 
 break;
-case 8: return 19;
+case 8: return 19; 
 break;
-case 9: return 19;
+case 9: return 19; 
 break;
-case 10: return 23;
+case 10: return 23; 
 break;
-case 11: return 22;
+case 11: return 22; 
 break;
-case 12: this.popState(); this.begin('com');
+case 12: this.popState(); this.begin('com'); 
 break;
-case 13: yy_.yytext = yy_.yytext.substr(3,yy_.yyleng-5); this.popState(); return 15;
+case 13: yy_.yytext = yy_.yytext.substr(3,yy_.yyleng-5); this.popState(); return 15; 
 break;
-case 14: return 22;
+case 14: return 22; 
 break;
-case 15: return 37;
+case 15: return 37; 
 break;
-case 16: return 36;
+case 16: return 36; 
 break;
-case 17: return 36;
+case 17: return 36; 
 break;
-case 18: return 40;
+case 18: return 40; 
 break;
-case 19: /*ignore whitespace*/
+case 19: /*ignore whitespace*/ 
 break;
-case 20: this.popState(); return 24;
+case 20: this.popState(); return 24; 
 break;
-case 21: this.popState(); return 18;
+case 21: this.popState(); return 18; 
 break;
-case 22: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\"/g,'"'); return 31;
+case 22: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\"/g,'"'); return 31; 
 break;
-case 23: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\'/g,"'"); return 31;
+case 23: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\'/g,"'"); return 31; 
 break;
-case 24: return 38;
+case 24: return 38; 
 break;
-case 25: return 33;
+case 25: return 33; 
 break;
-case 26: return 33;
+case 26: return 33; 
 break;
-case 27: return 32;
+case 27: return 32; 
 break;
-case 28: return 36;
+case 28: return 36; 
 break;
-case 29: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 36;
+case 29: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 36; 
 break;
-case 30: return 'INVALID';
+case 30: return 'INVALID'; 
 break;
-case 31: return 5;
+case 31: return 5; 
 break;
 }
 };
@@ -5215,7 +5215,7 @@ func third_partySwaggerUiLibJquery180MinJs() (*asset, error) {
 var _third_partySwaggerUiLibJqueryBaBbqMinJs = []byte(`/*
  * jQuery BBQ: Back Button & Query Library - v1.2.1 - 2/17/2010
  * http://benalman.com/projects/jquery-bbq-plugin/
- *
+ * 
  * Copyright (c) 2010 "Cowboy" Ben Alman
  * Dual licensed under the MIT and GPL licenses.
  * http://benalman.com/about/license/
@@ -5224,7 +5224,7 @@ var _third_partySwaggerUiLibJqueryBaBbqMinJs = []byte(`/*
 /*
  * jQuery hashchange event - v1.2 - 2/11/2010
  * http://benalman.com/projects/jquery-hashchange-plugin/
- *
+ * 
  * Copyright (c) 2010 "Cowboy" Ben Alman
  * Dual licensed under the MIT and GPL licenses.
  * http://benalman.com/about/license/
@@ -6606,7 +6606,7 @@ Content.prototype = {
 
 // ` + "`" + `Content` + "`" + ` objects have the following attributes:
 Object.defineProperties(Content.prototype,{
-
+  
 // - **type**. Typically accessed as ` + "`" + `content.type` + "`" + `, reflects the ` + "`" + `content-type` + "`" + `
 //   header associated with the request or response. If not passed as an options
 //   to the constructor or set explicitly, it will infer the type the ` + "`" + `data` + "`" + `
@@ -6720,7 +6720,7 @@ Content.processors = {};
 // - **stringify**. The function used to convert a Javascript data type into a
 //   raw content entity.
 Content.registerProcessor = function(types,processor) {
-
+  
 // You can pass an array of types that will trigger this processor, or just one.
 // We determine the array via duck-typing here.
   if (types.forEach) {
@@ -6810,33 +6810,33 @@ require._core = {
 require.resolve = (function () {
     return function (x, cwd) {
         if (!cwd) cwd = '/';
-
+        
         if (require._core[x]) return x;
         var path = require.modules.path();
         var y = cwd || '.';
-
+        
         if (x.match(/^(?:\.\.?\/|\/)/)) {
             var m = loadAsFileSync(path.resolve(y, x))
                 || loadAsDirectorySync(path.resolve(y, x));
             if (m) return m;
         }
-
+        
         var n = loadNodeModulesSync(x, y);
         if (n) return n;
-
+        
         throw new Error("Cannot find module '" + x + "'");
-
+        
         function loadAsFileSync (x) {
             if (require.modules[x]) {
                 return x;
             }
-
+            
             for (var i = 0; i < require.extensions.length; i++) {
                 var ext = require.extensions[i];
                 if (require.modules[x + ext]) return x + ext;
             }
         }
-
+        
         function loadAsDirectorySync (x) {
             x = x.replace(/\/+$/, '');
             var pkgfile = x + '/package.json';
@@ -6856,10 +6856,10 @@ require.resolve = (function () {
                     if (m) return m;
                 }
             }
-
+            
             return loadAsFileSync(x + '/index');
         }
-
+        
         function loadNodeModulesSync (x, start) {
             var dirs = nodeModulesPathsSync(start);
             for (var i = 0; i < dirs.length; i++) {
@@ -6869,23 +6869,23 @@ require.resolve = (function () {
                 var n = loadAsDirectorySync(dir + '/' + x);
                 if (n) return n;
             }
-
+            
             var m = loadAsFileSync(x);
             if (m) return m;
         }
-
+        
         function nodeModulesPathsSync (start) {
             var parts;
             if (start === '/') parts = [ '' ];
             else parts = path.normalize(start).split('/');
-
+            
             var dirs = [];
             for (var i = parts.length - 1; i >= 0; i--) {
                 if (parts[i] === 'node_modules') continue;
                 var dir = parts.slice(0, i + 1).join('/') + '/node_modules';
                 dirs.push(dir);
             }
-
+            
             return dirs;
         }
     };
@@ -6901,13 +6901,13 @@ require.alias = function (from, to) {
         res = require.resolve(from, '/');
     }
     var basedir = path.dirname(res);
-
+    
     var keys = (Object.keys || function (obj) {
         var res = [];
         for (var key in obj) res.push(key)
         return res;
     })(require.modules);
-
+    
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         if (key.slice(0, basedir.length + 1) === basedir + '/') {
@@ -6925,7 +6925,7 @@ require.define = function (filename, fn) {
         ? ''
         : require.modules.path().dirname(filename)
     ;
-
+    
     var require_ = function (file) {
         return require(file, dirname)
     };
@@ -6935,7 +6935,7 @@ require.define = function (filename, fn) {
     require_.modules = require.modules;
     require_.define = require.define;
     var module_ = { exports : {} };
-
+    
     require.modules[filename] = function () {
         require.modules[filename]._cached = module_.exports;
         fn.call(
@@ -6958,7 +6958,7 @@ if (!process.nextTick) process.nextTick = (function () {
     var canPost = typeof window !== 'undefined'
         && window.postMessage && window.addEventListener
     ;
-
+    
     if (canPost) {
         window.addEventListener('message', function (ev) {
             if (ev.source === window && ev.data === 'browserify-tick') {
@@ -6970,7 +6970,7 @@ if (!process.nextTick) process.nextTick = (function () {
             }
         }, true);
     }
-
+    
     return function (fn) {
         if (canPost) {
             queue.push(fn);
@@ -7080,7 +7080,7 @@ path = normalizeArray(filter(path.split('/'), function(p) {
   if (path && trailingSlash) {
     path += '/';
   }
-
+  
   return (isAbsolute ? '/' : '') + path;
 };
 
@@ -7131,7 +7131,7 @@ require.define("/shred.js", function (require, module, exports, __dirname, __fil
     // Shred is an HTTP client library intended to simplify the use of Node's
 // built-in HTTP library. In particular, we wanted to make it easier to interact
 // with HTTP-based APIs.
-//
+// 
 // See the [examples](./examples.html) for more details.
 
 // Ax is a nice logging library we wrote. You can use any logger, providing it
@@ -7153,7 +7153,7 @@ var Shred = function(options) {
 };
 
 // Most of the real work is done in the request and reponse classes.
-
+ 
 Shred.Request = require("./shred/request");
 Shred.Response = require("./shred/response");
 
@@ -7224,7 +7224,7 @@ var format = function(level,message) {
 
 var noOp = function(message) { return this; }
 var makeLogger = function(level,fn) {
-  return function(message) {
+  return function(message) { 
     this.stream.write(this.format(level, message)+"\n");
     return this;
   }
@@ -7336,7 +7336,7 @@ require.define("/node_modules/cookiejar/cookiejar.js", function (require, module
       return this;
     }
     else {
-        return new CookieAccessInfo(domain,path,secure,script)
+        return new CookieAccessInfo(domain,path,secure,script)    
     }
 }
 
@@ -7395,7 +7395,7 @@ Cookie.prototype.parse = function parse(str) {
       , value=pair[2];
       this.name = key;
       this.value = value;
-
+    
       for(var i=1;i<parts.length;i++) {
         pair=parts[i].match(/([^=]+)(?:=((?:.|\n)*))?/)
         , key=pair[1].trim().toLowerCase()
@@ -7424,7 +7424,7 @@ Cookie.prototype.parse = function parse(str) {
           break
         }
       }
-
+    
       return this;
   }
     return new Cookie().parse(str)
@@ -7465,7 +7465,7 @@ Cookie.prototype.collidesWith = function collidesWith(access_info) {
 exports.CookieJar=CookieJar=function CookieJar() {
   if(this instanceof CookieJar) {
       var cookies = {} //name: [Cookie]
-
+    
       this.setCookie = function setCookie(cookie) {
         cookie = Cookie(cookie);
         //Delete the cookie if the set is past the current time
@@ -7529,7 +7529,7 @@ exports.CookieJar=CookieJar=function CookieJar() {
             matches.toValueString=function() {return matches.map(function(c){return c.toValueString();}).join(';');}
         return matches;
       }
-
+    
       return this;
   }
     return new CookieJar()
@@ -7907,7 +7907,7 @@ var processOptions = function(request,options) {
       request.setHeader("cookie", cookieString);
     }
   }
-
+  
   // The content entity can be set either using the ` + "`" + `body` + "`" + ` or ` + "`" + `content` + "`" + ` attributes.
   if (options.body||options.content) {
     request.content = options.body||options.content;
@@ -8525,14 +8525,14 @@ try {
 // ` + "`" + `Request` + "`" + ` object handles this, getting the raw response object and passing it
 // in here, along with the request. The callback allows us to stream the response
 // and then use the callback to let the request know when it's ready.
-var Response = function(raw, request, callback) {
+var Response = function(raw, request, callback) { 
   var response = this;
   this._raw = raw;
 
   // The ` + "`" + `._setHeaders` + "`" + ` method is "private"; you can't otherwise set headers on
   // the response.
   this._setHeaders.call(this,raw.headers);
-
+  
   // store any cookies
   if (request.cookieJar && this.getHeader('set-cookie')) {
     var cookieStrings = this.getHeader('set-cookie');
@@ -8595,7 +8595,7 @@ var Response = function(raw, request, callback) {
     }
 
     var setBodyAndFinish = function (body) {
-      response._body = new Content({
+      response._body = new Content({ 
         body: body,
         type: response.getHeader("Content-Type")
       });
@@ -8615,7 +8615,7 @@ var Response = function(raw, request, callback) {
     else{
        if (response.request.encoding){
             body = Iconv.fromEncoding(body,response.request.encoding);
-        }
+        }        
       setBodyAndFinish(body);
     }
   });
@@ -8648,8 +8648,8 @@ Response.prototype = {
 
 // ` + "`" + `Response` + "`" + ` object properties, all of which are read-only:
 Object.defineProperties(Response.prototype, {
-
-// - **status**. The HTTP status code for the response.
+  
+// - **status**. The HTTP status code for the response. 
   status: {
     get: function() { return this._raw.statusCode; },
     enumerable: true
@@ -8707,7 +8707,7 @@ module.exports = Response;
 });
 
 require.define("/shred/content.js", function (require, module, exports, __dirname, __filename) {
-
+    
 // The purpose of the ` + "`" + `Content` + "`" + ` object is to abstract away the data conversions
 // to and from raw content entities as strings. For example, you want to be able
 // to pass in a Javascript object and have it be automatically converted into a
@@ -8737,7 +8737,7 @@ Content.prototype = {
 
 // ` + "`" + `Content` + "`" + ` objects have the following attributes:
 Object.defineProperties(Content.prototype,{
-
+  
 // - **type**. Typically accessed as ` + "`" + `content.type` + "`" + `, reflects the ` + "`" + `content-type` + "`" + `
 //   header associated with the request or response. If not passed as an options
 //   to the constructor or set explicitly, it will infer the type the ` + "`" + `data` + "`" + `
@@ -8851,7 +8851,7 @@ Content.processors = {};
 // - **stringify**. The function used to convert a Javascript data type into a
 //   raw content entity.
 Content.registerProcessor = function(types,processor) {
-
+  
 // You can pass an array of types that will trigger this processor, or just one.
 // We determine the array via duck-typing here.
   if (types.forEach) {
@@ -8906,7 +8906,7 @@ require.define("/shred/mixins/headers.js", function (require, module, exports, _
 // overload the index operator in Javascript, using a hash to represent the
 // headers means it's possible to have two conflicting values for a single
 // header.
-//
+// 
 // The solution to this is to provide explicit methods to set or get headers.
 // This also has the benefit of allowing us to introduce additional variations,
 // including snake case, which we automatically convert to what Matthew King has
@@ -8920,7 +8920,7 @@ require.define("/shred/mixins/headers.js", function (require, module, exports, _
 var corsetCase = function(string) {
   return string;//.toLowerCase()
       //.replace("_","-")
-      // .replace(/(^|-)(\w)/g,
+      // .replace(/(^|-)(\w)/g, 
           // function(s) { return s.toUpperCase(); });
 };
 
@@ -8944,7 +8944,7 @@ var getHeader = function(object,name) {
 };
 
 // The "real" ` + "`" + `getHeader` + "`" + ` function: get one or more headers, or all of them
-// if you don't ask for any specifics.
+// if you don't ask for any specifics. 
 var getHeaders = function(object,names) {
   var keys = (names && names.length>0) ? names : Object.keys($H(object));
   var hash = keys.reduce(function(hash,key) {
@@ -8972,7 +8972,7 @@ var setHeaders = function(object,hash) {
 // Here's where we actually bind the functionality to an object. These mixins work by
 // exposing mixin functions. Each function mixes in a specific batch of features.
 module.exports = {
-
+  
   // Add getters.
   getters: function(constructor) {
     constructor.prototype.getHeader = function(name) { return getHeader(this,name); };
@@ -9012,10 +9012,10 @@ var iconv = module.exports = {
     fromEncoding: function(buf, encoding) {
         return iconv.getCodec(encoding).fromEncoding(buf);
     },
-
+    
     defaultCharUnicode: '�',
     defaultCharSingleByte: '?',
-
+    
     // Get correct codec for given encoding.
     getCodec: function(encoding) {
         var enc = encoding || "utf8";
@@ -9034,7 +9034,7 @@ var iconv = module.exports = {
                 // Options for other encoding.
                 codecOptions = codec;
                 enc = codec.type;
-            }
+            } 
             else if (type === "Function")
                 // Codec itself.
                 return codec(codecOptions);
@@ -9042,7 +9042,7 @@ var iconv = module.exports = {
                 throw new Error("Encoding not recognized: '" + encoding + "' (searched as: '"+enc+"')");
         }
     },
-
+    
     // Define basic encodings
     encodings: {
         internal: function(options) {
@@ -9060,20 +9060,20 @@ var iconv = module.exports = {
         binary: "internal",
         ascii: "internal",
         base64: "internal",
-
+        
         // Codepage single-byte encodings.
         singlebyte: function(options) {
             // Prepare chars if needed
             if (!options.chars || (options.chars.length !== 128 && options.chars.length !== 256))
                 throw new Error("Encoding '"+options.type+"' has incorrect 'chars' (must be of len 128 or 256)");
-
+            
             if (options.chars.length === 128)
                 options.chars = asciiString + options.chars;
-
+            
             if (!options.charsBuf) {
                 options.charsBuf = new Buffer(options.chars, 'ucs2');
             }
-
+            
             if (!options.revCharsBuf) {
                 options.revCharsBuf = new Buffer(65536);
                 var defChar = iconv.defaultCharSingleByte.charCodeAt(0);
@@ -9082,21 +9082,21 @@ var iconv = module.exports = {
                 for (var i = 0; i < options.chars.length; i++)
                     options.revCharsBuf[options.chars.charCodeAt(i)] = i;
             }
-
+            
             return {
                 toEncoding: function(str) {
                     str = ensureString(str);
-
+                    
                     var buf = new Buffer(str.length);
                     var revCharsBuf = options.revCharsBuf;
                     for (var i = 0; i < str.length; i++)
                         buf[i] = revCharsBuf[str.charCodeAt(i)];
-
+                    
                     return buf;
                 },
                 fromEncoding: function(buf) {
                     buf = ensureBuffer(buf);
-
+                    
                     // Strings are immutable in JS -> we use ucs2 buffer to speed up computations.
                     var charsBuf = options.charsBuf;
                     var newBuf = new Buffer(buf.length*2);
@@ -9123,7 +9123,7 @@ var iconv = module.exports = {
                     revCharsTable[table[key]] = parseInt(key);
                 }
             }
-
+            
             return {
                 toEncoding: function(str) {
                     str = ensureString(str);
@@ -9133,7 +9133,7 @@ var iconv = module.exports = {
                         if (str.charCodeAt(i) >> 7)
                             bufLen++;
 
-                    var newBuf = new Buffer(bufLen), gbkcode, unicode,
+                    var newBuf = new Buffer(bufLen), gbkcode, unicode, 
                         defaultChar = revCharsTable[iconv.defaultCharUnicode.charCodeAt(0)];
 
                     for (var i = 0, j = 0; i < strLen; i++) {
@@ -9158,7 +9158,7 @@ var iconv = module.exports = {
                     }
                     var newBuf = new Buffer(strLen*2), unicode, gbkcode,
                         defaultChar = iconv.defaultCharUnicode.charCodeAt(0);
-
+                    
                     for (var i = 0, j = 0; i < bufLen; i++, j+=2) {
                         gbkcode = buf[i];
                         if (gbkcode & 0x80) {
@@ -9225,7 +9225,7 @@ http.request = function (params, cb) {
     if (!params) params = {};
     if (!params.host) params.host = window.location.host.split(':')[0];
     if (!params.port) params.port = window.location.port;
-
+    
     var req = new Request(new xhrHttp, params);
     if (cb) req.on('response', cb);
     return req;
@@ -9340,15 +9340,15 @@ var Request = module.exports = function (xhr, params) {
     var self = this;
     self.xhr = xhr;
     self.body = '';
-
+    
     var uri = params.host + ':' + params.port + (params.path || '/');
-
+    
     xhr.open(
         params.method || 'GET',
         (params.scheme || 'http') + '://' + uri,
         true
     );
-
+    
     if (params.headers) {
         Object.keys(params.headers).forEach(function (key) {
             if (!isSafeHeader(key)) return;
@@ -9361,12 +9361,12 @@ var Request = module.exports = function (xhr, params) {
             else xhr.setRequestHeader(key, value)
         });
     }
-
+    
     var res = new Response(xhr);
     res.on('ready', function () {
         self.emit('response', res);
     });
-
+    
     xhr.onreadystatechange = function () {
         res.handle(xhr);
     };
@@ -9419,11 +9419,11 @@ function parseHeaders (xhr) {
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         if (line === '') continue;
-
+        
         var m = line.match(/^([^:]+):\s*(.*)/);
         if (m) {
             var key = m[1].toLowerCase(), value = m[2];
-
+            
             if (headers[key] !== undefined) {
                 if ((Array.isArray && Array.isArray(headers[key]))
                 || headers[key] instanceof Array) {
@@ -9467,7 +9467,7 @@ Response.prototype.handle = function () {
         catch (err) {
             capable.status2 = false;
         }
-
+        
         if (capable.status2) {
             this.emit('ready');
         }
@@ -9481,7 +9481,7 @@ Response.prototype.handle = function () {
             }
         }
         catch (err) {}
-
+        
         try {
             this.write();
         }
@@ -9495,7 +9495,7 @@ Response.prototype.handle = function () {
             this.emit('ready');
         }
         this.write();
-
+        
         if (xhr.error) {
             this.emit('error', xhr.responseText);
         }
@@ -9577,7 +9577,7 @@ var ArrayModel = function(definition) {
   this.name = "arrayModel";
   this.definition = definition || {};
   this.properties = [];
-
+  
   var requiredFields = definition.enum || [];
   var innerType = definition.items;
   if(innerType) {
@@ -10984,7 +10984,7 @@ Property.prototype.toString = function() {
   }
 
 
-  var options = '';
+  var options = ''; 
   var isArray = this.schema.type === 'array';
   var type;
 
@@ -11046,11 +11046,11 @@ Property.prototype.toString = function() {
     }
 
     options += optionHtml('Enum', enumString);
-  }
+  }     
 
   if (options.length > 0)
     str = '<span class="propWrap">' + str + '<table class="optionsWrapper"><tr><th colspan="2">' + this.name + '</th></tr>' + options + '</table></span>';
-
+  
   return str;
 };
 
@@ -11410,11 +11410,11 @@ SwaggerResource.prototype.addOperations = function (resource_path, ops, consumes
           o.summary,
           o.notes,
           type,
-          responseMessages,
-          this,
-          consumes,
-          produces,
-          o.authorizations,
+          responseMessages, 
+          this, 
+          consumes, 
+          produces, 
+          o.authorizations, 
           o.deprecated);
 
       this.operations[op.nickname] = op;
@@ -11896,15 +11896,15 @@ SwaggerOperation.prototype.urlify = function (args) {
     param = params[i];
     if(param.paramType === 'query') {
       if (queryParams !== '')
-        queryParams += '&';
+        queryParams += '&';    
       if (Array.isArray(param)) {
-        var output = '';
-        for(j = 0; j < param.length; j++) {
-          if(j > 0)
-            output += ',';
-          output += encodeURIComponent(param[j]);
-        }
-        queryParams += encodeURIComponent(param.name) + '=' + output;
+        var output = '';   
+        for(j = 0; j < param.length; j++) {    
+          if(j > 0)    
+            output += ',';   
+          output += encodeURIComponent(param[j]);    
+        }    
+        queryParams += encodeURIComponent(param.name) + '=' + output;    
       }
       else {
         if (typeof args[param.name] !== 'undefined') {
@@ -11970,7 +11970,7 @@ SwaggerOperation.prototype.asCurl = function (args) {
   var results = [];
   var i;
 
-  var headers = SwaggerRequest.prototype.setHeaders(args, {}, this);
+  var headers = SwaggerRequest.prototype.setHeaders(args, {}, this);    
   for(i = 0; i < this.parameters.length; i++) {
     var param = this.parameters[i];
     if(param.paramType && param.paramType === 'header' && args[param.name]) {
@@ -12618,12 +12618,12 @@ function handleLogin() {
     for (var key in authSchemes) {
       if (authSchemes.hasOwnProperty(key)) {
         var flow = authSchemes[key].flow;
-
+        
         if(authSchemes[key].type === 'oauth2' && flow && (flow === 'implicit' || flow === 'accessCode')) {
           var dets = authSchemes[key];
           url = dets.authorizationUrl + '?response_type=' + (flow === 'implicit' ? 'token' : 'code');
           window.swaggerUi.tokenName = dets.tokenName || 'access_token';
-          window.swaggerUi.tokenUrl = (flow === 'accessCode' ? dets.tokenUrl : null);
+          window.swaggerUi.tokenUrl = (flow === 'accessCode' ? dets.tokenUrl : null);          
         }
         else if(authSchemes[key].grantTypes) {
           // 1.2 support
@@ -12650,7 +12650,7 @@ function handleLogin() {
 
     for(k =0; k < o.length; k++) {
       var scope = $(o[k]).attr('scope');
-
+      
       if (scopes.indexOf(scope) === -1)
         scopes.push(scope);
     }
@@ -12722,11 +12722,11 @@ function processOAuthCode(data) {
     url : window.swaggerUi.tokenUrl,
     type: "POST",
     data: params,
-    success:function(data, textStatus, jqXHR)
+    success:function(data, textStatus, jqXHR) 
     {
       onOAuthComplete(data);
     },
-    error: function(jqXHR, textStatus, errorThrown)
+    error: function(jqXHR, textStatus, errorThrown) 
     {
       onOAuthComplete("");
     }
@@ -12780,7 +12780,7 @@ function onOAuthComplete(token) {
               // all scopes are satisfied
               $(o).find('.api-ic').addClass('ic-info');
               $(o).find('.api-ic').removeClass('ic-warning');
-              $(o).find('.api-ic').removeClass('ic-error');
+              $(o).find('.api-ic').removeClass('ic-error');          
             }
           }
         });
@@ -13789,16 +13789,16 @@ var _third_partySwaggerUiLibSwaggerJs = []byte(`// swagger.js
       var param = params[i];
       if(param.paramType === 'query') {
         if (queryParams !== '')
-          queryParams += '&';
+          queryParams += '&';    
         if (Array.isArray(param)) {
-          var j;
-          var output = '';
-          for(j = 0; j < param.length; j++) {
-            if(j > 0)
-              output += ',';
-            output += encodeURIComponent(param[j]);
-          }
-          queryParams += encodeURIComponent(param.name) + '=' + output;
+          var j;   
+          var output = '';   
+          for(j = 0; j < param.length; j++) {    
+            if(j > 0)    
+              output += ',';   
+            output += encodeURIComponent(param[j]);    
+          }    
+          queryParams += encodeURIComponent(param.name) + '=' + output;    
         }
         else {
           if (args[param.name]) {
@@ -14615,7 +14615,7 @@ $(function() {
 		var error_free = true;
 
 		// Cycle through the forms required inputs
-		$(this).find("input.required").each(function() {
+ 		$(this).find("input.required").each(function() {
 
 			// Remove any existing error styles from the input
 			$(this).removeClass('error');
@@ -14714,7 +14714,7 @@ var Docs = {
 			$('.resource ul.endpoints').slideDown();
 			return;
 		}
-
+		
 		$('li#resource_' + resource).addClass('active');
 
 		var elem = $('li#resource_' + resource + ' ul.endpoints');
@@ -14738,7 +14738,7 @@ var Docs = {
 	expandOperationsForResource: function(resource) {
 		// Make sure the resource container is open..
 		Docs.expandEndpointListForResource(resource);
-
+		
 		if (resource == '') {
 			$('.resource ul.endpoints li.operation div.content').slideDown();
 			return;

@@ -8,7 +8,7 @@ import (
 	kapi "k8s.io/kubernetes/pkg/api/v1"
 )
 
-// +genclient=true
+// +genclient
 
 // Deployment Configs define the template for a pod and manages deploying new images or configuration changes.
 // A single deployment configuration is usually analogous to a single micro-service. Can support many different
@@ -51,6 +51,7 @@ type DeploymentConfigSpec struct {
 
 	// RevisionHistoryLimit is the number of old ReplicationControllers to retain to allow for rollbacks.
 	// This field is a pointer to allow for differentiation between an explicit zero and not specified.
+	// Defaults to 10. (This only applies to DeploymentConfigs created via the new group API resource, not the legacy resource.)
 	RevisionHistoryLimit *int32 `json:"revisionHistoryLimit,omitempty" protobuf:"varint,4,opt,name=revisionHistoryLimit"`
 
 	// Test ensures that this deployment config will have zero replicas except while a deployment is running. This allows the
@@ -299,6 +300,8 @@ type DeploymentConfigStatus struct {
 	// This could be based on a change made by the user or caused by an automatic trigger
 	Details *DeploymentDetails `json:"details,omitempty" protobuf:"bytes,7,opt,name=details"`
 	// Conditions represents the latest available observations of a deployment config's current state.
+	// +patchMergeKey=type
+	// +patchStrategy=merge
 	Conditions []DeploymentCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,8,rep,name=conditions"`
 	// Total number of ready pods targeted by this deployment.
 	ReadyReplicas int32 `json:"readyReplicas,omitempty" protobuf:"varint,9,opt,name=readyReplicas"`

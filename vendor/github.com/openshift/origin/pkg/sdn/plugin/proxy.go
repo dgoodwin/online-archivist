@@ -8,6 +8,7 @@ import (
 	"github.com/golang/glog"
 
 	osclient "github.com/openshift/origin/pkg/client"
+	"github.com/openshift/origin/pkg/sdn"
 	osapi "github.com/openshift/origin/pkg/sdn/apis/network"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -19,6 +20,14 @@ import (
 	pconfig "k8s.io/kubernetes/pkg/proxy/config"
 )
 
+// EndpointsConfigHandler is an abstract interface of objects which receive update notifications for the set of endpoints.
+type EndpointsConfigHandler interface {
+	// OnEndpointsUpdate gets called when endpoints configuration is changed for a given
+	// service on any of the configuration sources. An example is when a new
+	// service comes up, or when containers come up or down for an existing service.
+	OnEndpointsUpdate(endpoints []*kapi.Endpoints)
+}
+
 type firewallItem struct {
 	ruleType osapi.EgressNetworkPolicyRuleType
 	net      *net.IPNet
@@ -29,37 +38,43 @@ type proxyFirewallItem struct {
 	activePolicy       *ktypes.UID
 }
 
+type proxyEndpoints struct {
+	endpoints *kapi.Endpoints
+	blocked   bool
+}
+
 type OsdnProxy struct {
 	kClient              kclientset.Interface
 	osClient             *osclient.Client
 	networkInfo          *NetworkInfo
 	egressDNS            *EgressDNS
-	baseEndpointsHandler pconfig.EndpointsConfigHandler
+	baseEndpointsHandler pconfig.EndpointsHandler
 
 	lock         sync.Mutex
 	firewall     map[string]*proxyFirewallItem
-	allEndpoints []*kapi.Endpoints
+	allEndpoints map[ktypes.UID]*proxyEndpoints
 
 	idLock sync.Mutex
 	ids    map[string]uint32
 }
 
 // Called by higher layers to create the proxy plugin instance; only used by nodes
-func NewProxyPlugin(pluginName string, osClient *osclient.Client, kClient kclientset.Interface) (*OsdnProxy, error) {
-	if !osapi.IsOpenShiftMultitenantNetworkPlugin(pluginName) {
+func NewProxyPlugin(pluginName string, osClient *osclient.Client, kClient kclientset.Interface) (sdn.ProxyInterface, error) {
+	if !sdn.IsOpenShiftMultitenantNetworkPlugin(pluginName) {
 		return nil, nil
 	}
 
 	return &OsdnProxy{
-		kClient:   kClient,
-		osClient:  osClient,
-		ids:       make(map[string]uint32),
-		egressDNS: NewEgressDNS(),
-		firewall:  make(map[string]*proxyFirewallItem),
+		kClient:      kClient,
+		osClient:     osClient,
+		ids:          make(map[string]uint32),
+		egressDNS:    NewEgressDNS(),
+		firewall:     make(map[string]*proxyFirewallItem),
+		allEndpoints: make(map[ktypes.UID]*proxyEndpoints),
 	}, nil
 }
 
-func (proxy *OsdnProxy) Start(baseHandler pconfig.EndpointsConfigHandler) error {
+func (proxy *OsdnProxy) Start(baseHandler pconfig.EndpointsHandler) error {
 	glog.Infof("Starting multitenant SDN proxy endpoint filter")
 
 	var err error
@@ -103,9 +118,6 @@ func (proxy *OsdnProxy) watchEgressNetworkPolicies() {
 			proxy.lock.Lock()
 			defer proxy.lock.Unlock()
 			proxy.updateEgressNetworkPolicy(*policy)
-			if proxy.allEndpoints != nil {
-				proxy.updateEndpoints()
-			}
 		}()
 		return nil
 	})
@@ -134,7 +146,7 @@ func (proxy *OsdnProxy) isNamespaceGlobal(ns string) bool {
 	proxy.idLock.Lock()
 	defer proxy.idLock.Unlock()
 
-	if proxy.ids[ns] == osapi.GlobalVNID {
+	if proxy.ids[ns] == sdn.GlobalVNID {
 		return true
 	}
 	return false
@@ -213,6 +225,22 @@ func (proxy *OsdnProxy) updateEgressNetworkPolicy(policy osapi.EgressNetworkPoli
 			glog.Errorf("Found multiple egress policies, dropping all firewall rules for namespace: %q", ns)
 		}
 	}
+
+	// Update endpoints
+	for _, pep := range proxy.allEndpoints {
+		if pep.endpoints.Namespace != policy.Namespace {
+			continue
+		}
+
+		wasBlocked := pep.blocked
+		pep.blocked = proxy.endpointsBlocked(pep.endpoints)
+		switch {
+		case wasBlocked && !pep.blocked:
+			proxy.baseEndpointsHandler.OnEndpointsAdd(pep.endpoints)
+		case !wasBlocked && pep.blocked:
+			proxy.baseEndpointsHandler.OnEndpointsDelete(pep.endpoints)
+		}
+	}
 }
 
 func (proxy *OsdnProxy) firewallBlocksIP(namespace string, ip net.IP) bool {
@@ -231,39 +259,74 @@ func (proxy *OsdnProxy) firewallBlocksIP(namespace string, ip net.IP) bool {
 	return false
 }
 
-func (proxy *OsdnProxy) OnEndpointsUpdate(allEndpoints []*kapi.Endpoints) {
-	proxy.lock.Lock()
-	defer proxy.lock.Unlock()
-	proxy.allEndpoints = allEndpoints
-	proxy.updateEndpoints()
-}
-
-func (proxy *OsdnProxy) updateEndpoints() {
-	if len(proxy.firewall) == 0 {
-		proxy.baseEndpointsHandler.OnEndpointsUpdate(proxy.allEndpoints)
-		return
-	}
-
-	filteredEndpoints := make([]*kapi.Endpoints, 0, len(proxy.allEndpoints))
-
-EndpointLoop:
-	for _, ep := range proxy.allEndpoints {
-		ns := ep.ObjectMeta.Namespace
-		for _, ss := range ep.Subsets {
-			for _, addr := range ss.Addresses {
-				IP := net.ParseIP(addr.IP)
-				if !proxy.networkInfo.ClusterNetwork.Contains(IP) && !proxy.networkInfo.ServiceNetwork.Contains(IP) {
-					if proxy.firewallBlocksIP(ns, IP) {
-						glog.Warningf("Service '%s' in namespace '%s' has an Endpoint pointing to firewalled destination (%s)", ep.ObjectMeta.Name, ns, addr.IP)
-						continue EndpointLoop
-					}
+func (proxy *OsdnProxy) endpointsBlocked(ep *kapi.Endpoints) bool {
+	for _, ss := range ep.Subsets {
+		for _, addr := range ss.Addresses {
+			IP := net.ParseIP(addr.IP)
+			if !proxy.networkInfo.ClusterNetwork.Contains(IP) && !proxy.networkInfo.ServiceNetwork.Contains(IP) {
+				if proxy.firewallBlocksIP(ep.Namespace, IP) {
+					glog.Warningf("Service '%s' in namespace '%s' has an Endpoint pointing to firewalled destination (%s)", ep.Name, ep.Namespace, addr.IP)
+					return true
 				}
 			}
 		}
-		filteredEndpoints = append(filteredEndpoints, ep)
 	}
 
-	proxy.baseEndpointsHandler.OnEndpointsUpdate(filteredEndpoints)
+	return false
+}
+
+func (proxy *OsdnProxy) OnEndpointsAdd(ep *kapi.Endpoints) {
+	proxy.lock.Lock()
+	defer proxy.lock.Unlock()
+
+	pep := &proxyEndpoints{ep, proxy.endpointsBlocked(ep)}
+	proxy.allEndpoints[ep.UID] = pep
+	if !pep.blocked {
+		proxy.baseEndpointsHandler.OnEndpointsAdd(ep)
+	}
+}
+
+func (proxy *OsdnProxy) OnEndpointsUpdate(old, ep *kapi.Endpoints) {
+	proxy.lock.Lock()
+	defer proxy.lock.Unlock()
+
+	pep := proxy.allEndpoints[ep.UID]
+	if pep == nil {
+		glog.Warningf("Got OnEndpointsUpdate for unknown Endpoints %#v", ep)
+		pep = &proxyEndpoints{ep, true}
+		proxy.allEndpoints[ep.UID] = pep
+	}
+	wasBlocked := pep.blocked
+	pep.endpoints = ep
+	pep.blocked = proxy.endpointsBlocked(ep)
+
+	switch {
+	case wasBlocked && !pep.blocked:
+		proxy.baseEndpointsHandler.OnEndpointsAdd(ep)
+	case !wasBlocked && !pep.blocked:
+		proxy.baseEndpointsHandler.OnEndpointsUpdate(old, ep)
+	case !wasBlocked && pep.blocked:
+		proxy.baseEndpointsHandler.OnEndpointsDelete(ep)
+	}
+}
+
+func (proxy *OsdnProxy) OnEndpointsDelete(ep *kapi.Endpoints) {
+	proxy.lock.Lock()
+	defer proxy.lock.Unlock()
+
+	pep := proxy.allEndpoints[ep.UID]
+	if pep == nil {
+		glog.Warningf("Got OnEndpointsDelete for unknown Endpoints %#v", ep)
+		return
+	}
+	delete(proxy.allEndpoints, ep.UID)
+	if !pep.blocked {
+		proxy.baseEndpointsHandler.OnEndpointsDelete(ep)
+	}
+}
+
+func (proxy *OsdnProxy) OnEndpointsSynced() {
+	proxy.baseEndpointsHandler.OnEndpointsSynced()
 }
 
 func (proxy *OsdnProxy) syncEgressDNSProxyFirewall() {
@@ -298,9 +361,6 @@ func (proxy *OsdnProxy) syncEgressDNSProxyFirewall() {
 		defer proxy.lock.Unlock()
 
 		proxy.updateEgressNetworkPolicy(policy)
-		if proxy.allEndpoints != nil {
-			proxy.updateEndpoints()
-		}
 	}
 }
 

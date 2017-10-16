@@ -246,3 +246,4 @@ v1.tagimportpolicy
 v1.imagestreamimportstatus
 v1.imageimportspec
 v1.repositoryimportspec
+

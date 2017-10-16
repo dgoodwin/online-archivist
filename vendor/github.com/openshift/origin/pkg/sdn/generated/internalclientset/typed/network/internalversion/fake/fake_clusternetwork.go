@@ -18,40 +18,9 @@ type FakeClusterNetworks struct {
 
 var clusternetworksResource = schema.GroupVersionResource{Group: "network.openshift.io", Version: "", Resource: "clusternetworks"}
 
-func (c *FakeClusterNetworks) Create(clusterNetwork *network.ClusterNetwork) (result *network.ClusterNetwork, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(clusternetworksResource, c.ns, clusterNetwork), &network.ClusterNetwork{})
+var clusternetworksKind = schema.GroupVersionKind{Group: "network.openshift.io", Version: "", Kind: "ClusterNetwork"}
 
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*network.ClusterNetwork), err
-}
-
-func (c *FakeClusterNetworks) Update(clusterNetwork *network.ClusterNetwork) (result *network.ClusterNetwork, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(clusternetworksResource, c.ns, clusterNetwork), &network.ClusterNetwork{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*network.ClusterNetwork), err
-}
-
-func (c *FakeClusterNetworks) Delete(name string, options *v1.DeleteOptions) error {
-	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(clusternetworksResource, c.ns, name), &network.ClusterNetwork{})
-
-	return err
-}
-
-func (c *FakeClusterNetworks) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(clusternetworksResource, c.ns, listOptions)
-
-	_, err := c.Fake.Invokes(action, &network.ClusterNetworkList{})
-	return err
-}
-
+// Get takes name of the clusterNetwork, and returns the corresponding clusterNetwork object, and an error if there is any.
 func (c *FakeClusterNetworks) Get(name string, options v1.GetOptions) (result *network.ClusterNetwork, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(clusternetworksResource, c.ns, name), &network.ClusterNetwork{})
@@ -62,9 +31,10 @@ func (c *FakeClusterNetworks) Get(name string, options v1.GetOptions) (result *n
 	return obj.(*network.ClusterNetwork), err
 }
 
+// List takes label and field selectors, and returns the list of ClusterNetworks that match those selectors.
 func (c *FakeClusterNetworks) List(opts v1.ListOptions) (result *network.ClusterNetworkList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(clusternetworksResource, c.ns, opts), &network.ClusterNetworkList{})
+		Invokes(testing.NewListAction(clusternetworksResource, clusternetworksKind, c.ns, opts), &network.ClusterNetworkList{})
 
 	if obj == nil {
 		return nil, err
@@ -88,6 +58,44 @@ func (c *FakeClusterNetworks) Watch(opts v1.ListOptions) (watch.Interface, error
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(clusternetworksResource, c.ns, opts))
 
+}
+
+// Create takes the representation of a clusterNetwork and creates it.  Returns the server's representation of the clusterNetwork, and an error, if there is any.
+func (c *FakeClusterNetworks) Create(clusterNetwork *network.ClusterNetwork) (result *network.ClusterNetwork, err error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewCreateAction(clusternetworksResource, c.ns, clusterNetwork), &network.ClusterNetwork{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*network.ClusterNetwork), err
+}
+
+// Update takes the representation of a clusterNetwork and updates it. Returns the server's representation of the clusterNetwork, and an error, if there is any.
+func (c *FakeClusterNetworks) Update(clusterNetwork *network.ClusterNetwork) (result *network.ClusterNetwork, err error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewUpdateAction(clusternetworksResource, c.ns, clusterNetwork), &network.ClusterNetwork{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*network.ClusterNetwork), err
+}
+
+// Delete takes name of the clusterNetwork and deletes it. Returns an error if one occurs.
+func (c *FakeClusterNetworks) Delete(name string, options *v1.DeleteOptions) error {
+	_, err := c.Fake.
+		Invokes(testing.NewDeleteAction(clusternetworksResource, c.ns, name), &network.ClusterNetwork{})
+
+	return err
+}
+
+// DeleteCollection deletes a collection of objects.
+func (c *FakeClusterNetworks) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+	action := testing.NewDeleteCollectionAction(clusternetworksResource, c.ns, listOptions)
+
+	_, err := c.Fake.Invokes(action, &network.ClusterNetworkList{})
+	return err
 }
 
 // Patch applies the patch and returns the patched clusterNetwork.

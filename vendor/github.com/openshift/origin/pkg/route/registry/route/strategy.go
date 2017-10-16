@@ -241,7 +241,7 @@ func (routeStatusStrategy) ValidateUpdate(ctx apirequest.Context, obj, old runti
 
 const emptyDestinationCertificate = `-----BEGIN COMMENT-----
 This is an empty PEM file created to provide backwards compatibility
-for reencrypt routes that have no destinationCACertificate. This
+for reencrypt routes that have no destinationCACertificate. This 
 content will only appear for routes accessed via /oapi/v1/routes.
 -----END COMMENT-----
 `
@@ -290,12 +290,12 @@ func DecorateLegacyRouteWithEmptyDestinationCACertificates(obj runtime.Object) e
 }
 
 // GetAttrs returns labels and fields of a given object for filtering purposes
-func GetAttrs(obj runtime.Object) (objLabels labels.Set, objFields fields.Set, err error) {
+func GetAttrs(obj runtime.Object) (labels.Set, fields.Set, bool, error) {
 	route, ok := obj.(*routeapi.Route)
 	if !ok {
-		return nil, nil, fmt.Errorf("not a route")
+		return nil, nil, false, fmt.Errorf("not a route")
 	}
-	return labels.Set(route.Labels), routeapi.RouteToSelectableFields(route), nil
+	return labels.Set(route.Labels), routeapi.RouteToSelectableFields(route), route.Initializers != nil, nil
 }
 
 // Matcher returns a matcher for a route

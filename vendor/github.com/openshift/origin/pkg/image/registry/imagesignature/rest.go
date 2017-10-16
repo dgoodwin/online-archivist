@@ -18,6 +18,9 @@ type REST struct {
 	imageClient client.ImageInterface
 }
 
+var _ rest.Creater = &REST{}
+var _ rest.Deleter = &REST{}
+
 // NewREST returns a new REST.
 func NewREST(imageClient client.ImageInterface) *REST {
 	return &REST{imageClient: imageClient}
@@ -28,7 +31,7 @@ func (r *REST) New() runtime.Object {
 	return &imageapi.ImageSignature{}
 }
 
-func (r *REST) Create(ctx apirequest.Context, obj runtime.Object) (runtime.Object, error) {
+func (r *REST) Create(ctx apirequest.Context, obj runtime.Object, _ bool) (runtime.Object, error) {
 	signature := obj.(*imageapi.ImageSignature)
 
 	if err := rest.BeforeCreate(Strategy, ctx, obj); err != nil {

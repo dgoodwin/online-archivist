@@ -11,7 +11,7 @@ race:
 errcheck:
 	@errcheck -ignorepkg=bytes -ignore=os:Remove github.com/boltdb/bolt
 
-test:
+test: 
 	@go test -v -cover .
 	@go test -v ./cmd/bolt
 

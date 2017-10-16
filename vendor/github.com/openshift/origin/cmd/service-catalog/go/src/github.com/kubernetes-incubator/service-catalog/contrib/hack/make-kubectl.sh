@@ -62,3 +62,4 @@ docker build -t kubectl .
 cd ..
 rm -rf $dir
 exit 0
+

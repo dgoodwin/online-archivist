@@ -27,7 +27,7 @@ To run it locally, start with:
 
 ```
 # run etcd locally on the default port
-$ etcd
+$ etcd 
 # switch to another shell and run
 $ ./bin/apiserver -v 10 --etcd-servers http://localhost:2379
 ```
@@ -178,3 +178,6 @@ cleanup
  kubectl --certificate-authority=/var/run/kubernetes-service-catalog/apiserver.crt --server=https://localhost:6443 delete instance test-instance
 instance "test-instance" deleted
 ```
+
+
+

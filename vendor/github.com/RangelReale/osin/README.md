@@ -65,7 +65,7 @@ http://localhost:14000/authorize?response_type=code&client_id=1234&redirect_uri=
 
 ### Storage backends
 
-There is a mock available at [example/teststorage.go](/example/teststorage.go) which you can use as a guide for writing your own.
+There is a mock available at [example/teststorage.go](/example/teststorage.go) which you can use as a guide for writing your own.  
 
 You might want to check out other implementations for common database management systems as well:
 

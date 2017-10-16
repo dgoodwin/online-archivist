@@ -99,7 +99,7 @@ func TestReadAdmissionConfiguration(t *testing.T) {
 },
 "podNodeSelectorPluginConfig": {
   "clusterDefaultNodeSelector": ""
-}
+}  
 }`,
 			ExpectedAdmissionConfig: &apiserver.AdmissionConfiguration{
 				Plugins: []apiserver.AdmissionPluginConfiguration{
@@ -126,7 +126,7 @@ func TestReadAdmissionConfiguration(t *testing.T) {
 },
 "podNodeSelectorPluginConfig": {
   "clusterDefaultNodeSelector": ""
-}
+}  
 }`,
 			ExpectedAdmissionConfig: &apiserver.AdmissionConfiguration{},
 			PluginNames:             []string{"NamespaceLifecycle", "InitialResources"},

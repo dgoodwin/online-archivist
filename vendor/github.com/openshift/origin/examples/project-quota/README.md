@@ -50,7 +50,7 @@ API resources (pods, services, etc.) that a project may require.
 Let's create a simple project that applies a basic quota where the total cpu usage across all pods cannot exceed 1 core and may not consume more than 750Mi of memory.
 
 ```shell
-$ oadm new-project quota-demo --admin=test-admin
+$ oc adm new-project quota-demo --admin=test-admin
 $ oc project quota-demo
 $ oc create quota quota --hard=cpu=1,memory=750Mi,pods=10,replicationcontrollers=10,resourcequotas=1,services=1
 ```
@@ -83,7 +83,7 @@ Quota:
                 replicationcontrollers  0       10
                 resourcequotas          1       1
                 services                0       10
-Resource limits:  <none>
+Resource limits:  <none>        
 ```
 
 Applying default resource limits
@@ -114,7 +114,7 @@ spec:
     terminationMessagePath: /dev/termination-log
   dnsPolicy: ClusterFirst
   restartPolicy: Always
-status: {}
+status: {} 
 $ oc create -f pod-without-resources.yaml
 Error from server: error when creating "pod-without-resources.yaml": pods "pod-without-resources" is forbidden: Failed quota: quota: must specify cpu,memory
 ```
@@ -193,7 +193,7 @@ Resource limits:
         Pod             cpu             10m     500m    -
         Pod             memory          5Mi     750Mi   -
         Container       cpu             10m     500m    100m
-        Container       memory          5Mi     750Mi   100Mi
+        Container       memory          5Mi     750Mi   100Mi  
 ```
 
 You can now see that the project has set min/max limits at the pod and container scopes.
@@ -234,7 +234,7 @@ Resource limits:
         Pod             cpu             10m     500m    -
         Pod             memory          5Mi     750Mi   -
         Container       cpu             10m     500m    100m
-        Container       memory          5Mi     750Mi   100Mi
+        Container       memory          5Mi     750Mi   100Mi    
 ```
 
 As you can see, we now have a single pod in our project, and that pod is consuming the default amount of resources.
@@ -338,7 +338,7 @@ Objects:
     ImageStream ruby-20-centos7
 
 
-    Service     database
+    Service     database           
 ```
 
 Notice that the template exposes parameters to limit the amount of memory and cpu used by the pods in your project.

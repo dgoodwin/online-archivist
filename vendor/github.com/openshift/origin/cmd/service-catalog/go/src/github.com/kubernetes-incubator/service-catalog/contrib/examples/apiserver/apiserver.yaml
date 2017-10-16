@@ -9,7 +9,7 @@ spec:
   - name: apiserver
     image: apiserver
     imagePullPolicy: IfNotPresent
-    args:
+    args: 
     - --etcd-servers
     - http://localhost:2379
     - -v
@@ -31,3 +31,4 @@ spec:
   - protocol: TCP
     port: 6443
     targetPort: https
+

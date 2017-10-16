@@ -102,23 +102,23 @@ ze3kOoP+iWSmTySHMSKVMppp0Xnls6t38mrsXtPuY8fGD2GS6VllaizMqc3wShNK
                     1e:c4:33:5a:d6:0d:7a:79:93
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Basic Constraints:
+            X509v3 Basic Constraints: 
                 CA:FALSE
-            Netscape Comment:
+            Netscape Comment: 
                 OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
+            X509v3 Subject Key Identifier: 
                 E7:FB:1F:45:F0:71:77:AF:8C:10:4A:0A:42:03:F5:1F:1F:07:CF:DF
-            X509v3 Authority Key Identifier:
+            X509v3 Authority Key Identifier: 
                 keyid:3D:F0:F7:30:3D:3B:EB:3A:55:68:FA:F5:43:C9:C7:AC:E1:3F:10:78
                 DirName:/C=US/ST=My State/L=My City/O=My Org/OU=My Unit/CN=ROOT CA
                 serial:EA:0E:6D:FE:64:B8:68:19
 
-            X509v3 Subject Alternative Name:
+            X509v3 Subject Alternative Name: 
                 <EMPTY>
 
-            X509v3 Extended Key Usage:
+            X509v3 Extended Key Usage: 
                 TLS Web Client Authentication
-            Netscape Cert Type:
+            Netscape Cert Type: 
                 SSL Client
     Signature Algorithm: sha256WithRSAEncryption
          08:bc:b4:80:a5:3b:be:9a:78:f9:47:3f:c0:2d:75:e3:10:89:
@@ -176,22 +176,22 @@ i5fmaPPBNzzBFCaQoN3TAjrpwp5Z0kQ=
                     70:2f:77:74:48:d9:cd:e5:af
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Basic Constraints:
+            X509v3 Basic Constraints: 
                 CA:FALSE
-            Netscape Comment:
+            Netscape Comment: 
                 OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
+            X509v3 Subject Key Identifier: 
                 6E:A3:F6:01:52:79:4D:46:78:3C:D0:AB:4A:75:96:AC:7D:6C:08:BE
-            X509v3 Authority Key Identifier:
+            X509v3 Authority Key Identifier: 
                 keyid:3D:F0:F7:30:3D:3B:EB:3A:55:68:FA:F5:43:C9:C7:AC:E1:3F:10:78
                 DirName:/C=US/ST=My State/L=My City/O=My Org/OU=My Unit/CN=ROOT CA
                 serial:EA:0E:6D:FE:64:B8:68:19
 
-            X509v3 Subject Alternative Name:
+            X509v3 Subject Alternative Name: 
                 DNS:client_dns.example.com
-            X509v3 Extended Key Usage:
+            X509v3 Extended Key Usage: 
                 TLS Web Client Authentication
-            Netscape Cert Type:
+            Netscape Cert Type: 
                 SSL Client
     Signature Algorithm: sha256WithRSAEncryption
          69:20:83:0f:16:f8:b6:f5:04:98:56:a4:b2:67:32:e0:82:80:
@@ -249,22 +249,22 @@ b3TuSTdzCLz1JoZn9YIE/9tan/lr3y/1dWHypZELBVZb6NE211Z67X3lXyoIh8JI
                     f1:0d:83:c7:f2:68:70:f0:23
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Basic Constraints:
+            X509v3 Basic Constraints: 
                 CA:FALSE
-            Netscape Comment:
+            Netscape Comment: 
                 OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
+            X509v3 Subject Key Identifier: 
                 76:22:99:CD:3D:BA:90:62:0F:BE:E7:5B:57:8D:31:1D:25:27:C6:6A
-            X509v3 Authority Key Identifier:
+            X509v3 Authority Key Identifier: 
                 keyid:3D:F0:F7:30:3D:3B:EB:3A:55:68:FA:F5:43:C9:C7:AC:E1:3F:10:78
                 DirName:/C=US/ST=My State/L=My City/O=My Org/OU=My Unit/CN=ROOT CA
                 serial:EA:0E:6D:FE:64:B8:68:19
 
-            X509v3 Subject Alternative Name:
+            X509v3 Subject Alternative Name: 
                 email:client_email@example.com
-            X509v3 Extended Key Usage:
+            X509v3 Extended Key Usage: 
                 TLS Web Client Authentication
-            Netscape Cert Type:
+            Netscape Cert Type: 
                 SSL Client
     Signature Algorithm: sha256WithRSAEncryption
          80:70:19:d2:5c:c1:cf:d2:b6:e5:0e:76:cd:8f:c2:8d:a8:19:
@@ -324,23 +324,23 @@ BIaMiQ==
                     2f:88:f5:62:d8:8e:69:f4:19
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Basic Constraints:
+            X509v3 Basic Constraints: 
                 CA:FALSE
-            Netscape Comment:
+            Netscape Comment: 
                 OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
+            X509v3 Subject Key Identifier: 
                 36:A1:0C:B2:28:0C:77:6C:7F:96:90:11:CA:19:AF:67:1E:92:17:08
-            X509v3 Authority Key Identifier:
+            X509v3 Authority Key Identifier: 
                 keyid:3D:F0:F7:30:3D:3B:EB:3A:55:68:FA:F5:43:C9:C7:AC:E1:3F:10:78
                 DirName:/C=US/ST=My State/L=My City/O=My Org/OU=My Unit/CN=ROOT CA
                 serial:EA:0E:6D:FE:64:B8:68:19
 
-            X509v3 Subject Alternative Name:
+            X509v3 Subject Alternative Name: 
                 <EMPTY>
 
-            X509v3 Extended Key Usage:
+            X509v3 Extended Key Usage: 
                 TLS Web Server Authentication
-            Netscape Cert Type:
+            Netscape Cert Type: 
                 SSL Server
     Signature Algorithm: sha256WithRSAEncryption
          a9:dd:3d:64:e5:e2:fb:7e:2e:ce:52:7a:85:1d:62:0b:ec:ca:
@@ -436,12 +436,12 @@ mFlG6tStAWz3TmydciZNdiEbeqHw5uaIYWj1zC5AdvFXBFue0ojIrJ5JtbTWccH9
                     db:07:89
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Subject Key Identifier:
+            X509v3 Subject Key Identifier: 
                 AB:3A:46:07:46:0C:68:F0:64:C7:73:A8:7C:8A:20:66:A8:DA:1C:E4
-            X509v3 Authority Key Identifier:
+            X509v3 Authority Key Identifier: 
                 keyid:AB:3A:46:07:46:0C:68:F0:64:C7:73:A8:7C:8A:20:66:A8:DA:1C:E4
 
-            X509v3 Basic Constraints:
+            X509v3 Basic Constraints: 
                 CA:TRUE
     Signature Algorithm: sha256WithRSAEncryption
          1c:af:04:c9:10:f2:43:03:b6:24:2e:20:2e:47:46:4d:7f:b9:

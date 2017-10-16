@@ -33,12 +33,12 @@ func TestDecodeEndpoints_V3(t *testing.T) {
         "acm": {
           "endpoints": {
              "ap-northeast-1": {}
-	  }
+    	  }
         },
         "s3": {
           "endpoints": {
              "ap-northeast-1": {}
-	  }
+    	  }
         }
       }
     }

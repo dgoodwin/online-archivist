@@ -30,7 +30,7 @@
 ## Searching and Browsing Services:
     1.  As a consumer, I'm able to search my catalog for services by attributes
         such as category
-    2.  As a consumer, I'm able to see metadata about a service prior to
+    2.  As a consumer, I'm able to see metadata about a service prior to 
         creation which allows me to see if this service fits my need
     3.  As a consumer, I'm able to see all the required and optional parameters
         the service takes in order to create it

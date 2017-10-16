@@ -5,8 +5,13 @@ import (
 	kapi "k8s.io/kubernetes/pkg/api/v1"
 )
 
-// +genclient=true
-// +nonNamespaced=true
+// AllowAllCapabilities can be used as a value for the
+// SecurityContextConstraints.AllowAllCapabilities field and means that any
+// capabilities are allowed to be requested.
+var AllowAllCapabilities kapi.Capability = "*"
+
+// +genclient
+// +genclient:nonNamespaced
 
 // SecurityContextConstraints governs the ability to make requests that affect the SecurityContext
 // that will be applied to a container.
@@ -18,7 +23,10 @@ type SecurityContextConstraints struct {
 
 	// Priority influences the sort order of SCCs when evaluating which SCCs to try first for
 	// a given pod request based on access in the Users and Groups fields.  The higher the int, the
-	// higher priority.  If scores for multiple SCCs are equal they will be sorted by name.
+	// higher priority. An unset value is considered a 0 priority. If scores
+	// for multiple SCCs are equal they will be sorted from most restrictive to
+	// least restrictive. If both priorities and restrictions are equal the
+	// SCCs will be sorted by name.
 	Priority *int32 `json:"priority" protobuf:"varint,2,opt,name=priority"`
 
 	// AllowPrivilegedContainer determines if a container can request to be run as privileged.
@@ -83,6 +91,7 @@ type FSType string
 
 var (
 	FSTypeAzureFile             FSType = "azureFile"
+	FSTypeAzureDisk             FSType = "azureDisk"
 	FSTypeFlocker               FSType = "flocker"
 	FSTypeFlexVolume            FSType = "flexVolume"
 	FSTypeHostPath              FSType = "hostPath"
@@ -101,6 +110,13 @@ var (
 	FSTypeDownwardAPI           FSType = "downwardAPI"
 	FSTypeFC                    FSType = "fc"
 	FSTypeConfigMap             FSType = "configMap"
+	FSTypeVsphereVolume         FSType = "vsphere"
+	FSTypeQuobyte               FSType = "quobyte"
+	FSTypePhotonPersistentDisk  FSType = "photonPersistentDisk"
+	FSProjected                 FSType = "projected"
+	FSPortworxVolume            FSType = "portworxVolume"
+	FSScaleIO                   FSType = "scaleIO"
+	FSStorageOS                 FSType = "storageOS"
 	FSTypeAll                   FSType = "*"
 	FSTypeNone                  FSType = "none"
 )

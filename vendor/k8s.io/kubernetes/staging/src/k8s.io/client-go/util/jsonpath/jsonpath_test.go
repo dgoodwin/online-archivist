@@ -255,7 +255,7 @@ func TestKubernetes(t *testing.T) {
 	    {
 	      "name": "e2e",
 	      "user": {"username": "admin", "password": "secret"}
-		}
+	  	}
 	  ]
 	}`)
 	var nodesData interface{}

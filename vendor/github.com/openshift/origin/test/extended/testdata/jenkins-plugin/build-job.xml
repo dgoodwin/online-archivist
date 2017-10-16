@@ -38,7 +38,7 @@
           <waitUnit>sec</waitUnit>
           <depCfg>frontend</depCfg>
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
-
+    
         <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
             <apiURL>https://openshift.default.svc.cluster.local</apiURL>
             <svcName>frontend</svcName>

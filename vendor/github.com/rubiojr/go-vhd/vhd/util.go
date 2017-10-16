@@ -58,8 +58,8 @@ func uuidToBytes(uuid string) []byte {
 
 /*
 	utf16BytesToString converts UTF-16 encoded bytes, in big or
-	little endian byte order, to a UTF-8 encoded string.
-	http://stackoverflow.com/a/15794113
+ 	little endian byte order, to a UTF-8 encoded string.
+ 	http://stackoverflow.com/a/15794113
 */
 func utf16BytesToString(b []byte, o binary.ByteOrder) string {
 	utf := make([]uint16, (len(b)+(2-1))/2)

@@ -22,7 +22,8 @@ Provides the ability to modify and test a JSON according to a
 * Create a JSON Merge Patch document based on two json documents (a to b):
 
   `mergeDoc, err := jsonpatch.CreateMergePatch(a, b)`
-
+ 
 * Bonus API: compare documents for structural equality
 
   `jsonpatch.Equal(doca, docb)`
+

@@ -9,7 +9,7 @@ const Enabled = false
 // Trace is true if `-tags debug` is used AND the environment
 // variable `PDEBUG_TRACE` is set to a `true` value (i.e.,
 // 1, true, etc), or `-tags debug0` is used. This allows you to
-// compile-in the trace logs, but only show them when you
+// compile-in the trace logs, but only show them when you 
 // set the environment variable
 const Trace = false
 

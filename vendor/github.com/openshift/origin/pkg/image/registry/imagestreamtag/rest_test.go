@@ -534,7 +534,7 @@ func TestCreateImageStreamTag(t *testing.T) {
 				))
 
 			ctx := apirequest.WithUser(apirequest.NewDefaultContext(), &fakeUser{})
-			_, err := storage.Create(ctx, tc.istag)
+			_, err := storage.Create(ctx, tc.istag, false)
 			gotErr := err != nil
 			if e, a := tc.expectError, gotErr; e != a {
 				t.Errorf("%s: Expected err=%v: got %v: %v", name, e, a, err)

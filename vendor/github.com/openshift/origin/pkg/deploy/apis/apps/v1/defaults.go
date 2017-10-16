@@ -1,11 +1,21 @@
 package v1
 
 import (
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
 	deployapi "github.com/openshift/origin/pkg/deploy/apis/apps"
 )
+
+// Applies defaults only for API group "apps.openshift.io" and not for the legacy API.
+// This function is called from storage layer where differentiation
+// between legacy and group API can be made and is not related to other functions here
+// which are called fom auto-generated code.
+func AppsV1DeploymentConfigLayeredDefaults(dc *deployapi.DeploymentConfig) {
+	if dc.Spec.RevisionHistoryLimit == nil {
+		v := deployapi.DefaultRevisionHistoryLimit
+		dc.Spec.RevisionHistoryLimit = &v
+	}
+}
 
 // Keep this in sync with pkg/api/serialization_test.go#defaultHookContainerName
 func defaultHookContainerName(hook *LifecycleHook, containerName string) {
@@ -125,15 +135,4 @@ func SetDefaults_DeploymentConfig(obj *DeploymentConfig) {
 
 func mkintp(i int64) *int64 {
 	return &i
-}
-
-func addDefaultingFuncs(scheme *runtime.Scheme) error {
-	RegisterDefaults(scheme)
-	return scheme.AddDefaultingFuncs(
-		SetDefaults_DeploymentConfigSpec,
-		SetDefaults_DeploymentStrategy,
-		SetDefaults_RecreateDeploymentStrategyParams,
-		SetDefaults_RollingDeploymentStrategyParams,
-		SetDefaults_DeploymentConfig,
-	)
 }

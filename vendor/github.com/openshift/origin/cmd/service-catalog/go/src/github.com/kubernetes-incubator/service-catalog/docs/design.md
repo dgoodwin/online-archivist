@@ -325,7 +325,7 @@ Below are the key aspects of the code that differ from the design above:
 
 - The API Server can only use etcd as its persistent store.
 - The API Server is not connected to the Controller, which means it's not
-  actually used as part of the running system yet. Any resources created
+  actually used as part of the running system yet. Any resources created 
   by talking to the API Server will be stored but nothing beyond storing
   them will happen.
 - Creating Third Party Resource versions of the Service Catalog resources

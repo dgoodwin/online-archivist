@@ -41,6 +41,10 @@ const (
 	ImportRegistryNotAllowed = "registry is not allowed for import"
 )
 
+var errNoRegistryURLPathAllowed = fmt.Errorf("no path after <host>[:<port>] is allowed")
+var errNoRegistryURLQueryAllowed = fmt.Errorf("no query arguments are allowed after <host>[:<port>]")
+var errRegistryURLHostEmpty = fmt.Errorf("no host name specified")
+
 // DefaultRegistry returns the default Docker registry (host or host:port), or false if it is not available.
 type DefaultRegistry interface {
 	DefaultRegistry() (string, bool)
@@ -576,7 +580,7 @@ func LatestImageTagEvent(stream *ImageStream, imageID string) (string, *TagEvent
 			continue
 		}
 		for i, event := range events.Items {
-			if digestOrImageMatch(event.Image, imageID) &&
+			if DigestOrImageMatch(event.Image, imageID) &&
 				(latestTagEvent == nil || latestTagEvent != nil && event.Created.After(latestTagEvent.Created.Time)) {
 				latestTagEvent = &events.Items[i]
 				latestTag = tag
@@ -874,7 +878,8 @@ func UpdateTrackingTags(stream *ImageStream, updatedTag string, updatedImage Tag
 	return updated
 }
 
-func digestOrImageMatch(image, imageID string) bool {
+// DigestOrImageMatch matches the digest in the image name.
+func DigestOrImageMatch(image, imageID string) bool {
 	if d, err := digest.ParseDigest(image); err == nil {
 		return strings.HasPrefix(d.Hex(), imageID) || strings.HasPrefix(image, imageID)
 	}
@@ -889,7 +894,7 @@ func ResolveImageID(stream *ImageStream, imageID string) (*TagEvent, error) {
 	for _, history := range stream.Status.Tags {
 		for i := range history.Items {
 			tagging := &history.Items[i]
-			if digestOrImageMatch(tagging.Image, imageID) {
+			if DigestOrImageMatch(tagging.Image, imageID) {
 				event = tagging
 				set.Insert(tagging.Image)
 			}
@@ -1160,4 +1165,42 @@ func (tagref TagReference) HasAnnotationTag(searchTag string) bool {
 		}
 	}
 	return false
+}
+
+// ValidateRegistryURL returns error if the given input is not a valid registry URL. The url may be prefixed
+// with http:// or https:// schema. It may not contain any path or query after the host:[port].
+func ValidateRegistryURL(registryURL string) error {
+	var (
+		u     *url.URL
+		err   error
+		parts = strings.SplitN(registryURL, "://", 2)
+	)
+
+	switch len(parts) {
+	case 2:
+		u, err = url.Parse(registryURL)
+		if err != nil {
+			return err
+		}
+		switch u.Scheme {
+		case "http", "https":
+		default:
+			return fmt.Errorf("unsupported scheme: %s", u.Scheme)
+		}
+	case 1:
+		u, err = url.Parse("https://" + registryURL)
+		if err != nil {
+			return err
+		}
+	}
+	if len(u.Path) > 0 && u.Path != "/" {
+		return errNoRegistryURLPathAllowed
+	}
+	if len(u.RawQuery) > 0 {
+		return errNoRegistryURLQueryAllowed
+	}
+	if len(u.Host) == 0 {
+		return errRegistryURLHostEmpty
+	}
+	return nil
 }

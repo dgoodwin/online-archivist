@@ -6,10 +6,11 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kapi "k8s.io/kubernetes/pkg/api"
+	kapihelper "k8s.io/kubernetes/pkg/api/helper"
 )
 
-// +genclient=true
-// +nonNamespaced=true
+// +genclient
+// +genclient:nonNamespaced
 
 // ClusterResourceQuota mirrors ResourceQuota at a cluster scope.  This object is easily convertible to
 // synthetic ResourceQuota object to allow quota evaluation re-use.
@@ -137,7 +138,7 @@ func (o ResourceQuotasStatusByNamespace) DeepCopy() ResourceQuotasStatusByNamesp
 
 func init() {
 	// Tell the reflection package how to compare our unexported type
-	if err := kapi.Semantic.AddFuncs(
+	if err := kapihelper.Semantic.AddFuncs(
 		func(o1, o2 ResourceQuotasStatusByNamespace) bool {
 			return reflect.DeepEqual(o1.orderedMap, o2.orderedMap)
 		},

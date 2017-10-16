@@ -28,25 +28,26 @@ import (
 	"github.com/openshift/origin/pkg/project/cache"
 )
 
-func init() {
-	admission.RegisterPlugin(api.PluginName, func(input io.Reader) (admission.Interface, error) {
-		obj, err := configlatest.ReadYAML(input)
-		if err != nil {
-			return nil, err
-		}
-		if obj == nil {
-			return nil, nil
-		}
-		config, ok := obj.(*api.ImagePolicyConfig)
-		if !ok {
-			return nil, fmt.Errorf("unexpected config object: %#v", obj)
-		}
-		if errs := validation.Validate(config); len(errs) > 0 {
-			return nil, errs.ToAggregate()
-		}
-		glog.V(5).Infof("%s admission controller loaded with config: %#v", api.PluginName, config)
-		return newImagePolicyPlugin(config)
-	})
+func Register(plugins *admission.Plugins) {
+	plugins.Register(api.PluginName,
+		func(input io.Reader) (admission.Interface, error) {
+			obj, err := configlatest.ReadYAML(input)
+			if err != nil {
+				return nil, err
+			}
+			if obj == nil {
+				return nil, nil
+			}
+			config, ok := obj.(*api.ImagePolicyConfig)
+			if !ok {
+				return nil, fmt.Errorf("unexpected config object: %#v", obj)
+			}
+			if errs := validation.Validate(config); len(errs) > 0 {
+				return nil, errs.ToAggregate()
+			}
+			glog.V(5).Infof("%s admission controller loaded with config: %#v", api.PluginName, config)
+			return newImagePolicyPlugin(config)
+		})
 }
 
 type imagePolicyPlugin struct {
@@ -303,7 +304,7 @@ func (c *imageResolutionCache) resolveImageReference(ref imageapi.DockerImageRef
 			return nil, err
 		}
 		c.cache.Add(ref.ID, imageCacheEntry{expires: now.Add(c.expiration), image: image})
-		return &rules.ImagePolicyAttributes{Name: ref, Image: image}, nil
+		return &rules.ImagePolicyAttributes{Name: ref, Image: image, IntegratedRegistry: c.integrated.Matches(ref.Registry)}, nil
 	}
 
 	fullReference := c.integrated.Matches(ref.Registry)
@@ -441,8 +442,7 @@ func (config resolutionConfig) FailOnResolutionFailure(gr schema.GroupResource) 
 
 var skipImageRewriteOnUpdate = map[schema.GroupResource]struct{}{
 	// Job template specs are immutable, they cannot be updated.
-	{Group: "extensions", Resource: "jobs"}: {},
-	{Group: "batch", Resource: "jobs"}:      {},
+	{Group: "batch", Resource: "jobs"}: {},
 	// Build specs are immutable, they cannot be updated.
 	{Group: "", Resource: "builds"}:                   {},
 	{Group: "build.openshift.io", Resource: "builds"}: {},
@@ -451,26 +451,32 @@ var skipImageRewriteOnUpdate = map[schema.GroupResource]struct{}{
 }
 
 // RewriteImagePullSpec applies to implicit rewrite attributes and local resources as well as if the policy requires it.
+// If a local name check is requested and a rule matches true is returned. The policy default resolution is only respected
+// if a resource isn't covered by a rule - if pods have a rule with DoNotAttempt and the global policy is RequiredRewrite,
+// no pods will be rewritten.
 func (config resolutionConfig) RewriteImagePullSpec(attr *rules.ImagePolicyAttributes, isUpdate bool, gr schema.GroupResource) bool {
 	if isUpdate {
 		if _, ok := skipImageRewriteOnUpdate[gr]; ok {
 			return false
 		}
 	}
-	if api.RequestsResolution(config.config.ResolveImages) {
-		return true
-	}
-	if attr.LocalRewrite {
-		for _, rule := range config.config.ResolutionRules {
-			if !rule.LocalNames {
-				continue
-			}
-			if resolutionRuleCoversResource(rule.TargetResource, gr) {
-				return true
-			}
+	hasMatchingRule := false
+	for _, rule := range config.config.ResolutionRules {
+		if !resolutionRuleCoversResource(rule.TargetResource, gr) {
+			continue
 		}
+		if rule.LocalNames && attr.LocalRewrite {
+			return true
+		}
+		if api.RewriteImagePullSpec(rule.Policy) {
+			return true
+		}
+		hasMatchingRule = true
 	}
-	return false
+	if hasMatchingRule {
+		return false
+	}
+	return api.RewriteImagePullSpec(config.config.ResolveImages)
 }
 
 // resolutionRuleCoversResource implements wildcard checking on Resource names

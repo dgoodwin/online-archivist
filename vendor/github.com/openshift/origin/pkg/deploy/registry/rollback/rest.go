@@ -8,6 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	apirequest "k8s.io/apiserver/pkg/endpoints/request"
+	"k8s.io/apiserver/pkg/registry/rest"
 	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
 	kcoreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
 
@@ -25,6 +26,8 @@ type REST struct {
 	codec     runtime.Codec
 }
 
+var _ rest.Creater = &REST{}
+
 // NewREST safely creates a new REST.
 func NewREST(oc client.Interface, kc kclientset.Interface, codec runtime.Codec) *REST {
 	return &REST{
@@ -41,7 +44,7 @@ func (r *REST) New() runtime.Object {
 }
 
 // Create generates a new DeploymentConfig representing a rollback.
-func (r *REST) Create(ctx apirequest.Context, obj runtime.Object) (runtime.Object, error) {
+func (r *REST) Create(ctx apirequest.Context, obj runtime.Object, _ bool) (runtime.Object, error) {
 	namespace, ok := apirequest.NamespaceFrom(ctx)
 	if !ok {
 		return nil, kerrors.NewBadRequest("namespace parameter required.")

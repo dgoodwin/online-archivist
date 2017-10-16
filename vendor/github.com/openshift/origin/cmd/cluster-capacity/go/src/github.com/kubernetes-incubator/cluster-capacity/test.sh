@@ -16,3 +16,4 @@
 
 tests=$(for file in $(find . -iname "*_test.go" | grep -v "./vendor" | sed "s/\.//"); do test=$(dirname $file | sed "s/\.//"); echo "github.com/kubernetes-incubator/cluster-capacity$test"; done)
 go test $tests
+

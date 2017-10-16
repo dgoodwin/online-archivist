@@ -123,19 +123,19 @@ const TokenGetResponse = `
 				"name": "test"
 			}
 		},
-        "serviceCatalog": [],
+        "serviceCatalog": [], 
 		"user": {
-            "id": "a530fefc3d594c4ba2693a4ecd6be74e",
-            "name": "apiserver",
+            "id": "a530fefc3d594c4ba2693a4ecd6be74e", 
+            "name": "apiserver", 
             "roles": [
                 {
                     "name": "member"
-                },
+                }, 
                 {
                     "name": "service"
                 }
-            ],
-            "roles_links": [],
+            ], 
+            "roles_links": [], 
             "username": "apiserver"
         }
     }

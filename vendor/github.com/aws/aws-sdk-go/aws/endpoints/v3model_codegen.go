@@ -173,7 +173,7 @@ import (
 	{{ end }}
 
 	{{ template "service consts" . }}
-
+	
 	{{ template "endpoint resolvers" . }}
 {{- end }}
 
@@ -227,7 +227,7 @@ import (
 			{{ PartitionVarName $partition.ID }},
 		{{ end }}
 	}
-
+	
 	{{ range $_, $partition := . -}}
 		{{ $name := PartitionGetter $partition.ID -}}
 		// {{ $name }} returns the Resolver for {{ $partition.Name }}.

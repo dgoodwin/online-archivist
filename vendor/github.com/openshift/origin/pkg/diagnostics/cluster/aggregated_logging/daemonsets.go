@@ -22,7 +22,7 @@ or to label them all:
 `
 
 const daemonSetPartialNodesLabeled = `
-There are some nodes that match the selector for DaemonSet '%s'.
+There are some nodes that match the selector for DaemonSet '%s'.  
 A list of matching nodes can be discovered by running:
 
   $ oc get nodes -l %s
@@ -31,9 +31,9 @@ const daemonSetNoPodsFound = `
 There were no pods found that match DaemonSet '%s' with matchLabels '%s'
 `
 const daemonSetPodsNotRunning = `
-The Pod '%[1]s' matched by DaemonSet '%[2]s' is not in '%[3]s' status: %[4]s.
+The Pod '%[1]s' matched by DaemonSet '%[2]s' is not in '%[3]s' status: %[4]s. 
 
-Depending upon the state, this could mean there is an error running the image
+Depending upon the state, this could mean there is an error running the image 
 for one or more pod containers, the node could be pulling images, etc.  Try running
 the following commands to get additional information:
 

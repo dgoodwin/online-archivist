@@ -36,7 +36,7 @@ Prerequisites:
     $ oc create -f gitserver-ephemeral.yaml
     ```
 
-    OR
+    OR 
 
     ```sh
     $ oc create -f gitserver-persistent.yaml
@@ -63,13 +63,13 @@ a 'git clone' of the repository.
    $ GITSERVER=http://$(oc get route git -o template --template '{{.spec.host}}')
    ```
 
-   In this case, the URL of your git server will be the host name used by the route; something like:
-
+   In this case, the URL of your git server will be the host name used by the route; something like: 
+   
    ```sh
    $ echo $GITSERVER
    http://git-myproject.router.default.svc.cluster.local
    ```
-
+  
    Alternatively, if your router is not functional, you can port-forward the git-server pod to your local machine.
    In a separate shell window, execute the following: (You must leave the port-forward command running
    for the port to be forwarded to your machine)
@@ -89,8 +89,8 @@ a 'git clone' of the repository.
 2. Setup your credentials
 
    By default the Git Server will allow users or service accounts that can create pods in
-   the project namespace to create and push code to the Git Server. The easiest way to
-   provide credentials to the Git Server is by using a custom credential helper that will
+   the project namespace to create and push code to the Git Server. The easiest way to 
+   provide credentials to the Git Server is by using a custom credential helper that will 
    send your OpenShift token by default to the server.
 
    **NOTE:** the config key is `credential.[git server URL].helper`
@@ -103,7 +103,7 @@ a 'git clone' of the repository.
 3. Push a repository to your git server
 
    In an existing repository, add a remote that points to the git server and push to it
-
+   
    ```sh
    # clone a public repository
    $ git clone https://github.com/openshift/ruby-hello-world.git
@@ -116,10 +116,10 @@ a 'git clone' of the repository.
    $ git push openshift master
    ```
 
-   **NOTE:** the ruby-hello-world.git repository does not exist before running these commands.
+   **NOTE:** the ruby-hello-world.git repository does not exist before running these commands. 
    By pushing to it, you are creating it in the Git Server.
 
-   On push the git server will invoke new-app on the code and create artifacts for it in
+   On push the git server will invoke new-app on the code and create artifacts for it in 
    OpenShift.
 
 
@@ -177,7 +177,7 @@ Authentication
 By default, the git server will authenticate using OpenShift user or service account credentials. For a user,
 the credentials are the user name, and the user's token (from `oc whoami -t`). For a service account, the user
 name is the service account name and the password is the service account token. The token can
-be one of the 2 tokens created with the service account and stored in the service account secrets. These can
+be one of the 2 tokens created with the service account and stored in the service account secrets. These can 
 be obtained by looking at the secrets that correspond to the service account (`oc get secrets`) and displaying
 the token in one of them: `oc describe secret NAME`.
 
@@ -187,7 +187,7 @@ Authorization
 
 Users or service accounts must be able to read pods in the current namespace in order to fetch repositories from
 the Git Server. Specifying ALLOW_ANON_GIT_PULL=true as an environment variable for the Git Server will allow anyone
-to fetch/clone content from the Git Server. To create/push content, users or service accounts must have the right
+to fetch/clone content from the Git Server. To create/push content, users or service accounts must have the right 
 to create pods in the namespace.
 
 
@@ -210,8 +210,8 @@ Automatically Starting Builds
 -----------------------------
 
 By default, whenever the git server receives a commit, it will look for a BuildConfig in the same namespace as the
-git server and the same name as the repository where the commit is being pushed.  If it finds a BuildConfig with
-the same name, it will start a build for that BuildConfig. Alternatively, an annotation may be added to a
+git server and the same name as the repository where the commit is being pushed.  If it finds a BuildConfig with 
+the same name, it will start a build for that BuildConfig. Alternatively, an annotation may be added to a 
 BuildConfig to explicitly link it to a repository on the git server:
 
 ```yaml
@@ -222,7 +222,7 @@ metadata:
       openshift.io/git-repository: myrepo
 ```
 
-**NOTE**: A build will be started for the BuildConfig matching the name of the repository and for any BuildConfig
+**NOTE**: A build will be started for the BuildConfig matching the name of the repository and for any BuildConfig 
 that has an annotation pointing to the source repository. If there is a BuildConfig that has a matching name but
 has an annotation pointing to a different repository, a build will not be invoked for it.
 
@@ -240,7 +240,7 @@ Setting the BUILD_STRATEGY to `docker` will force new builds to be created with 
 oc set env dc/git BUILD_STRATEGY=docker
 ```
 
-For OpenShift online which does not allow Docker type builds, you will need to set the strategy to `source`
+For OpenShift online which does not allow Docker type builds, you will need to set the strategy to `source` 
 if your repository contains a `Dockerfile`:
 
 ```sh

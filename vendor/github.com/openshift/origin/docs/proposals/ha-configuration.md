@@ -177,3 +177,4 @@ example shown below.
  1. Graphical User Interface (UI): This document describes what the HA
     configuration is, does and how it works under the covers. It makes
     absolutely **no** attempt to describe a graphical user interface.
+

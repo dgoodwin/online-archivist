@@ -42,7 +42,7 @@ const (
 // The kubeconfig at bootstrapPath is used to request a client certificate from the API server.
 // On success, a kubeconfig file referencing the generated key and obtained certificate is written to kubeconfigPath.
 // The certificate and key file are stored in certDir.
-func bootstrapClientCert(kubeconfigPath string, bootstrapPath string, certDir string, nodeName types.NodeName) error {
+func BootstrapClientCert(kubeconfigPath string, bootstrapPath string, certDir string, nodeName types.NodeName) error {
 	// Short-circuit if the kubeconfig file already exists.
 	// TODO: inspect the kubeconfig, ensure a rest client can be built from it, verify client cert expiration, etc.
 	_, err := os.Stat(kubeconfigPath)
@@ -73,18 +73,9 @@ func bootstrapClientCert(kubeconfigPath string, bootstrapPath string, certDir st
 	if err != nil {
 		return fmt.Errorf("unable to build bootstrap key path: %v", err)
 	}
-	keyData, generatedKeyFile, err := certutil.LoadOrGenerateKeyFile(keyPath)
+	keyData, _, err := certutil.LoadOrGenerateKeyFile(keyPath)
 	if err != nil {
 		return err
-	}
-	if generatedKeyFile {
-		defer func() {
-			if !success {
-				if err := os.Remove(keyPath); err != nil {
-					glog.Warningf("Cannot clean up the key file %q: %v", keyPath, err)
-				}
-			}
-		}()
 	}
 
 	// Get the cert.

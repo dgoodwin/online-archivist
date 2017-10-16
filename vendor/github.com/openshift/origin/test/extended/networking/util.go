@@ -3,6 +3,7 @@ package networking
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	testexutil "github.com/openshift/origin/test/extended/util"
@@ -11,6 +12,7 @@ import (
 	kapierrs "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kapiv1 "k8s.io/kubernetes/pkg/api/v1"
+	kapiv1pod "k8s.io/kubernetes/pkg/api/v1/pod"
 	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
 	"k8s.io/kubernetes/pkg/client/retry"
 	e2e "k8s.io/kubernetes/test/e2e/framework"
@@ -79,7 +81,7 @@ func waitForPodCondition(c kclientset.Interface, ns, podName, desc string, timeo
 func waitForPodSuccessInNamespace(c kclientset.Interface, podName string, contName string, namespace string) error {
 	return waitForPodCondition(c, namespace, podName, "success or failure", podStartTimeout, func(pod *kapiv1.Pod) (bool, error) {
 		// Cannot use pod.Status.Phase == api.PodSucceeded/api.PodFailed due to #2632
-		ci, ok := kapiv1.GetContainerStatus(pod.Status.ContainerStatuses, contName)
+		ci, ok := kapiv1pod.GetContainerStatus(pod.Status.ContainerStatuses, contName)
 		if !ok {
 			e2e.Logf("No Status.Info for container '%s' in pod '%s' yet", contName, podName)
 		} else {
@@ -162,32 +164,36 @@ func launchWebserverService(f *e2e.Framework, serviceName string, nodeName strin
 	return
 }
 
-func checkConnectivityToHost(f *e2e.Framework, nodeName string, podName string, host string, timeout int) error {
-	contName := fmt.Sprintf("%s-container", podName)
-	pod := &kapiv1.Pod{
-		TypeMeta: metav1.TypeMeta{
-			Kind: "Pod",
-		},
-		ObjectMeta: metav1.ObjectMeta{
-			Name: podName,
-		},
-		Spec: kapiv1.PodSpec{
-			Containers: []kapiv1.Container{
-				{
-					Name:    contName,
-					Image:   "gcr.io/google_containers/busybox",
-					Command: []string{"wget", fmt.Sprintf("--timeout=%d", timeout), "-s", host},
-				},
-			},
-			NodeName:      nodeName,
-			RestartPolicy: kapiv1.RestartPolicyNever,
-		},
+func checkConnectivityToHost(f *e2e.Framework, nodeName string, podName string, host string, timeout time.Duration) error {
+	e2e.Logf("Creating an exec pod on node %v", nodeName)
+	execPodName := e2e.CreateExecPodOrFail(f.ClientSet, f.Namespace.Name, fmt.Sprintf("execpod-sourceip-%s", nodeName), func(pod *kapiv1.Pod) {
+		pod.Spec.NodeName = nodeName
+	})
+	defer func() {
+		e2e.Logf("Cleaning up the exec pod")
+		err := f.ClientSet.Core().Pods(f.Namespace.Name).Delete(execPodName, nil)
+		Expect(err).NotTo(HaveOccurred())
+	}()
+	execPod, err := f.ClientSet.Core().Pods(f.Namespace.Name).Get(execPodName, metav1.GetOptions{})
+	e2e.ExpectNoError(err)
+
+	var stdout string
+	e2e.Logf("Waiting up to %v to wget %s", timeout, host)
+	cmd := fmt.Sprintf("wget -T 30 -qO- %s", host)
+	for start := time.Now(); time.Since(start) < timeout; time.Sleep(2) {
+		stdout, err = e2e.RunHostCmd(execPod.Namespace, execPod.Name, cmd)
+		if err != nil {
+			e2e.Logf("got err: %v, retry until timeout", err)
+			continue
+		}
+		// Need to check output because wget -q might omit the error.
+		if strings.TrimSpace(stdout) == "" {
+			e2e.Logf("got empty stdout, retry until timeout")
+			continue
+		}
+		break
 	}
-	podClient := f.ClientSet.CoreV1().Pods(f.Namespace.Name)
-	_, err := podClient.Create(pod)
-	expectNoError(err)
-	defer podClient.Delete(podName, nil)
-	return waitForPodSuccessInNamespace(f.ClientSet, podName, contName, f.Namespace.Name)
+	return err
 }
 
 func pluginIsolatesNamespaces() bool {
@@ -225,7 +231,7 @@ func checkPodIsolation(f1, f2 *e2e.Framework, nodeType NodeType) error {
 	defer f1.ClientSet.CoreV1().Pods(f1.Namespace.Name).Delete(podName, nil)
 	ip := e2e.LaunchWebserverPod(f1, podName, serverNode.Name)
 
-	return checkConnectivityToHost(f2, clientNode.Name, "isolation-wget", ip, 10)
+	return checkConnectivityToHost(f2, clientNode.Name, "isolation-wget", ip, 10*time.Second)
 }
 
 func checkServiceConnectivity(serverFramework, clientFramework *e2e.Framework, nodeType NodeType) error {
@@ -246,7 +252,7 @@ func checkServiceConnectivity(serverFramework, clientFramework *e2e.Framework, n
 	defer serverFramework.ClientSet.CoreV1().Services(serverFramework.Namespace.Name).Delete(podName, nil)
 	ip := launchWebserverService(serverFramework, podName, serverNode.Name)
 
-	return checkConnectivityToHost(clientFramework, clientNode.Name, "service-wget", ip, 10)
+	return checkConnectivityToHost(clientFramework, clientNode.Name, "service-wget", ip, 10*time.Second)
 }
 
 func InSingleTenantContext(body func()) {

@@ -60,7 +60,7 @@ func (s strategy) Validate(ctx apirequest.Context, obj runtime.Object) field.Err
 	token := obj.(*oauthapi.OAuthAuthorizeToken)
 	validationErrors := validation.ValidateAuthorizeToken(token)
 
-	client, err := s.clientGetter.GetClient(ctx, token.ClientName, &metav1.GetOptions{})
+	client, err := s.clientGetter.Get(token.ClientName, metav1.GetOptions{})
 	if err != nil {
 		return append(validationErrors, field.InternalError(field.NewPath("clientName"), err))
 	}
@@ -88,12 +88,12 @@ func (strategy) AllowUnconditionalUpdate() bool {
 }
 
 // GetAttrs returns labels and fields of a given object for filtering purposes
-func GetAttrs(o runtime.Object) (labels.Set, fields.Set, error) {
+func GetAttrs(o runtime.Object) (labels.Set, fields.Set, bool, error) {
 	obj, ok := o.(*oauthapi.OAuthAuthorizeToken)
 	if !ok {
-		return nil, nil, fmt.Errorf("not a OAuthAuthorizeToken")
+		return nil, nil, false, fmt.Errorf("not a OAuthAuthorizeToken")
 	}
-	return labels.Set(obj.Labels), SelectableFields(obj), nil
+	return labels.Set(obj.Labels), SelectableFields(obj), obj.Initializers != nil, nil
 }
 
 // Matcher returns a generic matcher for a given label and field selector.

@@ -284,10 +284,9 @@ type MasterConfig struct {
 	// AuditConfig holds information related to auditing capabilities.
 	AuditConfig AuditConfig `json:"auditConfig"`
 
-	// TemplateServiceBrokerConfig holds information related to the template
-	// service broker.  The broker is enabled if TemplateServiceBrokerConfig is
-	// non-nil.
-	TemplateServiceBrokerConfig *TemplateServiceBrokerConfig `json:"templateServiceBrokerConfig"`
+	// DisableOpenAPI avoids starting the openapi endpoint because it is very expensive.
+	// This option will be removed at a later time.  It is never serialized.
+	DisableOpenAPI bool `json:"-"`
 }
 
 // MasterAuthConfig configures authentication options in addition to the standard
@@ -1372,7 +1371,7 @@ type ControllerElectionConfig struct {
 	// controller instance should lead. It defaults to "kube-system"
 	LockNamespace string `json:"lockNamespace"`
 	// LockResource is the group and resource name to use to coordinate for the controller lock.
-	// If unset, defaults to "endpoints".
+	// If unset, defaults to "configmaps".
 	LockResource GroupResource `json:"lockResource"`
 }
 
@@ -1400,12 +1399,4 @@ type DefaultAdmissionConfig struct {
 
 	// Disable turns off an admission plugin that is enabled by default.
 	Disable bool `json:"disable"`
-}
-
-// TemplateServiceBrokerConfig holds information related to the template
-// service broker
-type TemplateServiceBrokerConfig struct {
-	// TemplateNamespaces indicates the namespace(s) in which the template service
-	// broker looks for templates to serve to the catalog.
-	TemplateNamespaces []string `json:"templateNamespaces"`
 }

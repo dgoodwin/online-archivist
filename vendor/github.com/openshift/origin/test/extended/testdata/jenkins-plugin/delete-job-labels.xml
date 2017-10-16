@@ -14,9 +14,9 @@
 
         <com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterLabels>
           <namespace>${PROJECT_NAME}</namespace>
-          <types>bc,is</types>
-          <keys>foo</keys>
-          <values>bar</values>
+          <types>bc,is</types>                                                                                                                                                                                                             
+          <keys>foo</keys>                                                                                                                                                                                                                 
+          <values>bar</values>                                                                                                                                                                                                             
         </com.openshift.jenkins.plugins.pipeline.OpenShiftDeleterLabels>
 
     </builders>

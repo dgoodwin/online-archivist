@@ -18,13 +18,13 @@ func TestParseINI(t *testing.T) {
 	}{
 		{
 			`root = toor
-[foo]
+[foo]  
 bar = hop
 ini = nin
 `,
 			map[string]map[string]string{
-				"":    map[string]string{"root": "toor"},
-				"foo": map[string]string{"bar": "hop", "ini": "nin"},
+				"":    {"root": "toor"},
+				"foo": {"bar": "hop", "ini": "nin"},
 			},
 		},
 		{
@@ -33,9 +33,9 @@ ini = nin
 empty=
 `,
 			map[string]map[string]string{
-				"":        map[string]string{},
-				"empty":   map[string]string{},
-				"section": map[string]string{"empty": ""},
+				"":        {},
+				"empty":   {},
+				"section": {"empty": ""},
 			},
 		},
 		{
@@ -45,7 +45,7 @@ empty=
 ;comment=true
 `,
 			map[string]map[string]string{
-				"": map[string]string{},
+				"": {},
 			},
 		},
 	}

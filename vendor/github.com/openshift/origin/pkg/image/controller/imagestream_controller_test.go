@@ -7,9 +7,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/diff"
 	kapi "k8s.io/kubernetes/pkg/api"
+	kapihelper "k8s.io/kubernetes/pkg/api/helper"
 
-	client "github.com/openshift/origin/pkg/client/testclient"
 	imageapi "github.com/openshift/origin/pkg/image/apis/image"
+	imageclient "github.com/openshift/origin/pkg/image/generated/internalclientset/fake"
 
 	_ "github.com/openshift/origin/pkg/api/install"
 )
@@ -229,13 +230,13 @@ func TestHandleImageStream(t *testing.T) {
 	}
 
 	for i, test := range testCases {
-		fake := &client.Fake{}
+		fake := imageclient.NewSimpleClientset()
 		other, err := kapi.Scheme.DeepCopy(test.stream)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if err := handleImageStream(test.stream, fake, nil); err != nil {
+		if err := handleImageStream(test.stream, fake.Image(), nil); err != nil {
 			t.Errorf("%d: unexpected error: %v", i, err)
 		}
 		if test.run {
@@ -248,7 +249,7 @@ func TestHandleImageStream(t *testing.T) {
 				t.Errorf("expected a create action: %#v", actions)
 			}
 		} else {
-			if !kapi.Semantic.DeepEqual(test.stream, other) {
+			if !kapihelper.Semantic.DeepEqual(test.stream, other) {
 				t.Errorf("%d: did not expect change to stream: %s", i, diff.ObjectGoPrintDiff(test.stream, other))
 			}
 			if len(fake.Actions()) != 0 {

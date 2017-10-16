@@ -4,6 +4,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// +genclient
+// +genclient:nonNamespaced
+
 // OAuthAccessToken describes an OAuth access token
 type OAuthAccessToken struct {
 	metav1.TypeMeta `json:",inline"`
@@ -34,6 +37,9 @@ type OAuthAccessToken struct {
 	// RefreshToken is the value by which this token can be renewed. Can be blank.
 	RefreshToken string `json:"refreshToken,omitempty" protobuf:"bytes,9,opt,name=refreshToken"`
 }
+
+// +genclient
+// +genclient:nonNamespaced
 
 // OAuthAuthorizeToken describes an OAuth authorization token
 type OAuthAuthorizeToken struct {
@@ -70,7 +76,8 @@ type OAuthAuthorizeToken struct {
 	CodeChallengeMethod string `json:"codeChallengeMethod,omitempty" protobuf:"bytes,10,opt,name=codeChallengeMethod"`
 }
 
-// +genclient=true
+// +genclient
+// +genclient:nonNamespaced
 
 // OAuthClient describes an OAuth client
 type OAuthClient struct {
@@ -89,6 +96,7 @@ type OAuthClient struct {
 	RespondWithChallenges bool `json:"respondWithChallenges,omitempty" protobuf:"varint,4,opt,name=respondWithChallenges"`
 
 	// RedirectURIs is the valid redirection URIs associated with a client
+	// +patchStrategy=merge
 	RedirectURIs []string `json:"redirectURIs,omitempty" patchStrategy:"merge" protobuf:"bytes,5,rep,name=redirectURIs"`
 
 	// GrantMethod determines how to handle grants for this client. If no method is provided, the
@@ -133,6 +141,9 @@ type ClusterRoleScopeRestriction struct {
 	// AllowEscalation indicates whether you can request roles and their escalating resources
 	AllowEscalation bool `json:"allowEscalation" protobuf:"varint,3,opt,name=allowEscalation"`
 }
+
+// +genclient
+// +genclient:nonNamespaced
 
 // OAuthClientAuthorization describes an authorization created by an OAuth client
 type OAuthClientAuthorization struct {

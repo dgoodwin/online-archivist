@@ -23,17 +23,17 @@ function scrub() {
 
 #
 #  Tests if an IPv4 address is valid
-#  Echos true (0) if valid, false (1) if invalid
+#  Echos true (0) if valid, false (1) if invalid 
 #
 #  Examples:
 #     validate_ipv4 192.0.2.3
-#         # -> 0
+#         # -> 0 
 #
-#     validate_ipv4 192.0.3.4.0
-#         # -> 1
+#     validate_ipv4 192.0.3.4.0 
+#         # -> 1 
 #
-#     validate_ipv4 192.0.2
-#         # -> 1
+#     validate_ipv4 192.0.2 
+#         # -> 1 
 #
 function validate_ipv4() {
   local IPv4_GROUP="[0-2]?[0-9]{1,2}"
@@ -55,17 +55,17 @@ function validate_ipv4() {
 
 #
 #  Tests if an IPv6 address is valid
-#  Returns true (0) if valid, false (1) if invalid
+#  Returns true (0) if valid, false (1) if invalid 
 #
 #  Examples:
-#     validate_ipv6 2001:DB8:1:E32:FFFF:3:19:39FB
-#         # -> 0
+#     validate_ipv6 2001:DB8:1:E32:FFFF:3:19:39FB 
+#         # -> 0 
 #
-#     validate_ipv6 2001:DB8::39FB
-#         # -> 0
+#     validate_ipv6 2001:DB8::39FB 
+#         # -> 0 
 #
-#     validate_ipv6 2001::DB8::39FB
-#         # -> 1
+#     validate_ipv6 2001::DB8::39FB 
+#         # -> 1 
 #
 function validate_ipv6() {
   local IPv6_GROUP="[[:xdigit:]]{1,4}"
@@ -83,7 +83,7 @@ function validate_ipv6() {
   if [[ ${1} =~ ${IPv6_SHAPE2} ]]; then
     is_valid=0
   fi
-
+   
   if [[ ${1} =~ ${IPv6_SHAPE3} ]]; then
     if [[ ${1} =~ ${VALID_SHAPE3} ]]; then
       is_valid=0
@@ -110,7 +110,7 @@ function expand_ipv4_range() {
   local expandedset=()
   local ip1=$(echo "$1" | awk '{print $1}' FS='-')
   local ip2=$(echo "$1" | awk '{print $2}' FS='-')
-  local n
+  local n 
 
   if [ -z "$ip2" ]; then
     expandedset=(${expandedset[@]} "$ip1")
@@ -155,9 +155,9 @@ function expand_ipv6_range() {
 
 #
 #  Returns the IP address family (IPv4 or IPv6)
-#  Returns "4" or "6" respectively
-#
-#  Examples:
+#  Returns "4" or "6" respectively 
+#  
+#  Examples: 
 #    get_address_family "192.168.3.1"
 #         # -> 4
 #

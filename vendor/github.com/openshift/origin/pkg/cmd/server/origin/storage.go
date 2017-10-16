@@ -6,38 +6,12 @@ import (
 
 	"github.com/golang/glog"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	apirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/util/flowcontrol"
-	kapi "k8s.io/kubernetes/pkg/api"
-	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
-	kubeletclient "k8s.io/kubernetes/pkg/kubelet/client"
 
 	authzapiv1 "github.com/openshift/origin/pkg/authorization/apis/authorization/v1"
-	"github.com/openshift/origin/pkg/authorization/util"
-	buildapiv1 "github.com/openshift/origin/pkg/build/apis/build/v1"
-	buildclient "github.com/openshift/origin/pkg/build/client"
-	buildgenerator "github.com/openshift/origin/pkg/build/generator"
-	buildregistry "github.com/openshift/origin/pkg/build/registry/build"
-	buildetcd "github.com/openshift/origin/pkg/build/registry/build/etcd"
-	buildconfigregistry "github.com/openshift/origin/pkg/build/registry/buildconfig"
-	buildconfigetcd "github.com/openshift/origin/pkg/build/registry/buildconfig/etcd"
-	buildlogregistry "github.com/openshift/origin/pkg/build/registry/buildlog"
-	"github.com/openshift/origin/pkg/build/webhook"
-	"github.com/openshift/origin/pkg/build/webhook/bitbucket"
-	"github.com/openshift/origin/pkg/build/webhook/generic"
-	"github.com/openshift/origin/pkg/build/webhook/github"
-	"github.com/openshift/origin/pkg/build/webhook/gitlab"
-	deployapiv1 "github.com/openshift/origin/pkg/deploy/apis/apps/v1"
-	deployconfigregistry "github.com/openshift/origin/pkg/deploy/registry/deployconfig"
-	deployconfigetcd "github.com/openshift/origin/pkg/deploy/registry/deployconfig/etcd"
-	deploylogregistry "github.com/openshift/origin/pkg/deploy/registry/deploylog"
-	deployconfiggenerator "github.com/openshift/origin/pkg/deploy/registry/generator"
-	deployconfiginstantiate "github.com/openshift/origin/pkg/deploy/registry/instantiate"
-	deployrollback "github.com/openshift/origin/pkg/deploy/registry/rollback"
 	"github.com/openshift/origin/pkg/dockerregistry"
 	imageapiv1 "github.com/openshift/origin/pkg/image/apis/image/v1"
 	"github.com/openshift/origin/pkg/image/importer"
@@ -54,9 +28,9 @@ import (
 	"github.com/openshift/origin/pkg/image/registry/imagestreamtag"
 	oauthapi "github.com/openshift/origin/pkg/oauth/apis/oauth"
 	oauthapiv1 "github.com/openshift/origin/pkg/oauth/apis/oauth/v1"
+	oauthclient "github.com/openshift/origin/pkg/oauth/generated/internalclientset/typed/oauth/internalversion"
 	accesstokenetcd "github.com/openshift/origin/pkg/oauth/registry/oauthaccesstoken/etcd"
 	authorizetokenetcd "github.com/openshift/origin/pkg/oauth/registry/oauthauthorizetoken/etcd"
-	clientregistry "github.com/openshift/origin/pkg/oauth/registry/oauthclient"
 	clientetcd "github.com/openshift/origin/pkg/oauth/registry/oauthclient/etcd"
 	clientauthetcd "github.com/openshift/origin/pkg/oauth/registry/oauthclientauthorization/etcd"
 	projectapiv1 "github.com/openshift/origin/pkg/project/apis/project/v1"
@@ -70,30 +44,18 @@ import (
 	hostsubnetetcd "github.com/openshift/origin/pkg/sdn/registry/hostsubnet/etcd"
 	netnamespaceetcd "github.com/openshift/origin/pkg/sdn/registry/netnamespace/etcd"
 	saoauth "github.com/openshift/origin/pkg/serviceaccounts/oauthclient"
-	templateapiv1 "github.com/openshift/origin/pkg/template/apis/template/v1"
-	brokertemplateinstanceetcd "github.com/openshift/origin/pkg/template/registry/brokertemplateinstance/etcd"
-	templateregistry "github.com/openshift/origin/pkg/template/registry/template"
-	templateetcd "github.com/openshift/origin/pkg/template/registry/template/etcd"
-	templateinstanceetcd "github.com/openshift/origin/pkg/template/registry/templateinstance/etcd"
-	userapiv1 "github.com/openshift/origin/pkg/user/apis/user/v1"
-	groupetcd "github.com/openshift/origin/pkg/user/registry/group/etcd"
-	identityregistry "github.com/openshift/origin/pkg/user/registry/identity"
-	identityetcd "github.com/openshift/origin/pkg/user/registry/identity/etcd"
-	userregistry "github.com/openshift/origin/pkg/user/registry/user"
-	useretcd "github.com/openshift/origin/pkg/user/registry/user/etcd"
-	"github.com/openshift/origin/pkg/user/registry/useridentitymapping"
-
-	"github.com/openshift/origin/pkg/build/registry/buildclone"
-	"github.com/openshift/origin/pkg/build/registry/buildconfiginstantiate"
 
 	quotaapiv1 "github.com/openshift/origin/pkg/quota/apis/quota/v1"
 	appliedclusterresourcequotaregistry "github.com/openshift/origin/pkg/quota/registry/appliedclusterresourcequota"
 	clusterresourcequotaetcd "github.com/openshift/origin/pkg/quota/registry/clusterresourcequota/etcd"
 
-	"github.com/openshift/origin/pkg/api/v1"
+	"github.com/openshift/origin/pkg/authorization/registry/clusterrole"
+	"github.com/openshift/origin/pkg/authorization/registry/clusterrolebinding"
 	"github.com/openshift/origin/pkg/authorization/registry/localresourceaccessreview"
 	"github.com/openshift/origin/pkg/authorization/registry/localsubjectaccessreview"
 	"github.com/openshift/origin/pkg/authorization/registry/resourceaccessreview"
+	"github.com/openshift/origin/pkg/authorization/registry/role"
+	"github.com/openshift/origin/pkg/authorization/registry/rolebinding"
 	rolebindingrestrictionetcd "github.com/openshift/origin/pkg/authorization/registry/rolebindingrestriction/etcd"
 	"github.com/openshift/origin/pkg/authorization/registry/selfsubjectrulesreview"
 	"github.com/openshift/origin/pkg/authorization/registry/subjectaccessreview"
@@ -104,7 +66,7 @@ import (
 	"github.com/openshift/origin/pkg/security/registry/podsecuritypolicyselfsubjectreview"
 	"github.com/openshift/origin/pkg/security/registry/podsecuritypolicysubjectreview"
 	sccstorage "github.com/openshift/origin/pkg/security/registry/securitycontextconstraints/etcd"
-	oscc "github.com/openshift/origin/pkg/security/scc"
+	oscc "github.com/openshift/origin/pkg/security/securitycontextconstraints"
 
 	// register api groups
 	_ "github.com/openshift/origin/pkg/api/install"
@@ -113,16 +75,6 @@ import (
 // TODO this function needs to be broken apart with each API group owning their own storage, probably with two method
 // per API group to give us legacy and current storage
 func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string]rest.Storage, error) {
-	// TODO sort out who is using this and why.  it was hardcoded before the migration and I suspect that it is being used
-	// to serialize out objects into annotations.
-	externalVersionCodec := kapi.Codecs.LegacyCodec(schema.GroupVersion{Group: "", Version: "v1"})
-
-	//TODO/REBASE use something other than c.KubeClientsetInternal
-	nodeConnectionInfoGetter, err := kubeletclient.NewNodeConnectionInfoGetter(c.KubeClientExternal.CoreV1().Nodes(), *c.KubeletClientConfig)
-	if err != nil {
-		return nil, fmt.Errorf("unable to configure the node connection info getter: %v", err)
-	}
-
 	// TODO: allow the system CAs and the local CAs to be joined together.
 	importTransport, err := restclient.TransportFor(&restclient.Config{})
 	if err != nil {
@@ -137,32 +89,9 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		return nil, fmt.Errorf("unable to configure a default transport for importing: %v", err)
 	}
 
-	buildStorage, buildDetailsStorage, err := buildetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
-	buildRegistry := buildregistry.NewRegistry(buildStorage)
-
-	buildConfigStorage, err := buildconfigetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-	buildConfigRegistry := buildconfigregistry.NewRegistry(buildConfigStorage)
-
-	deployConfigStorage, deployConfigStatusStorage, deployConfigScaleStorage, err := deployconfigetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-
-	dcInstantiateStorage := deployconfiginstantiate.NewREST(
-		*deployConfigStorage.Store,
-		c.DeprecatedOpenshiftClient,
-		c.KubeClientInternal,
-		externalVersionCodec,
-		c.GenericConfig.AdmissionControl,
-	)
-
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-	deployConfigRegistry := deployconfigregistry.NewRegistry(deployConfigStorage)
 
 	hostSubnetStorage, err := hostsubnetetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
 	if err != nil {
@@ -181,34 +110,8 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
 
-	userStorage, err := useretcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-	userRegistry := userregistry.NewRegistry(userStorage)
-	identityStorage, err := identityetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-	identityRegistry := identityregistry.NewRegistry(identityStorage)
-	userIdentityMappingStorage := useridentitymapping.NewREST(userRegistry, identityRegistry)
-	groupStorage, err := groupetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-
-	clusterPolicies := clusterPolicyLister{
-		ClusterPolicyLister: c.AuthorizationInformers.Authorization().InternalVersion().ClusterPolicies().Lister(),
-		versioner:           c.AuthorizationInformers.Authorization().InternalVersion().ClusterPolicies().Informer(),
-	}
-	selfSubjectRulesReviewStorage := selfsubjectrulesreview.NewREST(c.RuleResolver, clusterPolicies)
-	subjectRulesReviewStorage := subjectrulesreview.NewREST(c.RuleResolver, clusterPolicies)
-
-	authStorage, err := util.GetAuthorizationStorage(c.GenericConfig.RESTOptionsGetter, c.RuleResolver)
-	if err != nil {
-		return nil, fmt.Errorf("error building authorization REST storage: %v", err)
-	}
-
+	selfSubjectRulesReviewStorage := selfsubjectrulesreview.NewREST(c.RuleResolver, c.KubeInternalInformers.Rbac().InternalVersion().ClusterRoles().Lister())
+	subjectRulesReviewStorage := subjectrulesreview.NewREST(c.RuleResolver, c.KubeInternalInformers.Rbac().InternalVersion().ClusterRoles().Lister())
 	subjectAccessReviewStorage := subjectaccessreview.NewREST(c.GenericConfig.Authorizer)
 	subjectAccessReviewRegistry := subjectaccessreview.NewRegistry(subjectAccessReviewStorage)
 	localSubjectAccessReviewStorage := localsubjectaccessreview.NewREST(subjectAccessReviewRegistry)
@@ -249,7 +152,6 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 	imageStreamRegistry := imagestream.NewRegistry(imageStreamStorage, imageStreamStatusStorage, internalImageStreamStorage)
 	imageStreamMappingStorage := imagestreammapping.NewREST(imageRegistry, imageStreamRegistry, c.RegistryNameFn)
 	imageStreamTagStorage := imagestreamtag.NewREST(imageRegistry, imageStreamRegistry)
-	imageStreamTagRegistry := imagestreamtag.NewRegistry(imageStreamTagStorage)
 	importerCache, err := imageimporter.NewImageStreamLayerCache(imageimporter.DefaultImageStreamLayerCacheSize)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
@@ -273,42 +175,11 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		c.RegistryNameFn,
 		c.DeprecatedOpenshiftClient.SubjectAccessReviews())
 	imageStreamImageStorage := imagestreamimage.NewREST(imageRegistry, imageStreamRegistry)
-	imageStreamImageRegistry := imagestreamimage.NewRegistry(imageStreamImageStorage)
 
 	routeStorage, routeStatusStorage, err := routeetcd.NewREST(c.GenericConfig.RESTOptionsGetter, c.RouteAllocator, subjectAccessReviewRegistry)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
-
-	buildGenerator := &buildgenerator.BuildGenerator{
-		Client: buildgenerator.Client{
-			GetBuildConfigFunc:      buildConfigRegistry.GetBuildConfig,
-			UpdateBuildConfigFunc:   buildConfigRegistry.UpdateBuildConfig,
-			GetBuildFunc:            buildRegistry.GetBuild,
-			CreateBuildFunc:         buildRegistry.CreateBuild,
-			UpdateBuildFunc:         buildRegistry.UpdateBuild,
-			GetImageStreamFunc:      imageStreamRegistry.GetImageStream,
-			GetImageStreamImageFunc: imageStreamImageRegistry.GetImageStreamImage,
-			GetImageStreamTagFunc:   imageStreamTagRegistry.GetImageStreamTag,
-		},
-		ServiceAccounts: c.KubeClientInternal.Core(),
-		Secrets:         c.KubeClientInternal.Core(),
-	}
-
-	// TODO: with sharding, this needs to be changed
-	deployConfigGenerator := &deployconfiggenerator.DeploymentConfigGenerator{
-		Client: deployconfiggenerator.Client{
-			DCFn:   deployConfigRegistry.GetDeploymentConfig,
-			ISFn:   imageStreamRegistry.GetImageStream,
-			LISFn2: imageStreamRegistry.ListImageStreams,
-		},
-	}
-	deployRollbackClient := deployrollback.Client{
-		DCFn: deployConfigRegistry.GetDeploymentConfig,
-		RCFn: clientDeploymentInterface{c.KubeClientInternal}.GetDeployment,
-		GRFn: deployrollback.NewRollbackGenerator().GenerateRollback,
-	}
-	deployConfigRollbackStorage := deployrollback.NewREST(c.DeprecatedOpenshiftClient, c.KubeClientInternal, externalVersionCodec)
 
 	projectStorage := projectproxy.NewREST(c.KubeClientInternal.Core().Namespaces(), c.ProjectAuthorizationCache, c.ProjectAuthorizationCache, c.ProjectCache)
 
@@ -318,32 +189,18 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		// we can continue on, the storage that gets created will be valid, it simply won't work properly.  There's no reason to kill the master
 	}
 
-	policyBindings := policyBindingLister{
-		PolicyBindingLister: c.AuthorizationInformers.Authorization().InternalVersion().PolicyBindings().Lister(),
-		versioner:           c.AuthorizationInformers.Authorization().InternalVersion().PolicyBindings().Informer(),
-	}
-	projectRequestStorage := projectrequeststorage.NewREST(c.ProjectRequestMessage, namespace, templateName, c.DeprecatedOpenshiftClient, c.GenericConfig.LoopbackClientConfig, policyBindings)
-
-	buildConfigWebHooks := buildconfigregistry.NewWebHookREST(
-		buildConfigRegistry,
-		buildclient.NewOSClientBuildConfigInstantiatorClient(c.DeprecatedOpenshiftClient),
-		// We use the buildapiv1 schemegroup to encode the Build that gets
-		// returned. As such, we need to make sure that the GroupVersion we use
-		// is the same API version that the storage is going to be used for.
-		buildapiv1.SchemeGroupVersion,
-		map[string]webhook.Plugin{
-			"generic":   generic.New(),
-			"github":    github.New(),
-			"gitlab":    gitlab.New(),
-			"bitbucket": bitbucket.New(),
-		},
+	projectRequestStorage := projectrequeststorage.NewREST(
+		c.ProjectRequestMessage,
+		namespace, templateName,
+		c.DeprecatedOpenshiftClient,
+		c.GenericConfig.LoopbackClientConfig,
+		c.KubeInternalInformers.Rbac().InternalVersion().RoleBindings().Lister(),
 	)
 
 	clientStorage, err := clientetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
-	clientRegistry := clientregistry.NewRegistry(clientStorage)
 
 	// If OAuth is disabled, set the strategy to Deny
 	saAccountGrantMethod := oauthapi.GrantHandlerDeny
@@ -352,7 +209,11 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		saAccountGrantMethod = oauthapi.GrantHandlerType(c.ServiceAccountMethod)
 	}
 
-	combinedOAuthClientGetter := saoauth.NewServiceAccountOAuthClientGetter(c.KubeClientInternal.Core(), c.KubeClientInternal.Core(), c.DeprecatedOpenshiftClient, clientRegistry, saAccountGrantMethod)
+	oauthClient, err := oauthclient.NewForConfig(c.GenericConfig.LoopbackClientConfig)
+	if err != nil {
+		return nil, err
+	}
+	combinedOAuthClientGetter := saoauth.NewServiceAccountOAuthClientGetter(c.KubeClientInternal.Core(), c.KubeClientInternal.Core(), c.DeprecatedOpenshiftClient, oauthClient.OAuthClients(), saAccountGrantMethod)
 	authorizeTokenStorage, err := authorizetokenetcd.NewREST(c.GenericConfig.RESTOptionsGetter, combinedOAuthClientGetter)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
@@ -366,11 +227,6 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
 
-	templateStorage, err := templateetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-	if err != nil {
-		return nil, fmt.Errorf("error building REST storage: %v", err)
-	}
-
 	clusterResourceQuotaStorage, clusterResourceQuotaStatusStorage, err := clusterresourcequotaetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
 	if err != nil {
 		return nil, fmt.Errorf("error building REST storage: %v", err)
@@ -380,13 +236,7 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		return nil, fmt.Errorf("error building REST storage: %v", err)
 	}
 
-	storage := map[schema.GroupVersion]map[string]rest.Storage{
-		v1.SchemeGroupVersion: {
-			// TODO: Deprecate these
-			"generateDeploymentConfigs": deployconfiggenerator.NewREST(deployConfigGenerator, externalVersionCodec),
-			"deploymentConfigRollbacks": deployrollback.NewDeprecatedREST(deployRollbackClient, externalVersionCodec),
-		},
-	}
+	storage := map[schema.GroupVersion]map[string]rest.Storage{}
 
 	storage[quotaapiv1.SchemeGroupVersion] = map[string]rest.Storage{
 		"clusterResourceQuotas":        clusterResourceQuotaStorage,
@@ -405,13 +255,6 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		"egressNetworkPolicies": egressNetworkPolicyStorage,
 	}
 
-	storage[userapiv1.SchemeGroupVersion] = map[string]rest.Storage{
-		"users":                userStorage,
-		"groups":               groupStorage,
-		"identities":           identityStorage,
-		"userIdentityMappings": userIdentityMappingStorage,
-	}
-
 	storage[oauthapiv1.SchemeGroupVersion] = map[string]rest.Storage{
 		"oAuthAuthorizeTokens":      authorizeTokenStorage,
 		"oAuthAccessTokens":         accessTokenStorage,
@@ -427,15 +270,10 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		"selfSubjectRulesReviews":    selfSubjectRulesReviewStorage,
 		"subjectRulesReviews":        subjectRulesReviewStorage,
 
-		"policies":       authStorage.Policy,
-		"policyBindings": authStorage.PolicyBinding,
-		"roles":          authStorage.Role,
-		"roleBindings":   authStorage.RoleBinding,
-
-		"clusterPolicies":       authStorage.ClusterPolicy,
-		"clusterPolicyBindings": authStorage.ClusterPolicyBinding,
-		"clusterRoleBindings":   authStorage.ClusterRoleBinding,
-		"clusterRoles":          authStorage.ClusterRole,
+		"roles":               role.NewREST(c.KubeClientInternal.Rbac().RESTClient()),
+		"roleBindings":        rolebinding.NewREST(c.KubeClientInternal.Rbac().RESTClient()),
+		"clusterRoles":        clusterrole.NewREST(c.KubeClientInternal.Rbac().RESTClient()),
+		"clusterRoleBindings": clusterrolebinding.NewREST(c.KubeClientInternal.Rbac().RESTClient()),
 
 		"roleBindingRestrictions": roleBindingRestrictionStorage,
 	}
@@ -450,20 +288,6 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 	storage[projectapiv1.SchemeGroupVersion] = map[string]rest.Storage{
 		"projects":        projectStorage,
 		"projectRequests": projectRequestStorage,
-	}
-
-	storage[deployapiv1.SchemeGroupVersion] = map[string]rest.Storage{
-		"deploymentConfigs":             deployConfigStorage,
-		"deploymentConfigs/scale":       deployConfigScaleStorage,
-		"deploymentConfigs/status":      deployConfigStatusStorage,
-		"deploymentConfigs/rollback":    deployConfigRollbackStorage,
-		"deploymentConfigs/log":         deploylogregistry.NewREST(c.DeprecatedOpenshiftClient, c.KubeClientInternal.Core(), c.KubeClientInternal.Core(), nodeConnectionInfoGetter),
-		"deploymentConfigs/instantiate": dcInstantiateStorage,
-	}
-
-	storage[templateapiv1.SchemeGroupVersion] = map[string]rest.Storage{
-		"processedTemplates": templateregistry.NewREST(),
-		"templates":          templateStorage,
 	}
 
 	storage[imageapiv1.SchemeGroupVersion] = map[string]rest.Storage{
@@ -483,48 +307,5 @@ func (c OpenshiftAPIConfig) GetRestStorage() (map[schema.GroupVersion]map[string
 		"routes/status": routeStatusStorage,
 	}
 
-	if c.EnableTemplateServiceBroker {
-		templateInstanceStorage, templateInstanceStatusStorage, err := templateinstanceetcd.NewREST(c.GenericConfig.RESTOptionsGetter, c.KubeClientInternal)
-		if err != nil {
-			return nil, fmt.Errorf("error building REST storage: %v", err)
-		}
-		brokerTemplateInstanceStorage, err := brokertemplateinstanceetcd.NewREST(c.GenericConfig.RESTOptionsGetter)
-		if err != nil {
-			return nil, fmt.Errorf("error building REST storage: %v", err)
-		}
-
-		storage[templateapiv1.SchemeGroupVersion]["templateinstances"] = templateInstanceStorage
-		storage[templateapiv1.SchemeGroupVersion]["templateinstances/status"] = templateInstanceStatusStorage
-		storage[templateapiv1.SchemeGroupVersion]["brokertemplateinstances"] = brokerTemplateInstanceStorage
-	}
-
-	if c.EnableBuilds {
-		storage[buildapiv1.SchemeGroupVersion] = map[string]rest.Storage{
-			"builds":         buildStorage,
-			"builds/clone":   buildclone.NewStorage(buildGenerator),
-			"builds/log":     buildlogregistry.NewREST(buildStorage, buildStorage, c.KubeClientInternal.Core(), nodeConnectionInfoGetter),
-			"builds/details": buildDetailsStorage,
-
-			"buildConfigs":                   buildConfigStorage,
-			"buildConfigs/webhooks":          buildConfigWebHooks,
-			"buildConfigs/instantiate":       buildconfiginstantiate.NewStorage(buildGenerator),
-			"buildConfigs/instantiatebinary": buildconfiginstantiate.NewBinaryStorage(buildGenerator, buildStorage, c.KubeClientInternal.Core(), nodeConnectionInfoGetter),
-		}
-	}
-
 	return storage, nil
-}
-
-// TODO, this shoudl be removed
-type clientDeploymentInterface struct {
-	KubeClient kclientset.Interface
-}
-
-// GetDeployment returns the deployment with the provided context and name
-func (c clientDeploymentInterface) GetDeployment(ctx apirequest.Context, name string, options *metav1.GetOptions) (*kapi.ReplicationController, error) {
-	opts := metav1.GetOptions{}
-	if options != nil {
-		opts = *options
-	}
-	return c.KubeClient.Core().ReplicationControllers(apirequest.NamespaceValue(ctx)).Get(name, opts)
 }

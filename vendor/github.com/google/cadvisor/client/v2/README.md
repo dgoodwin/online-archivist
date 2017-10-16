@@ -66,3 +66,4 @@ This method returns a [cadvisor/info/v2/Attributes](../../info/v2/machine.go#L24
 ```
 
 You can see the full specification of the [Attributes struct in the source](../../info/v2/machine.go#L24)
+

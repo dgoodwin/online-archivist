@@ -1,7 +1,7 @@
 Excluder
 ========
 
-Many times admins do not want certain packages updated
+Many times admins do not want certain packages updated 
 when doing normal system updates.  The excluder scripts
 exclude packages from yum or dnf so that the packages
 are not updated.
@@ -23,7 +23,7 @@ Copy the template, then substitue values for the variables.
 * @@PACKAGE_LIST-VARIABLE@@
   * Space seperated list of packages to exclude
   * The '*' wildcard is supported
-
+  
 **Example**
 
 * sed "s|@@CONF_FILE-VARIABLE@@|yum.conf|" contrib/excluder/excluder-template > /usr/sbin/myspecial-excluder

@@ -12,7 +12,7 @@ var optionalLoggingServices = sets.NewString("logging-es-ops", "logging-es-ops-c
 var loggingServices = expectedLoggingServices.Union(optionalLoggingServices)
 
 const serviceNotFound = `
-Expected to find '%s' among the logging services for the project but did not.
+Expected to find '%s' among the logging services for the project but did not.  
 `
 const serviceOptionalNotFound = `
 Looked for '%s' among the logging services for the project but did not find it.

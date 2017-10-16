@@ -3,8 +3,9 @@ package server
 import (
 	"github.com/docker/distribution/context"
 
-	"github.com/openshift/origin/pkg/client"
+	"github.com/openshift/origin/pkg/dockerregistry/server/client"
 	"github.com/openshift/origin/pkg/dockerregistry/server/configuration"
+	"github.com/openshift/origin/pkg/dockerregistry/server/maxconnections"
 )
 
 type contextKey string
@@ -19,6 +20,9 @@ const (
 
 	// registryClientKey is the key for RegistryClient values in Contexts.
 	registryClientKey contextKey = "registryClient"
+
+	// writeLimiterKey is the key for write limiters in Contexts.
+	writeLimiterKey contextKey = "writeLimiter"
 
 	// userClientKey is the key for a origin's client with the current user's
 	// credentials in Contexts.
@@ -61,14 +65,25 @@ func remoteBlobAccessCheckEnabledFrom(ctx context.Context) bool {
 }
 
 // WithRegistryClient returns a new Context with provided registry client.
-func WithRegistryClient(ctx context.Context, client RegistryClient) context.Context {
+func WithRegistryClient(ctx context.Context, client client.RegistryClient) context.Context {
 	return context.WithValue(ctx, registryClientKey, client)
 }
 
 // RegistryClientFrom returns the registry client stored in ctx if present.
 // It will panic otherwise.
-func RegistryClientFrom(ctx context.Context) RegistryClient {
-	return ctx.Value(registryClientKey).(RegistryClient)
+func RegistryClientFrom(ctx context.Context) client.RegistryClient {
+	return ctx.Value(registryClientKey).(client.RegistryClient)
+}
+
+// WithWriteLimiter returns a new Context with a write limiter.
+func WithWriteLimiter(ctx context.Context, writeLimiter maxconnections.Limiter) context.Context {
+	return context.WithValue(ctx, writeLimiterKey, writeLimiter)
+}
+
+// WriteLimiterFrom returns the write limiter if one is stored in ctx, or nil otherwise.
+func WriteLimiterFrom(ctx context.Context) maxconnections.Limiter {
+	writeLimiter, _ := ctx.Value(writeLimiterKey).(maxconnections.Limiter)
+	return writeLimiter
 }
 
 // withUserClient returns a new Context with the origin's client.

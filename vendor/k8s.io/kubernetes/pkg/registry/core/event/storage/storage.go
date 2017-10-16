@@ -43,18 +43,15 @@ func NewREST(optsGetter generic.RESTOptionsGetter, ttl uint64) *REST {
 	opts.Decorator = generic.UndecoratedStorage // TODO use watchCacheSize=-1 to signal UndecoratedStorage
 
 	store := &genericregistry.Store{
-		Copier:      api.Scheme,
-		NewFunc:     func() runtime.Object { return &api.Event{} },
-		NewListFunc: func() runtime.Object { return &api.EventList{} },
-		ObjectNameFunc: func(obj runtime.Object) (string, error) {
-			return obj.(*api.Event).Name, nil
-		},
+		Copier:        api.Scheme,
+		NewFunc:       func() runtime.Object { return &api.Event{} },
+		NewListFunc:   func() runtime.Object { return &api.EventList{} },
 		PredicateFunc: event.MatchEvent,
 		TTLFunc: func(runtime.Object, uint64, bool) (uint64, error) {
 			return ttl, nil
 		},
-		QualifiedResource: resource,
-		WatchCacheSize:    cachesize.GetWatchCacheSizeByResource(resource.Resource),
+		DefaultQualifiedResource: resource,
+		WatchCacheSize:           cachesize.GetWatchCacheSizeByResource(resource.Resource),
 
 		CreateStrategy: event.Strategy,
 		UpdateStrategy: event.Strategy,

@@ -15,7 +15,7 @@ import (
 )
 
 func setup(t *testing.T) (ovs.Interface, *ovsController, []string) {
-	ovsif := ovs.NewFake(BR)
+	ovsif := ovs.NewFake(Br0)
 	oc := NewOVSController(ovsif, 0, true)
 	err := oc.SetupOVS("10.128.0.0/14", "172.30.0.0/16", "10.128.0.0/23", "10.128.0.1", "172.17.0.4")
 	if err != nil {
@@ -300,7 +300,7 @@ func TestOVSPod(t *testing.T) {
 	}
 
 	// Delete
-	err = oc.TearDownPod("veth1", "10.128.0.2")
+	err = oc.TearDownPod("veth1", "10.128.0.2", sandboxID)
 	if err != nil {
 		t.Fatalf("Unexpected error deleting pod rules: %v", err)
 	}
@@ -973,7 +973,7 @@ func TestAlreadySetUp(t *testing.T) {
 	}
 
 	for i, tc := range testcases {
-		ovsif := ovs.NewFake(BR)
+		ovsif := ovs.NewFake(Br0)
 		if err := ovsif.AddBridge("fail-mode=secure", "protocols=OpenFlow13"); err != nil {
 			t.Fatalf("(%d) unexpected error from AddBridge: %v", i, err)
 		}

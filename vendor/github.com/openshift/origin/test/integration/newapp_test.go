@@ -32,7 +32,6 @@ import (
 
 	buildapi "github.com/openshift/origin/pkg/build/apis/build"
 	client "github.com/openshift/origin/pkg/client/testclient"
-	clicmd "github.com/openshift/origin/pkg/cmd/cli/cmd"
 	deployapi "github.com/openshift/origin/pkg/deploy/apis/apps"
 	"github.com/openshift/origin/pkg/dockerregistry"
 	"github.com/openshift/origin/pkg/generate"
@@ -44,11 +43,13 @@ import (
 	"github.com/openshift/origin/pkg/generate/jenkinsfile"
 	"github.com/openshift/origin/pkg/generate/source"
 	imageapi "github.com/openshift/origin/pkg/image/apis/image"
+	clicmd "github.com/openshift/origin/pkg/oc/cli/cmd"
 	templateapi "github.com/openshift/origin/pkg/template/apis/template"
-	"github.com/openshift/source-to-image/pkg/test"
 
 	_ "github.com/openshift/origin/pkg/api/install"
 	"github.com/openshift/origin/test/util"
+
+	s2igit "github.com/openshift/source-to-image/pkg/scm/git"
 )
 
 func skipExternalGit(t *testing.T) {
@@ -196,7 +197,10 @@ func TestNewAppResolve(t *testing.T) {
 
 func TestNewAppDetectSource(t *testing.T) {
 	skipExternalGit(t)
-	gitLocalDir := test.CreateLocalGitDirectory(t)
+	gitLocalDir, err := s2igit.CreateLocalGitDirectory()
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer os.RemoveAll(gitLocalDir)
 
 	dockerSearcher := app.DockerRegistrySearcher{

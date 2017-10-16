@@ -76,3 +76,4 @@ function start_failover_services() {
   trap "cleanup ${pid}" SIGHUP SIGINT SIGTERM
   wait ${pid}
 }
+

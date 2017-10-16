@@ -19,6 +19,7 @@ type FakeDeploymentConfigs struct {
 }
 
 var deploymentConfigsResource = schema.GroupVersionResource{Group: "", Version: "", Resource: "deploymentconfigs"}
+var deploymentConfigsKind = schema.GroupVersionKind{Group: "", Version: "", Kind: "DeploymentConfig"}
 
 func (c *FakeDeploymentConfigs) Get(name string, options metav1.GetOptions) (*deployapi.DeploymentConfig, error) {
 	obj, err := c.Fake.Invokes(clientgotesting.NewGetAction(deploymentConfigsResource, c.Namespace, name), &deployapi.DeploymentConfig{})
@@ -30,7 +31,7 @@ func (c *FakeDeploymentConfigs) Get(name string, options metav1.GetOptions) (*de
 }
 
 func (c *FakeDeploymentConfigs) List(opts metav1.ListOptions) (*deployapi.DeploymentConfigList, error) {
-	obj, err := c.Fake.Invokes(clientgotesting.NewListAction(deploymentConfigsResource, c.Namespace, opts), &deployapi.DeploymentConfigList{})
+	obj, err := c.Fake.Invokes(clientgotesting.NewListAction(deploymentConfigsResource, deploymentConfigsKind, c.Namespace, opts), &deployapi.DeploymentConfigList{})
 	if obj == nil {
 		return nil, err
 	}
@@ -67,15 +68,6 @@ func (c *FakeDeploymentConfigs) Delete(name string) error {
 
 func (c *FakeDeploymentConfigs) Watch(opts metav1.ListOptions) (watch.Interface, error) {
 	return c.Fake.InvokesWatch(clientgotesting.NewWatchAction(deploymentConfigsResource, c.Namespace, opts))
-}
-
-func (c *FakeDeploymentConfigs) Generate(name string) (*deployapi.DeploymentConfig, error) {
-	obj, err := c.Fake.Invokes(clientgotesting.NewGetAction(deployapi.LegacySchemeGroupVersion.WithResource("generatedeploymentconfigs"), c.Namespace, name), &deployapi.DeploymentConfig{})
-	if obj == nil {
-		return nil, err
-	}
-
-	return obj.(*deployapi.DeploymentConfig), err
 }
 
 func (c *FakeDeploymentConfigs) Rollback(inObj *deployapi.DeploymentConfigRollback) (result *deployapi.DeploymentConfig, err error) {

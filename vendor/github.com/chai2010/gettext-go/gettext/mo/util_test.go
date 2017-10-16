@@ -58,7 +58,7 @@ Report-Msgid-Bugs-To: poedit@googlegroups.com
 POT-Creation-Date: 2012-07-30 10:34+0200
 PO-Revision-Date: 2013-02-24 21:00+0800
 Last-Translator: Christopher Meng <trans@cicku.me>
-Language-Team:
+Language-Team: 
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

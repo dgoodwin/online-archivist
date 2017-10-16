@@ -4,3 +4,4 @@ In suite "package/name", test case "TestOne" was skipped:
 === RUN TestOne
 --- SKIP: TestOne (0.02 seconds)
 	file_test.go:11: Skip message
+

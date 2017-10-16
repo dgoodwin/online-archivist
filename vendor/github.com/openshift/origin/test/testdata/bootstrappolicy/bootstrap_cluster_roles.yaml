@@ -1,6 +1,6 @@
 apiVersion: v1
 items:
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -13,19 +13,15 @@ items:
   rules:
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
     - '*'
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - '*'
-    resources: []
     verbs:
     - '*'
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -34,16 +30,15 @@ items:
     name: sudoer
   rules:
   - apiGroups:
-    - user.openshift.io
     - ""
-    attributeRestrictions: null
+    - user.openshift.io
     resourceNames:
     - system:admin
     resources:
     - systemusers
     verbs:
     - impersonate
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -53,7 +48,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - bindings
     - componentstatuses
@@ -90,8 +84,8 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
+    - controllerrevisions
     - deployments
     - deployments/scale
     - deployments/status
@@ -102,8 +96,25 @@ items:
     - list
     - watch
   - apiGroups:
+    - apiextensions.k8s.io
+    resources:
+    - customresourcedefinitions
+    - customresourcedefinitions/status
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - apiregistration.k8s.io
+    resources:
+    - apiservices
+    - apiservices/status
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers
     - horizontalpodautoscalers/status
@@ -113,7 +124,6 @@ items:
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     - cronjobs/status
@@ -127,7 +137,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     - daemonsets/status
@@ -154,8 +163,15 @@ items:
     - list
     - watch
   - apiGroups:
+    - networking.k8s.io
+    resources:
+    - networkpolicies
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
     - policy
-    attributeRestrictions: null
     resources:
     - poddisruptionbudgets
     - poddisruptionbudgets/status
@@ -165,7 +181,6 @@ items:
     - watch
   - apiGroups:
     - rbac.authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - clusterrolebindings
     - clusterroles
@@ -177,7 +192,6 @@ items:
     - watch
   - apiGroups:
     - settings.k8s.io
-    attributeRestrictions: null
     resources:
     - podpresets
     verbs:
@@ -186,7 +200,6 @@ items:
     - watch
   - apiGroups:
     - storage.k8s.io
-    attributeRestrictions: null
     resources:
     - storageclasses
     verbs:
@@ -195,7 +208,6 @@ items:
     - watch
   - apiGroups:
     - certificates.k8s.io
-    attributeRestrictions: null
     resources:
     - certificatesigningrequests
     - certificatesigningrequests/approval
@@ -205,9 +217,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - clusterpolicies
     - clusterpolicybindings
@@ -223,9 +234,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs
     - buildconfigs/webhooks
@@ -237,9 +247,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs
     - deploymentconfigs/log
@@ -250,9 +259,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     - imagesignatures
@@ -265,17 +273,15 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
   - apiGroups:
-    - oauth.openshift.io
     - ""
-    attributeRestrictions: null
+    - oauth.openshift.io
     resources:
     - oauthclientauthorizations
     verbs:
@@ -283,9 +289,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projectrequests
     - projects
@@ -294,9 +299,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - quota.openshift.io
     - ""
-    attributeRestrictions: null
+    - quota.openshift.io
     resources:
     - appliedclusterresourcequotas
     - clusterresourcequotas
@@ -306,9 +310,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes
     - routes/status
@@ -317,9 +320,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - network.openshift.io
     - ""
-    attributeRestrictions: null
+    - network.openshift.io
     resources:
     - clusternetworks
     - egressnetworkpolicies
@@ -330,9 +332,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - security.openshift.io
     - ""
-    attributeRestrictions: null
+    - security.openshift.io
     resources:
     - securitycontextconstraints
     verbs:
@@ -340,9 +341,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - template.openshift.io
     - ""
-    attributeRestrictions: null
+    - template.openshift.io
     resources:
     - processedtemplates
     - templateconfigs
@@ -353,9 +353,18 @@ items:
     - list
     - watch
   - apiGroups:
-    - user.openshift.io
     - ""
-    attributeRestrictions: null
+    - template.openshift.io
+    resources:
+    - brokertemplateinstances
+    - templateinstances/status
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    - user.openshift.io
     resources:
     - groups
     - identities
@@ -366,9 +375,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - localresourceaccessreviews
     - localsubjectaccessreviews
@@ -380,7 +388,6 @@ items:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - localsubjectaccessreviews
     - selfsubjectaccessreviews
@@ -389,15 +396,13 @@ items:
     - create
   - apiGroups:
     - authentication.k8s.io
-    attributeRestrictions: null
     resources:
     - tokenreviews
     verbs:
     - create
   - apiGroups:
-    - security.openshift.io
     - ""
-    attributeRestrictions: null
+    - security.openshift.io
     resources:
     - podsecuritypolicyreviews
     - podsecuritypolicyselfsubjectreviews
@@ -406,7 +411,6 @@ items:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/metrics
     - nodes/spec
@@ -414,23 +418,18 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/stats
     verbs:
     - create
     - get
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - '*'
-    resources: []
     verbs:
     - get
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildlogs
     verbs:
@@ -439,14 +438,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotausages
     verbs:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -454,16 +452,13 @@ items:
     creationTimestamp: null
     name: cluster-debugger
   rules:
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - /debug/pprof
     - /debug/pprof/*
     - /metrics
-    resources: []
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -472,15 +467,14 @@ items:
     name: system:build-strategy-docker
   rules:
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/docker
     - builds/optimizeddocker
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -489,14 +483,13 @@ items:
     name: system:build-strategy-custom
   rules:
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/custom
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -505,14 +498,13 @@ items:
     name: system:build-strategy-source
   rules:
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/source
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -521,14 +513,13 @@ items:
     name: system:build-strategy-jenkinspipeline
   rules:
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/jenkinspipeline
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -538,7 +529,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes
     verbs:
@@ -552,7 +542,6 @@ items:
     - watch
   - apiGroups:
     - storage.k8s.io
-    attributeRestrictions: null
     resources:
     - storageclasses
     verbs:
@@ -566,7 +555,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     - persistentvolumeclaims
@@ -574,7 +562,7 @@ items:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -585,7 +573,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     - pods/attach
@@ -603,7 +590,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     - endpoints
@@ -625,7 +611,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - bindings
     - events
@@ -643,14 +628,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - serviceaccounts
     verbs:
     - impersonate
   - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers
     verbs:
@@ -664,7 +647,6 @@ items:
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     - jobs
@@ -680,13 +662,11 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/rollback
     - deployments/scale
     - horizontalpodautoscalers
-    - jobs
     - networkpolicies
     - replicasets
     - replicasets/scale
@@ -702,7 +682,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     verbs:
@@ -711,7 +690,6 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/scale
@@ -727,9 +705,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - rolebindings
     - roles
@@ -743,9 +720,22 @@ items:
     - update
     - watch
   - apiGroups:
-    - authorization.openshift.io
+    - rbac.authorization.k8s.io
+    resources:
+    - rolebindings
+    - roles
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - localresourceaccessreviews
     - localsubjectaccessreviews
@@ -753,9 +743,8 @@ items:
     verbs:
     - create
   - apiGroups:
-    - security.openshift.io
     - ""
-    attributeRestrictions: null
+    - security.openshift.io
     resources:
     - podsecuritypolicyreviews
     - podsecuritypolicyselfsubjectreviews
@@ -764,15 +753,13 @@ items:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - localsubjectaccessreviews
     verbs:
     - create
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - policies
     - policybindings
@@ -782,9 +769,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs
     - buildconfigs/webhooks
@@ -799,9 +785,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/log
     verbs:
@@ -809,9 +794,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs/instantiate
     - buildconfigs/instantiatebinary
@@ -819,16 +803,14 @@ items:
     verbs:
     - create
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/details
     verbs:
     - update
   - apiGroups:
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - jenkins
     verbs:
@@ -836,13 +818,11 @@ items:
     - edit
     - view
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs
     - deploymentconfigs/scale
-    - generatedeploymentconfigs
     verbs:
     - create
     - delete
@@ -853,9 +833,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigrollbacks
     - deploymentconfigs/instantiate
@@ -863,9 +842,8 @@ items:
     verbs:
     - create
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs/log
     - deploymentconfigs/status
@@ -874,9 +852,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -893,9 +870,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/status
     verbs:
@@ -903,26 +879,23 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
     - update
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimports
     verbs:
     - create
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
@@ -931,9 +904,8 @@ items:
     - patch
     - update
   - apiGroups:
-    - quota.openshift.io
     - ""
-    attributeRestrictions: null
+    - quota.openshift.io
     resources:
     - appliedclusterresourcequotas
     verbs:
@@ -941,9 +913,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes
     verbs:
@@ -956,17 +927,15 @@ items:
     - update
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/custom-host
     verbs:
     - create
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/status
     verbs:
@@ -974,17 +943,15 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/status
     verbs:
     - update
   - apiGroups:
-    - template.openshift.io
     - ""
-    attributeRestrictions: null
+    - template.openshift.io
     resources:
     - processedtemplates
     - templateconfigs
@@ -1000,9 +967,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildlogs
     verbs:
@@ -1016,7 +982,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotausages
     verbs:
@@ -1024,15 +989,14 @@ items:
     - list
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - resourceaccessreviews
     - subjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1043,7 +1007,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     - pods/attach
@@ -1061,7 +1024,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     - endpoints
@@ -1083,7 +1045,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - bindings
     - events
@@ -1101,14 +1062,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - serviceaccounts
     verbs:
     - impersonate
   - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers
     verbs:
@@ -1122,7 +1081,6 @@ items:
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     - jobs
@@ -1138,13 +1096,11 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/rollback
     - deployments/scale
     - horizontalpodautoscalers
-    - jobs
     - replicasets
     - replicasets/scale
     - replicationcontrollers/scale
@@ -1159,7 +1115,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     verbs:
@@ -1168,7 +1123,6 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/scale
@@ -1184,9 +1138,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs
     - buildconfigs/webhooks
@@ -1201,9 +1154,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/log
     verbs:
@@ -1211,9 +1163,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs/instantiate
     - buildconfigs/instantiatebinary
@@ -1221,29 +1172,25 @@ items:
     verbs:
     - create
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/details
     verbs:
     - update
   - apiGroups:
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - jenkins
     verbs:
     - edit
     - view
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs
     - deploymentconfigs/scale
-    - generatedeploymentconfigs
     verbs:
     - create
     - delete
@@ -1254,9 +1201,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigrollbacks
     - deploymentconfigs/instantiate
@@ -1264,9 +1210,8 @@ items:
     verbs:
     - create
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs/log
     - deploymentconfigs/status
@@ -1275,9 +1220,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -1294,9 +1238,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/status
     verbs:
@@ -1304,34 +1247,30 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
     - update
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimports
     verbs:
     - create
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - get
   - apiGroups:
-    - quota.openshift.io
     - ""
-    attributeRestrictions: null
+    - quota.openshift.io
     resources:
     - appliedclusterresourcequotas
     verbs:
@@ -1339,9 +1278,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes
     verbs:
@@ -1354,17 +1292,15 @@ items:
     - update
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/custom-host
     verbs:
     - create
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/status
     verbs:
@@ -1372,9 +1308,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - template.openshift.io
     - ""
-    attributeRestrictions: null
+    - template.openshift.io
     resources:
     - processedtemplates
     - templateconfigs
@@ -1390,9 +1325,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildlogs
     verbs:
@@ -1406,14 +1340,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotausages
     verbs:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1424,7 +1357,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     - endpoints
@@ -1439,7 +1371,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - bindings
     - events
@@ -1457,7 +1388,6 @@ items:
     - watch
   - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers
     verbs:
@@ -1466,7 +1396,6 @@ items:
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     - jobs
@@ -1477,12 +1406,10 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/scale
     - horizontalpodautoscalers
-    - jobs
     - replicasets
     - replicasets/scale
     verbs:
@@ -1491,7 +1418,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     verbs:
@@ -1500,7 +1426,6 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - deployments
     - deployments/scale
@@ -1510,9 +1435,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs
     - buildconfigs/webhooks
@@ -1522,9 +1446,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/log
     verbs:
@@ -1533,15 +1456,13 @@ items:
     - watch
   - apiGroups:
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - jenkins
     verbs:
     - view
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs
     - deploymentconfigs/scale
@@ -1550,9 +1471,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs/log
     - deploymentconfigs/status
@@ -1561,9 +1481,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -1574,9 +1493,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/status
     verbs:
@@ -1584,17 +1502,15 @@ items:
     - list
     - watch
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - get
   - apiGroups:
-    - quota.openshift.io
     - ""
-    attributeRestrictions: null
+    - quota.openshift.io
     resources:
     - appliedclusterresourcequotas
     verbs:
@@ -1602,9 +1518,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes
     verbs:
@@ -1612,9 +1527,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/status
     verbs:
@@ -1622,9 +1536,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - template.openshift.io
     - ""
-    attributeRestrictions: null
+    - template.openshift.io
     resources:
     - processedtemplates
     - templateconfigs
@@ -1635,9 +1548,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildlogs
     verbs:
@@ -1646,14 +1558,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotausages
     verbs:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1662,9 +1573,8 @@ items:
     name: basic-user
   rules:
   - apiGroups:
-    - user.openshift.io
     - ""
-    attributeRestrictions: null
+    - user.openshift.io
     resourceNames:
     - "~"
     resources:
@@ -1672,55 +1582,57 @@ items:
     verbs:
     - get
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projectrequests
     verbs:
     - list
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - clusterroles
     verbs:
     - get
     - list
   - apiGroups:
+    - rbac.authorization.k8s.io
+    resources:
+    - clusterroles
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
     - storage.k8s.io
-    attributeRestrictions: null
     resources:
     - storageclasses
     verbs:
     - get
     - list
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - list
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - selfsubjectrulesreviews
     verbs:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - selfsubjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1729,21 +1641,19 @@ items:
     name: self-access-reviewer
   rules:
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - selfsubjectrulesreviews
     verbs:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - selfsubjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1753,14 +1663,13 @@ items:
     name: self-provisioner
   rules:
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projectrequests
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1769,17 +1678,13 @@ items:
     creationTimestamp: null
     name: cluster-status
   rules:
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - /healthz
     - /healthz/*
-    resources: []
     verbs:
     - get
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
+    - /
     - /.well-known
     - /.well-known/*
     - /api
@@ -1795,10 +1700,9 @@ items:
     - /swaggerapi/*
     - /version
     - /version/*
-    resources: []
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1807,9 +1711,8 @@ items:
     name: system:image-auditor
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     verbs:
@@ -1818,7 +1721,7 @@ items:
     - patch
     - update
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1827,14 +1730,13 @@ items:
     name: system:image-puller
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1844,15 +1746,14 @@ items:
     name: system:image-pusher
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1862,39 +1763,35 @@ items:
     name: system:image-builder
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
     - update
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams
     verbs:
     - create
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds/details
     verbs:
     - update
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - builds
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1904,7 +1801,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     - replicationcontrollers
@@ -1913,15 +1809,13 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - limitranges
     verbs:
     - list
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs
     - builds
@@ -1929,26 +1823,23 @@ items:
     - get
     - list
   - apiGroups:
-    - apps.openshift.io
     - ""
-    attributeRestrictions: null
+    - apps.openshift.io
     resources:
     - deploymentconfigs
     verbs:
     - get
     - list
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     verbs:
     - delete
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     - imagestreams
@@ -1956,14 +1847,13 @@ items:
     - get
     - list
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/status
     verbs:
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -1972,24 +1862,22 @@ items:
     name: system:image-signer
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     - imagestreams/layers
     verbs:
     - get
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagesignatures
     verbs:
     - create
     - delete
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2000,14 +1888,12 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
     - delete
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -2017,7 +1903,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -2027,28 +1912,25 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods/log
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - list
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamtags
     verbs:
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2058,19 +1940,15 @@ items:
   rules:
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
     - '*'
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - '*'
-    resources: []
     verbs:
     - '*'
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2079,15 +1957,14 @@ items:
     name: system:oauth-token-deleter
   rules:
   - apiGroups:
-    - oauth.openshift.io
     - ""
-    attributeRestrictions: null
+    - oauth.openshift.io
     resources:
     - oauthaccesstokens
     - oauthauthorizetokens
     verbs:
     - delete
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2097,7 +1974,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     verbs:
@@ -2105,30 +1981,27 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes
     verbs:
     - list
     - watch
   - apiGroups:
-    - route.openshift.io
     - ""
-    attributeRestrictions: null
+    - route.openshift.io
     resources:
     - routes/status
     verbs:
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2138,16 +2011,14 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - limitranges
     - resourcequotas
     verbs:
     - list
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     - imagestreamtags
@@ -2155,18 +2026,16 @@ items:
     - delete
     - get
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreams/secrets
     verbs:
     - get
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - images
     - imagestreams
@@ -2174,14 +2043,13 @@ items:
     - get
     - update
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreammappings
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2191,14 +2059,13 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - services
     verbs:
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2208,7 +2075,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -2217,14 +2083,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
     - proxy
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/log
     - nodes/metrics
@@ -2233,7 +2097,7 @@ items:
     - nodes/stats
     verbs:
     - '*'
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2243,7 +2107,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -2252,7 +2115,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/metrics
     - nodes/spec
@@ -2260,13 +2122,12 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/stats
     verbs:
     - create
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2276,15 +2137,13 @@ items:
   rules:
   - apiGroups:
     - authentication.k8s.io
-    attributeRestrictions: null
     resources:
     - tokenreviews
     verbs:
     - create
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - localsubjectaccessreviews
     - subjectaccessreviews
@@ -2292,7 +2151,6 @@ items:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - localsubjectaccessreviews
     - subjectaccessreviews
@@ -2300,7 +2158,6 @@ items:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -2309,7 +2166,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -2319,7 +2175,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
@@ -2327,7 +2182,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
@@ -2336,7 +2190,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -2345,7 +2198,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -2354,14 +2206,12 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     - secrets
@@ -2369,7 +2219,6 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     - persistentvolumes
@@ -2377,20 +2226,18 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     verbs:
     - get
   - apiGroups:
     - certificates.k8s.io
-    attributeRestrictions: null
     resources:
     - certificatesigningrequests
     verbs:
     - create
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2399,9 +2246,8 @@ items:
     name: system:sdn-reader
   rules:
   - apiGroups:
-    - network.openshift.io
     - ""
-    attributeRestrictions: null
+    - network.openshift.io
     resources:
     - egressnetworkpolicies
     - hostsubnets
@@ -2412,7 +2258,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     - nodes
@@ -2422,7 +2267,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - networkpolicies
     verbs:
@@ -2430,14 +2274,13 @@ items:
     - list
     - watch
   - apiGroups:
-    - network.openshift.io
     - ""
-    attributeRestrictions: null
+    - network.openshift.io
     resources:
     - clusternetworks
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2446,9 +2289,8 @@ items:
     name: system:sdn-manager
   rules:
   - apiGroups:
-    - network.openshift.io
     - ""
-    attributeRestrictions: null
+    - network.openshift.io
     resources:
     - hostsubnets
     - netnamespaces
@@ -2459,9 +2301,8 @@ items:
     - list
     - watch
   - apiGroups:
-    - network.openshift.io
     - ""
-    attributeRestrictions: null
+    - network.openshift.io
     resources:
     - clusternetworks
     verbs:
@@ -2469,14 +2310,13 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2485,15 +2325,14 @@ items:
     name: system:webhook
   rules:
   - apiGroups:
-    - build.openshift.io
     - ""
-    attributeRestrictions: null
+    - build.openshift.io
     resources:
     - buildconfigs/webhooks
     verbs:
     - create
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2501,9 +2340,8 @@ items:
     creationTimestamp: null
     name: system:discovery
   rules:
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
+    - /
     - /.well-known
     - /.well-known/*
     - /api
@@ -2519,10 +2357,9 @@ items:
     - /swaggerapi/*
     - /version
     - /version/*
-    resources: []
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2532,7 +2369,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes
     verbs:
@@ -2543,7 +2379,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     verbs:
@@ -2553,7 +2388,6 @@ items:
     - watch
   - apiGroups:
     - storage.k8s.io
-    attributeRestrictions: null
     resources:
     - storageclasses
     verbs:
@@ -2562,7 +2396,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
@@ -2571,7 +2404,7 @@ items:
     - patch
     - update
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2581,7 +2414,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     - serviceaccounts
@@ -2595,9 +2427,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -2614,26 +2445,23 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimports
     verbs:
     - create
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
     - update
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - rolebindings
     - roles
@@ -2647,9 +2475,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - localresourceaccessreviews
     - localsubjectaccessreviews
@@ -2658,15 +2485,13 @@ items:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - localsubjectaccessreviews
     verbs:
     - create
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - policies
     - policybindings
@@ -2676,30 +2501,27 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
     - get
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - delete
     - get
   - apiGroups:
-    - authorization.openshift.io
     - ""
-    attributeRestrictions: null
+    - authorization.openshift.io
     resources:
     - resourceaccessreviews
     - subjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2709,7 +2531,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     - serviceaccounts
@@ -2723,9 +2544,8 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -2742,17 +2562,15 @@ items:
     - update
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimports
     verbs:
     - create
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
@@ -2760,20 +2578,18 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
     - get
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2782,9 +2598,8 @@ items:
     name: registry-viewer
   rules:
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreamimages
     - imagestreammappings
@@ -2795,29 +2610,26 @@ items:
     - list
     - watch
   - apiGroups:
-    - image.openshift.io
     - ""
-    attributeRestrictions: null
+    - image.openshift.io
     resources:
     - imagestreams/layers
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
     - get
   - apiGroups:
-    - project.openshift.io
     - ""
-    attributeRestrictions: null
+    - project.openshift.io
     resources:
     - projects
     verbs:
     - get
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2825,17 +2637,14 @@ items:
     creationTimestamp: null
     name: system:openshift:templateservicebroker-client
   rules:
-  - apiGroups: null
-    attributeRestrictions: null
-    nonResourceURLs:
+  - nonResourceURLs:
     - /brokers/template.openshift.io/*
-    resources: []
     verbs:
     - delete
     - get
     - put
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2843,7 +2652,7 @@ items:
     creationTimestamp: null
     name: system:replication-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2851,7 +2660,7 @@ items:
     creationTimestamp: null
     name: system:endpoint-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2859,7 +2668,7 @@ items:
     creationTimestamp: null
     name: system:replicaset-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2867,7 +2676,7 @@ items:
     creationTimestamp: null
     name: system:garbage-collector-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2875,7 +2684,7 @@ items:
     creationTimestamp: null
     name: system:job-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2883,7 +2692,7 @@ items:
     creationTimestamp: null
     name: system:hpa-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2891,7 +2700,7 @@ items:
     creationTimestamp: null
     name: system:daemonset-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2899,7 +2708,7 @@ items:
     creationTimestamp: null
     name: system:disruption-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2907,7 +2716,7 @@ items:
     creationTimestamp: null
     name: system:namespace-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2915,7 +2724,7 @@ items:
     creationTimestamp: null
     name: system:gc-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2923,7 +2732,7 @@ items:
     creationTimestamp: null
     name: system:certificate-signing-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2931,7 +2740,7 @@ items:
     creationTimestamp: null
     name: system:statefulset-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2939,7 +2748,7 @@ items:
     creationTimestamp: null
     name: system:build-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2947,7 +2756,7 @@ items:
     creationTimestamp: null
     name: system:deploymentconfig-controller
   rules: []
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -2955,91 +2764,7 @@ items:
     creationTimestamp: null
     name: system:deployment-controller
   rules: []
-- apiVersion: v1
-  kind: ClusterRole
-  metadata:
-    annotations:
-      authorization.openshift.io/system-only: "true"
-    creationTimestamp: null
-    name: system:node-bootstrapper
-  rules:
-  - apiGroups:
-    - certificates.k8s.io
-    attributeRestrictions: null
-    resources:
-    - certificatesigningrequests
-    verbs:
-    - create
-    - get
-    - list
-    - watch
-- apiVersion: v1
-  kind: ClusterRole
-  metadata:
-    annotations:
-      authorization.openshift.io/system-only: "true"
-    creationTimestamp: null
-    name: system:openshift:template-service-broker
-  rules:
-  - apiGroups:
-    - authorization.k8s.io
-    attributeRestrictions: null
-    resources:
-    - subjectaccessreviews
-    verbs:
-    - create
-  - apiGroups:
-    - template.openshift.io
-    attributeRestrictions: null
-    resources:
-    - brokertemplateinstances
-    verbs:
-    - create
-    - delete
-    - get
-    - update
-  - apiGroups:
-    - template.openshift.io
-    attributeRestrictions: null
-    resources:
-    - templateinstances
-    verbs:
-    - assign
-    - create
-    - delete
-    - get
-  - apiGroups:
-    - ""
-    attributeRestrictions: null
-    resources:
-    - secrets
-    verbs:
-    - create
-    - delete
-    - get
-    - list
-  - apiGroups:
-    - ""
-    attributeRestrictions: null
-    resources:
-    - services
-    verbs:
-    - list
-  - apiGroups:
-    - ""
-    attributeRestrictions: null
-    resources:
-    - configmaps
-    verbs:
-    - list
-  - apiGroups:
-    - route.openshift.io
-    attributeRestrictions: null
-    resources:
-    - routes
-    verbs:
-    - list
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3050,7 +2775,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - builds
     verbs:
@@ -3063,7 +2787,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - buildconfigs
     verbs:
@@ -3071,7 +2794,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - builds/custom
     - builds/docker
@@ -3083,7 +2805,6 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - imagestreams
     verbs:
@@ -3091,7 +2812,6 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
@@ -3099,7 +2819,6 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     verbs:
@@ -3107,7 +2826,6 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -3117,21 +2835,26 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
+    resources:
+    - serviceaccounts
+    verbs:
+    - get
+    - list
+  - apiGroups:
+    - ""
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3142,7 +2865,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - buildconfigs
     verbs:
@@ -3152,21 +2874,19 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - buildconfigs/instantiate
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3176,7 +2896,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -3188,14 +2907,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
     - delete
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -3205,14 +2922,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3222,7 +2938,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -3236,7 +2951,6 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs/status
     verbs:
@@ -3244,23 +2958,22 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs
     verbs:
+    - delete
     - get
     - list
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3270,7 +2983,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -3280,7 +2992,6 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs
     verbs:
@@ -3290,7 +3001,6 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - imagestreams
     verbs:
@@ -3300,21 +3010,19 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs/instantiate
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3324,14 +3032,12 @@ items:
   rules:
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - subjectaccessreviews
     verbs:
     - create
   - apiGroups:
     - template.openshift.io
-    attributeRestrictions: null
     resources:
     - subjectaccessreviews
     verbs:
@@ -3340,12 +3046,11 @@ items:
     - watch
   - apiGroups:
     - template.openshift.io
-    attributeRestrictions: null
     resources:
     - templateinstances/status
     verbs:
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3355,7 +3060,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
@@ -3364,7 +3068,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces/finalize
     - namespaces/status
@@ -3372,14 +3075,13 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3389,7 +3091,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - serviceaccounts
     verbs:
@@ -3402,14 +3103,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3419,7 +3119,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - serviceaccounts
     verbs:
@@ -3430,7 +3129,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
@@ -3443,7 +3141,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -3452,14 +3149,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3470,7 +3166,6 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - imagestreams
     verbs:
@@ -3478,7 +3173,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     verbs:
@@ -3487,7 +3181,6 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     verbs:
@@ -3495,7 +3188,6 @@ items:
     - update
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - statefulsets
     verbs:
@@ -3503,7 +3195,6 @@ items:
     - update
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     verbs:
@@ -3512,7 +3203,6 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs
     verbs:
@@ -3521,7 +3211,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - buildconfigs/instantiate
     verbs:
@@ -3529,7 +3218,6 @@ items:
   - apiGroups:
     - ""
     - build.openshift.io
-    attributeRestrictions: null
     resources:
     - builds/docker
     - builds/jenkinspipeline
@@ -3539,14 +3227,13 @@ items:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3556,7 +3243,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -3565,7 +3251,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
@@ -3576,14 +3261,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3594,7 +3278,6 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - imagestreams
     verbs:
@@ -3606,7 +3289,6 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - images
     verbs:
@@ -3620,21 +3302,19 @@ items:
   - apiGroups:
     - ""
     - image.openshift.io
-    attributeRestrictions: null
     resources:
     - imagestreamimports
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3645,7 +3325,6 @@ items:
   - apiGroups:
     - ""
     - network.openshift.io
-    attributeRestrictions: null
     resources:
     - clusternetworks
     verbs:
@@ -3655,7 +3334,6 @@ items:
   - apiGroups:
     - ""
     - network.openshift.io
-    attributeRestrictions: null
     resources:
     - hostsubnets
     verbs:
@@ -3668,7 +3346,6 @@ items:
   - apiGroups:
     - ""
     - network.openshift.io
-    attributeRestrictions: null
     resources:
     - netnamespaces
     verbs:
@@ -3680,7 +3357,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -3688,7 +3364,6 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -3697,7 +3372,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
@@ -3706,7 +3380,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -3715,21 +3388,19 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3739,7 +3410,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     verbs:
@@ -3747,7 +3417,6 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
@@ -3756,21 +3425,19 @@ items:
   - apiGroups:
     - ""
     - quota.openshift.io
-    attributeRestrictions: null
     resources:
     - clusterresourcequotas/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3780,7 +3447,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - replicationcontrollers/scale
@@ -3789,7 +3455,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -3799,7 +3464,6 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs
     verbs:
@@ -3809,7 +3473,6 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments/scale
     - replicasets/scale
@@ -3819,7 +3482,6 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs/scale
     verbs:
@@ -3827,7 +3489,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
@@ -3835,14 +3496,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3852,7 +3512,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -3861,21 +3520,19 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3885,7 +3542,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes
     verbs:
@@ -3897,14 +3553,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     verbs:
@@ -3914,14 +3568,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -3932,14 +3584,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -3949,56 +3600,49 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotas/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotas
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - configmaps
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4009,13 +3653,88 @@ items:
   - apiGroups:
     - ""
     - apps.openshift.io
-    attributeRestrictions: null
     resources:
     - deploymentconfigs/scale
     verbs:
     - get
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
+  kind: ClusterRole
+  metadata:
+    annotations:
+      authorization.openshift.io/system-only: "true"
+    creationTimestamp: null
+    name: system:openshift:controller:template-service-broker
+  rules:
+  - apiGroups:
+    - authorization.k8s.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+  - apiGroups:
+    - authorization.openshift.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+  - apiGroups:
+    - template.openshift.io
+    resources:
+    - brokertemplateinstances
+    verbs:
+    - create
+    - delete
+    - get
+    - update
+  - apiGroups:
+    - template.openshift.io
+    resources:
+    - templateinstances
+    verbs:
+    - assign
+    - create
+    - delete
+    - get
+  - apiGroups:
+    - template.openshift.io
+    resources:
+    - templates
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    - services
+    verbs:
+    - list
+  - apiGroups:
+    - route.openshift.io
+    resources:
+    - routes
+    verbs:
+    - list
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - create
+    - patch
+    - update
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4028,7 +3747,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     - persistentvolumes
@@ -4037,7 +3755,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4046,7 +3763,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
@@ -4054,7 +3770,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4062,14 +3777,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4082,17 +3796,16 @@ items:
   rules:
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs
     verbs:
+    - delete
     - get
     - list
     - update
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - jobs
     verbs:
@@ -4100,18 +3813,17 @@ items:
     - delete
     - get
     - list
+    - patch
     - update
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - cronjobs/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4119,14 +3831,13 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4139,23 +3850,21 @@ items:
   rules:
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets
     verbs:
+    - delete
     - get
     - list
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - daemonsets/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4163,7 +3872,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4174,21 +3882,30 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods/binding
     verbs:
     - create
   - apiGroups:
+    - apps
+    resources:
+    - controllerrevisions
+    verbs:
+    - create
+    - delete
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4202,10 +3919,10 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     verbs:
+    - delete
     - get
     - list
     - update
@@ -4213,14 +3930,12 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments/status
     verbs:
     - update
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicasets
     verbs:
@@ -4233,7 +3948,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4243,14 +3957,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4264,7 +3977,6 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments
     verbs:
@@ -4273,7 +3985,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicasets
     verbs:
@@ -4282,7 +3993,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
@@ -4291,7 +4001,6 @@ items:
     - watch
   - apiGroups:
     - policy
-    attributeRestrictions: null
     resources:
     - poddisruptionbudgets
     verbs:
@@ -4300,7 +4009,6 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - statefulsets
     verbs:
@@ -4309,21 +4017,19 @@ items:
     - watch
   - apiGroups:
     - policy
-    attributeRestrictions: null
     resources:
     - poddisruptionbudgets/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4336,7 +4042,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     - services
@@ -4346,7 +4051,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     verbs:
@@ -4357,21 +4061,19 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints/restricted
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4384,7 +4086,6 @@ items:
   rules:
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
@@ -4396,14 +4097,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4416,7 +4116,6 @@ items:
   rules:
   - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers
     verbs:
@@ -4425,14 +4124,12 @@ items:
     - watch
   - apiGroups:
     - autoscaling
-    attributeRestrictions: null
     resources:
     - horizontalpodautoscalers/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers/scale
     verbs:
@@ -4440,7 +4137,6 @@ items:
     - update
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicationcontrollers/scale
     verbs:
@@ -4449,7 +4145,6 @@ items:
   - apiGroups:
     - apps
     - extensions
-    attributeRestrictions: null
     resources:
     - deployments/scale
     - replicasets/scale
@@ -4458,14 +4153,12 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resourceNames:
     - 'http:heapster:'
     - 'https:heapster:'
@@ -4475,7 +4168,6 @@ items:
     - proxy
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resourceNames:
     - 'http:heapster:'
     - 'https:heapster:'
@@ -4485,14 +4177,13 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4505,41 +4196,39 @@ items:
   rules:
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - jobs
     verbs:
+    - delete
     - get
     - list
     - update
     - watch
   - apiGroups:
     - batch
-    attributeRestrictions: null
     resources:
     - jobs/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
     - create
     - delete
     - list
+    - patch
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4552,7 +4241,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces
     verbs:
@@ -4562,7 +4250,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - namespaces/finalize
     - namespaces/status
@@ -4570,7 +4257,6 @@ items:
     - update
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
@@ -4578,7 +4264,7 @@ items:
     - deletecollection
     - get
     - list
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4591,7 +4277,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4602,21 +4287,19 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
+    - patch
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4624,14 +4307,13 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4644,7 +4326,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes
     verbs:
@@ -4656,14 +4337,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumes/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     verbs:
@@ -4673,14 +4352,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4691,7 +4368,6 @@ items:
     - watch
   - apiGroups:
     - storage.k8s.io
-    attributeRestrictions: null
     resources:
     - storageclasses
     verbs:
@@ -4700,7 +4376,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - services
@@ -4710,14 +4385,12 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4725,21 +4398,19 @@ items:
     - list
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4752,7 +4423,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4761,12 +4431,11 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
     - list
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4779,24 +4448,22 @@ items:
   rules:
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicasets
     verbs:
+    - delete
     - get
     - list
     - update
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicasets/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4807,14 +4474,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4827,24 +4493,22 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     verbs:
+    - delete
     - get
     - list
     - update
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -4855,14 +4519,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4875,7 +4538,6 @@ items:
   rules:
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
@@ -4883,21 +4545,19 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - resourcequotas/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4910,7 +4570,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4918,21 +4577,19 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
     - patch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4945,21 +4602,19 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - serviceaccounts
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -4972,7 +4627,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services
     verbs:
@@ -4981,14 +4635,12 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - services/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -4996,14 +4648,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5016,7 +4667,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -5024,23 +4674,21 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - statefulsets
     verbs:
+    - delete
     - get
     - list
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - statefulsets/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods
     verbs:
@@ -5050,8 +4698,19 @@ items:
     - patch
     - update
   - apiGroups:
+    - apps
+    resources:
+    - controllerrevisions
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     verbs:
@@ -5059,14 +4718,13 @@ items:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5079,7 +4737,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
@@ -5089,14 +4746,13 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5109,7 +4765,6 @@ items:
   rules:
   - apiGroups:
     - certificates.k8s.io
-    attributeRestrictions: null
     resources:
     - certificatesigningrequests
     verbs:
@@ -5118,22 +4773,26 @@ items:
     - watch
   - apiGroups:
     - certificates.k8s.io
-    attributeRestrictions: null
     resources:
     - certificatesigningrequests/approval
     - certificatesigningrequests/status
     verbs:
     - update
   - apiGroups:
+    - authorization.k8s.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+  - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5146,12 +4805,11 @@ items:
   rules:
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - selfsubjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5164,7 +4822,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     - namespaces
@@ -5174,7 +4831,7 @@ items:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5187,28 +4844,45 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes/status
     verbs:
     - patch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
     - create
     - patch
     - update
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
+  kind: ClusterRole
+  metadata:
+    annotations:
+      authorization.openshift.io/system-only: "true"
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: null
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system:node-bootstrapper
+  rules:
+  - apiGroups:
+    - certificates.k8s.io
+    resources:
+    - certificatesigningrequests
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5221,19 +4895,17 @@ items:
   rules:
   - apiGroups:
     - authentication.k8s.io
-    attributeRestrictions: null
     resources:
     - tokenreviews
     verbs:
     - create
   - apiGroups:
     - authorization.k8s.io
-    attributeRestrictions: null
     resources:
     - subjectaccessreviews
     verbs:
     - create
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5246,7 +4918,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - services
@@ -5254,7 +4925,7 @@ items:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5267,7 +4938,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
@@ -5276,7 +4946,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - secrets
@@ -5285,44 +4954,41 @@ items:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - secrets
     verbs:
     - delete
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - namespaces
+    - secrets
     - serviceaccounts
     verbs:
     - get
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
+    - secrets
     - serviceaccounts
     verbs:
     - update
   - apiGroups:
     - authentication.k8s.io
-    attributeRestrictions: null
     resources:
     - tokenreviews
     verbs:
     - create
   - apiGroups:
     - '*'
-    attributeRestrictions: null
     resources:
     - '*'
     verbs:
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5335,7 +5001,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - events
     verbs:
@@ -5344,14 +5009,12 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     verbs:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resourceNames:
     - kube-scheduler
     resources:
@@ -5363,7 +5026,6 @@ items:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - nodes
     - pods
@@ -5373,7 +5035,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - bindings
     - pods/binding
@@ -5381,14 +5042,12 @@ items:
     - create
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - pods/status
     verbs:
     - update
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - replicationcontrollers
     - services
@@ -5398,7 +5057,6 @@ items:
     - watch
   - apiGroups:
     - extensions
-    attributeRestrictions: null
     resources:
     - replicasets
     verbs:
@@ -5407,7 +5065,6 @@ items:
     - watch
   - apiGroups:
     - apps
-    attributeRestrictions: null
     resources:
     - statefulsets
     verbs:
@@ -5416,7 +5073,6 @@ items:
     - watch
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - persistentvolumeclaims
     - persistentvolumes
@@ -5424,7 +5080,7 @@ items:
     - get
     - list
     - watch
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1beta1
   kind: ClusterRole
   metadata:
     annotations:
@@ -5437,7 +5093,6 @@ items:
   rules:
   - apiGroups:
     - ""
-    attributeRestrictions: null
     resources:
     - endpoints
     - services

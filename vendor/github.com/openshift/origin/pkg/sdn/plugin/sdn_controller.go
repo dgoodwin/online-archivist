@@ -24,9 +24,15 @@ import (
 
 func (plugin *OsdnNode) getLocalSubnet() (string, error) {
 	var subnet *osapi.HostSubnet
+	// If the HostSubnet doesn't already exist, it will be created by the SDN master in
+	// response to the kubelet registering itself with the master (which should be
+	// happening in another goroutine in parallel with this). Sometimes this takes
+	// unexpectedly long though, so give it plenty of time before returning an error
+	// (since that will cause the node process to exit).
 	backoff := utilwait.Backoff{
-		Duration: 100 * time.Millisecond,
-		Factor:   2,
+		// A bit over 1 minute total
+		Duration: time.Second,
+		Factor:   1.5,
 		Steps:    8,
 	}
 	err := utilwait.ExponentialBackoff(backoff, func() (bool, error) {
@@ -56,7 +62,7 @@ func (plugin *OsdnNode) alreadySetUp(localSubnetGatewayCIDR, clusterNetworkCIDR 
 	var found bool
 
 	exec := kexec.New()
-	itx := ipcmd.NewTransaction(exec, TUN)
+	itx := ipcmd.NewTransaction(exec, Tun0)
 	addrs, err := itx.GetAddresses()
 	itx.EndTransaction()
 	if err != nil {
@@ -73,7 +79,7 @@ func (plugin *OsdnNode) alreadySetUp(localSubnetGatewayCIDR, clusterNetworkCIDR 
 		return false
 	}
 
-	itx = ipcmd.NewTransaction(exec, TUN)
+	itx = ipcmd.NewTransaction(exec, Tun0)
 	routes, err := itx.GetRoutes()
 	itx.EndTransaction()
 	if err != nil {
@@ -160,9 +166,9 @@ func (plugin *OsdnNode) SetupSDN() (bool, error) {
 		return false, err
 	}
 
-	itx := ipcmd.NewTransaction(exec, TUN)
+	itx := ipcmd.NewTransaction(exec, Tun0)
 	itx.AddAddress(gwCIDR)
-	defer deleteLocalSubnetRoute(TUN, localSubnetCIDR)
+	defer deleteLocalSubnetRoute(Tun0, localSubnetCIDR)
 	itx.SetLink("mtu", fmt.Sprint(plugin.mtu))
 	itx.SetLink("up")
 	itx.AddRoute(clusterNetworkCIDR, "proto", "kernel", "scope", "link")
@@ -174,14 +180,13 @@ func (plugin *OsdnNode) SetupSDN() (bool, error) {
 
 	sysctl := sysctl.New()
 
-	// Enable IP forwarding for ipv4 packets
-	err = sysctl.SetSysctl("net/ipv4/ip_forward", 1)
+	// Make sure IPv4 forwarding state is 1
+	val, err := sysctl.GetSysctl("net/ipv4/ip_forward")
 	if err != nil {
-		return false, fmt.Errorf("could not enable IPv4 forwarding: %s", err)
+		return false, fmt.Errorf("could not get IPv4 forwarding state: %s", err)
 	}
-	err = sysctl.SetSysctl(fmt.Sprintf("net/ipv4/conf/%s/forwarding", TUN), 1)
-	if err != nil {
-		return false, fmt.Errorf("could not enable IPv4 forwarding on %s: %s", TUN, err)
+	if val != 1 {
+		return false, fmt.Errorf("net/ipv4/ip_forward=0, it must be set to 1")
 	}
 
 	return true, nil

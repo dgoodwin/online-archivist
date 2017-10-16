@@ -49,6 +49,7 @@ cp -R vendor/* $TMPDIR
 
 # Remove any nested origin vendor directories that may have appeared.
 find $TMPDIR/github.com/openshift/origin -mindepth 1 -type d -name vendor -exec rm -rf {} \; || :
+find $TMPDIR/github.com/heptio/ark -mindepth 1 -type d -name vendor -exec rm -rf {} \; || :
 
 # Delete the component vendor directory to make way for the merged version.
 rm -rf vendor

@@ -55,3 +55,4 @@ cat daxpy.go \
 | gofmt -r 'float64 -> complex64' \
 | sed 's/Daxpy/Caxpy/' \
 >> caxpy.go
+

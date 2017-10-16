@@ -52,7 +52,7 @@
                             "name": "busybox:1"
                         }
                     }
-                },
+                }, 
                 "resources": {},
                 "postCommit": {}
             }

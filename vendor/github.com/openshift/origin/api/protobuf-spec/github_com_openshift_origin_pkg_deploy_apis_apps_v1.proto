@@ -9,9 +9,8 @@ import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
-import "k8s.io/apiserver/pkg/apis/example/v1/generated.proto";
 import "k8s.io/kubernetes/pkg/api/v1/generated.proto";
-import "k8s.io/kubernetes/pkg/apis/extensions/v1beta1/generated.proto";
+import "k8s.io/kubernetes/pkg/apis/policy/v1beta1/generated.proto";
 
 // Package-wide variables from generator "generated".
 option go_package = "v1";
@@ -70,7 +69,7 @@ message DeploymentCondition {
 // A single deployment configuration is usually analogous to a single micro-service. Can support many different
 // deployment patterns, including full restart, customizable rolling updates, and  fully custom behaviors, as
 // well as pre- and post- deployment hooks. Each individual deployment is represented as a replication controller.
-//
+// 
 // A deployment is "triggered" when its configuration is changed or a tag in an Image Stream is changed.
 // Triggers can be disabled to allow manual control over a deployment. The "strategy" determines how the deployment
 // is carried out and may be changed at any time. The `latestVersion` field is updated when a new deployment
@@ -148,6 +147,7 @@ message DeploymentConfigSpec {
 
   // RevisionHistoryLimit is the number of old ReplicationControllers to retain to allow for rollbacks.
   // This field is a pointer to allow for differentiation between an explicit zero and not specified.
+  // Defaults to 10. (This only applies to DeploymentConfigs created via the new group API resource, not the legacy resource.)
   optional int32 revisionHistoryLimit = 4;
 
   // Test ensures that this deployment config will have zero replicas except while a deployment is running. This allows the
@@ -194,6 +194,8 @@ message DeploymentConfigStatus {
   optional DeploymentDetails details = 7;
 
   // Conditions represents the latest available observations of a deployment config's current state.
+  // +patchMergeKey=type
+  // +patchStrategy=merge
   repeated DeploymentCondition conditions = 8;
 
   // Total number of ready pods targeted by this deployment.
@@ -417,9 +419,9 @@ message RollingDeploymentStrategyParams {
   // during the update. Value can be an absolute number (ex: 5) or a
   // percentage of total pods at the start of update (ex: 10%). Absolute
   // number is calculated from percentage by rounding down.
-  //
+  // 
   // This cannot be 0 if MaxSurge is 0. By default, 25% is used.
-  //
+  // 
   // Example: when this is set to 30%, the old RC can be scaled down by 30%
   // immediately when the rolling update starts. Once new pods are ready, old
   // RC can be scaled down further, followed by scaling up the new RC,
@@ -431,9 +433,9 @@ message RollingDeploymentStrategyParams {
   // original number of pods. Value can be an absolute number (ex: 5) or a
   // percentage of total pods at the start of the update (ex: 10%). Absolute
   // number is calculated from percentage by rounding up.
-  //
+  // 
   // This cannot be 0 if MaxUnavailable is 0. By default, 25% is used.
-  //
+  // 
   // Example: when this is set to 30%, the new RC can be scaled up by 30%
   // immediately when the rolling update starts. Once old pods have been
   // killed, new RC can be scaled up further, ensuring that total number of
@@ -460,3 +462,4 @@ message TagImageHook {
   // To is the target ImageStreamTag to set the container's image onto.
   optional k8s.io.kubernetes.pkg.api.v1.ObjectReference to = 2;
 }
+

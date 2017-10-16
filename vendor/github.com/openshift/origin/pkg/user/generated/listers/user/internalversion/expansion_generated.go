@@ -2,10 +2,18 @@
 
 package internalversion
 
+// GroupListerExpansion allows custom methods to be added to
+// GroupLister.
+type GroupListerExpansion interface{}
+
+// GroupNamespaceListerExpansion allows custom methods to be added to
+// GroupNamespaceLister.
+type GroupNamespaceListerExpansion interface{}
+
+// IdentityListerExpansion allows custom methods to be added to
+// IdentityLister.
+type IdentityListerExpansion interface{}
+
 // UserListerExpansion allows custom methods to be added to
 // UserLister.
 type UserListerExpansion interface{}
-
-// UserNamespaceListerExpansion allows custom methods to be added to
-// UserNamespaeLister.
-type UserNamespaceListerExpansion interface{}

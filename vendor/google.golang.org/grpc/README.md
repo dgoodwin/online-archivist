@@ -16,7 +16,7 @@ $ go get google.golang.org/grpc
 Prerequisites
 -------------
 
-This requires Go 1.5 or later .
+This requires Go 1.5 or later.
 
 Constraints
 -----------
@@ -29,3 +29,4 @@ See [API documentation](https://godoc.org/google.golang.org/grpc) for package an
 Status
 ------
 GA
+

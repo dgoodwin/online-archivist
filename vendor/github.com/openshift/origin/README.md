@@ -106,12 +106,12 @@ Many Docker containers expect to run as root (and therefore edit all the content
 
     * Don't run as root
     * Make directories you want to write to group-writable and owned by group id 0
-    * Set the net-bind capability on your executables if they need to bind to ports &lt;1024
+    * Set the net-bind capability on your executables if they need to bind to ports < 1024
 
 If you are running your own cluster and want to run a container as root, you can grant that permission to the containers in your current project with the following command:
 
     # Gives the default service account in the current project access to run as UID 0 (root)
-    oc adm add-scc-to-user anyuid -z default
+    oc adm add-scc-to-user anyuid -z default 
 
 See the [security documentation](https://docs.openshift.org/latest/admin_guide/manage_scc.html) more on confining applications.
 
@@ -163,7 +163,7 @@ Stateful Sets | Alpha (1.3, 1.4)<br>Beta (1.5) | Tech Preview (1.3, 1.4, 1.5) | 
 Init Containers | Alpha (1.3, 1.4)<br>Beta(1.5) | Tech Preview (1.3, 1.4, 1.5) | Init containers are properly secured, but will not be officially supported until 1.6.
 Federated Clusters | Alpha (1.3)<br>Beta (1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | A Kubernetes federation server may be used against Origin clusters with the appropriate credentials today.<br>Known issues include tenant support in federation and the ability to have consistent access control between federation and normal clusters.<br>No Origin specific binary is being distributed for federation at this time.
 Deployment | Beta (1.3, 1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | OpenShift launched with DeploymentConfigs, a more fully featured Deployment object. DeploymentConfigs are more appropriate for developer flows where you want to push code and have it automatically be deployed, and also provide more advanced hooks and custom deployments.  Use Kubernetes Deployments when you are managing change outside of OpenShift.
-Replica Sets | Beta (1.3, 1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | Replica Sets perform the same function as Replication Controllers, but have a more powerful label syntax. Both ReplicationControllers and ReplicaSets can be used.
+Replica Sets | Beta (1.3, 1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | Replica Sets perform the same function as Replication Controllers, but have a more powerful label syntax. Both ReplicationControllers and ReplicaSets can be used.  
 Ingress | Beta (1.2, 1.3, 1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | OpenShift launched with Routes, a more full featured Ingress object. In 1.5, Ingress rules can be read by the router (disabled by default), but because Ingress objects reference secrets you must grant the routers a very level of access to your cluster to run with them.  Future changes will likely reduce the security impact of enabling Ingress.
 PodSecurityPolicy | Beta (1.3, 1.4, 1.5) | Tech Preview (1.3, 1.4, 1.5) | OpenShift launched with SecurityContextConstraints, and then upstreamed them as PodSecurityPolicy. We plan to enable upstream PodSecurityPolicy so as to automatically migrate existing SecurityContextConstraints. PodSecurityPolicy has not yet completed a full security review, which will be part of the criteria for tech preview. <br>SecurityContextConstraints are a superset of PodSecurityPolicy features.
 PodAntiAffinitySelectors | Beta (1.3, 1.4, 1.5) | Not Yet Secure (1.3)<br>Tech Preview (1.4, 1.5) | End users are not allowed to set PodAntiAffinitySelectors that are not the node name due to the possibility of attacking the scheduler via denial of service.

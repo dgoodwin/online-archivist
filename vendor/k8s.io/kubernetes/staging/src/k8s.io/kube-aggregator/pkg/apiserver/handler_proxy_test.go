@@ -82,6 +82,17 @@ func (*fakeRequestContextMapper) Update(req *http.Request, context genericapireq
 	return nil
 }
 
+type mockedRouter struct {
+	destinationHost string
+}
+
+func (r *mockedRouter) ResolveEndpoint(namespace, name string) (*url.URL, error) {
+	return &url.URL{
+		Scheme: "https",
+		Host:   r.destinationHost,
+	}, nil
+}
+
 func TestProxyHandler(t *testing.T) {
 	target := &targetHTTPHandler{}
 	targetServer := httptest.NewUnstartedServer(target)
@@ -138,6 +149,7 @@ func TestProxyHandler(t *testing.T) {
 			expectedHeaders: map[string][]string{
 				"X-Forwarded-Proto": {"https"},
 				"X-Forwarded-Uri":   {"/request/path"},
+				"X-Forwarded-For":   {"127.0.0.1"},
 				"X-Remote-User":     {"username"},
 				"User-Agent":        {"Go-http-client/1.1"},
 				"Accept-Encoding":   {"gzip"},
@@ -167,16 +179,17 @@ func TestProxyHandler(t *testing.T) {
 
 		func() {
 			handler := &proxyHandler{
-				localDelegate: http.NewServeMux(),
+				localDelegate:   http.NewServeMux(),
+				serviceResolver: &mockedRouter{destinationHost: targetServer.Listener.Addr().String()},
+				proxyTransport:  &http.Transport{},
 			}
 			handler.contextMapper = &fakeRequestContextMapper{user: tc.user}
 			server := httptest.NewServer(handler)
 			defer server.Close()
 
 			if tc.apiService != nil {
-				handler.updateAPIService(tc.apiService, tc.apiService.Spec.Service.Name+"."+tc.apiService.Spec.Service.Namespace+".svc")
+				handler.updateAPIService(tc.apiService)
 				curr := handler.handlingInfo.Load().(proxyHandlingInfo)
-				curr.destinationHost = targetServer.Listener.Addr().String()
 				handler.handlingInfo.Store(curr)
 			}
 
@@ -293,9 +306,11 @@ func TestProxyUpgrade(t *testing.T) {
 
 			serverURL, _ := url.Parse(backendServer.URL)
 			proxyHandler := &proxyHandler{
-				contextMapper: &fakeRequestContextMapper{user: &user.DefaultInfo{Name: "username"}},
+				contextMapper:   &fakeRequestContextMapper{user: &user.DefaultInfo{Name: "username"}},
+				serviceResolver: &mockedRouter{destinationHost: serverURL.Host},
+				proxyTransport:  &http.Transport{},
 			}
-			proxyHandler.updateAPIService(tc.APIService, serverURL.Host)
+			proxyHandler.updateAPIService(tc.APIService)
 			aggregator := httptest.NewServer(proxyHandler)
 			defer aggregator.Close()
 

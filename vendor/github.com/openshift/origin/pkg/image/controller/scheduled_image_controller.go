@@ -11,9 +11,8 @@ import (
 	"k8s.io/client-go/util/flowcontrol"
 	kapi "k8s.io/kubernetes/pkg/api"
 
-	"github.com/openshift/origin/pkg/client"
-	"github.com/openshift/origin/pkg/controller"
 	imageapi "github.com/openshift/origin/pkg/image/apis/image"
+	imageclient "github.com/openshift/origin/pkg/image/generated/internalclientset/typed/image/internalversion"
 )
 
 type uniqueItem struct {
@@ -26,7 +25,7 @@ type ScheduledImageStreamController struct {
 	enabled bool
 
 	// image stream client
-	isNamespacer client.ImageStreamsNamespacer
+	client imageclient.ImageInterface
 
 	// lister can list/get image streams from a shared informer's cache
 	lister imageStreamLister
@@ -37,7 +36,7 @@ type ScheduledImageStreamController struct {
 	rateLimiter flowcontrol.RateLimiter
 
 	// scheduler for timely image re-imports
-	scheduler *controller.Scheduler
+	scheduler *Scheduler
 }
 
 // Importing is invoked when the controller decides to import a stream in order to push back
@@ -172,7 +171,7 @@ func (s *ScheduledImageStreamController) syncTimedByName(namespace, name string)
 	resetScheduledTags(stream)
 
 	glog.V(3).Infof("Scheduled import of stream %s/%s...", stream.Namespace, stream.Name)
-	return handleImageStream(stream, s.isNamespacer, nil)
+	return handleImageStream(stream, s.client, nil)
 }
 
 // resetScheduledTags artificially increments the generation on the tags that should be imported.

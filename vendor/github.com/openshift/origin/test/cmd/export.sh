@@ -38,3 +38,4 @@ os::cmd::expect_success_and_text 'oc export dc/database --template="{{.status.la
 os::cmd::expect_success_and_text 'oc get dc/database --export --template="{{.status.conditions}}"' '<no value>'
 echo "export: ok"
 os::test::junit::declare_suite_end
+

@@ -15,9 +15,9 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/openshift/origin/pkg/client"
-	"github.com/openshift/origin/pkg/cmd/cli/cmd"
-	"github.com/openshift/origin/pkg/cmd/cli/cmd/login"
 	configapi "github.com/openshift/origin/pkg/cmd/server/api"
+	"github.com/openshift/origin/pkg/oc/cli/cmd"
+	"github.com/openshift/origin/pkg/oc/cli/cmd/login"
 	testutil "github.com/openshift/origin/test/util"
 	testserver "github.com/openshift/origin/test/util/server"
 )
@@ -50,8 +50,8 @@ func TestOAuthOIDC(t *testing.T) {
 	// Additional claims in userInfo (sub claim must match)
 	userinfoResponse := `{
 		"sub": "mysub",
-		"mynameclaim":"myname",
-		"myusernameclaim":"myusername"
+	 	"mynameclaim":"myname",
+	 	"myusernameclaim":"myusername"
 	}`
 
 	// Write cert we're going to use to verify OIDC server requests
@@ -65,13 +65,11 @@ func TestOAuthOIDC(t *testing.T) {
 	}
 
 	// Get master config
-	testutil.RequireEtcd(t)
-	defer testutil.DumpEtcdOnFailure(t)
-
 	masterOptions, err := testserver.DefaultMasterOptions()
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+	defer testserver.CleanupMasterEtcd(t, masterOptions)
 
 	// Set up a dummy OIDC server
 	oidcServer := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

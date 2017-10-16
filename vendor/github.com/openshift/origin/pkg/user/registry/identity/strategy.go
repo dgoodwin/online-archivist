@@ -45,6 +45,12 @@ func (identityStrategy) PrepareForCreate(ctx apirequest.Context, obj runtime.Obj
 	identity.Name = identityName(identity.ProviderName, identity.ProviderUserName)
 }
 
+// this name cannot change since it must match resources persisted into etcd.
+func identityName(provider, identity string) string {
+	// TODO: normalize?
+	return provider + ":" + identity
+}
+
 // Validate validates a new user
 func (identityStrategy) Validate(ctx apirequest.Context, obj runtime.Object) field.ErrorList {
 	identity := obj.(*userapi.Identity)
@@ -70,12 +76,12 @@ func (identityStrategy) ValidateUpdate(ctx apirequest.Context, obj, old runtime.
 }
 
 // GetAttrs returns labels and fields of a given object for filtering purposes
-func GetAttrs(o runtime.Object) (labels.Set, fields.Set, error) {
+func GetAttrs(o runtime.Object) (labels.Set, fields.Set, bool, error) {
 	obj, ok := o.(*userapi.Identity)
 	if !ok {
-		return nil, nil, fmt.Errorf("not an Identity")
+		return nil, nil, false, fmt.Errorf("not an Identity")
 	}
-	return labels.Set(obj.Labels), SelectableFields(obj), nil
+	return labels.Set(obj.Labels), SelectableFields(obj), obj.Initializers != nil, nil
 }
 
 // Matcher returns a generic matcher for a given label and field selector.

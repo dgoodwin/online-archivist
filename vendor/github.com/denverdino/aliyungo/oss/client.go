@@ -1323,9 +1323,9 @@ func (b *Bucket) CopyLargeFileInParallel(sourcePath string, destPath string, con
 	}
 
 	currentLength, err := b.GetContentLength(sourcePath)
-
+	
 	log.Printf("Parallel Copy large file[size: %d] from %s to %s\n",currentLength, sourcePath, destPath)
-
+	
 	if err != nil {
 		return err
 	}

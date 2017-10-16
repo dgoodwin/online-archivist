@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"k8s.io/gengo/args"
-	"k8s.io/kubernetes/cmd/libs/go2idl/go-to-protobuf/protobuf"
+	"k8s.io/kube-gen/cmd/go-to-protobuf/protobuf"
 
 	flag "github.com/spf13/pflag"
 )
@@ -33,6 +33,9 @@ func init() {
 			// strip off the leading + if it exists because we want all kube packages to be prefixed with -
 			// so they're not generated
 			if strings.HasPrefix(kubePackage, "+") {
+				kubePackage = kubePackage[1:]
+			}
+			if strings.HasPrefix(kubePackage, "-") {
 				kubePackage = kubePackage[1:]
 			}
 			fullPackageList = append(fullPackageList, "-"+kubePackage)

@@ -155,7 +155,7 @@ Such as:
 
 Limit ranges can force a maximal amount of resources per pod or per container.
 Resource quota can limit a maximal amount of resource consumed by all pods in a namespace.
-Node selector can limit a set of nodes on which a pod can be scheduled.
+Node selector can limit a set of nodes on which a pod can be scheduled. 
 
 Some of the limitations are completely pod based (e.g. node selector, limit ranges).
 Some are enforced by scheduler predicates or by admissions (e.g. resource quota).
