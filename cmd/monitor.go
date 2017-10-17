@@ -11,7 +11,7 @@ import (
 
 	restclient "k8s.io/client-go/rest"
 	kclientcmd "k8s.io/client-go/tools/clientcmd"
-	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
+	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
 
 	log "github.com/Sirupsen/logrus"
 	arkclient "github.com/heptio/ark/pkg/client"
@@ -39,14 +39,15 @@ var clusterMonitorCmd = &cobra.Command{
 
 		// TODO: in Ark this appears to be the binary name when launching the CLI.
 		// Not sure how this is being used.
-		arkFactory := arkclient.NewFactory()
+		arkFactory := arkclient.NewFactory("ark")
 		arkClient, err := arkFactory.Client()
 		if err != nil {
 			log.Panicf("error creating Ark client: %s", err)
 		}
 		log.Debugf("got ark client: %v", arkClient)
 
-		activityMonitor := clustermonitor.NewClusterMonitor(archivistCfg, archivistCfg.Clusters[0], oc, kc)
+		activityMonitor := clustermonitor.NewClusterMonitor(archivistCfg, archivistCfg.Clusters[0],
+			oc, kc, arkClient)
 		activityMonitor.Run()
 
 		log.Infoln("cluster monitor running")
@@ -80,7 +81,8 @@ func CreateClientsForConfig(dcc kclientcmd.ClientConfig) (*restclient.Config, *c
 		"BearerToken": clientConfig.BearerToken,
 	}).Infoln("Created OpenShift client clientConfig:")
 
-	oc, kc, err := clientFac.Clients()
+	oc, _, err := clientFac.Clients()
+	kc := kclientset.NewForConfigOrDie(clientConfig)
 	return clientConfig, clientFac, oc, kc, err
 }
 

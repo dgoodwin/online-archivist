@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/openshift/online-archivist/pkg/archive"
 	"github.com/openshift/online-archivist/pkg/model"
 
 	authclientset "github.com/openshift/origin/pkg/authorization/generated/clientset"
@@ -86,46 +85,15 @@ func (th TransferHandler) initiateTransfer(r *http.Request) (httpStatus int, err
 	}
 	reqLog.Infoln("parsed transfer", t)
 
-	var yamlStr string
 	if t.Source.Cluster != nil {
-		archiver := archive.NewArchiver(
-			th.projectClient,
-			th.authClient,
-			th.userClient,
-			th.uidMapClient,
-			th.idsClient,
-			th.f,
-			th.oc,
-			th.kc,
-			t.Source.Cluster.Namespace,
-			"admin")
-		yamlStr, err = archiver.Archive()
-		if err != nil {
-			reqLog.Errorln(err)
-			return http.StatusInternalServerError, err
-		}
+		// TODO
 	}
 
 	if t.Dest.Cluster != nil {
 		if t.Source.Cluster == nil {
 			return http.StatusBadRequest, errors.New("no source specifies for transfer")
 		}
-		archiver := archive.NewArchiver(
-			th.projectClient,
-			th.authClient,
-			th.userClient,
-			th.uidMapClient,
-			th.idsClient,
-			th.f,
-			th.oc,
-			th.kc,
-			t.Dest.Cluster.Namespace,
-			"admin")
-		err := archiver.Importer.Import(yamlStr)
-		if err != nil {
-			reqLog.Errorln(err)
-			return http.StatusInternalServerError, err
-		}
+		// TODO
 	}
 
 	return http.StatusAccepted, nil
