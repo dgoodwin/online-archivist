@@ -8,39 +8,40 @@ import (
 	"github.com/openshift/online-archivist/pkg/config"
 	"github.com/openshift/online-archivist/pkg/util"
 
-	oclient "github.com/openshift/origin/pkg/client"
-
-	buildapi "github.com/openshift/origin/pkg/build/apis/build"
-	projectapi "github.com/openshift/origin/pkg/project/apis/project"
+	buildapi "github.com/openshift/api/build/v1"
+	buildclient "github.com/openshift/client-go/build/clientset/versioned"
 
 	arkapi "github.com/heptio/ark/pkg/apis/ark/v1"
-	arkclientset "github.com/heptio/ark/pkg/generated/clientset"
+	arkclientset "github.com/heptio/ark/pkg/generated/clientset/versioned"
 	arkinformers "github.com/heptio/ark/pkg/generated/informers/externalversions"
 	arkv1informers "github.com/heptio/ark/pkg/generated/informers/externalversions/ark/v1"
 
 	"github.com/pkg/errors"
+	kapiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/kubernetes"
 	kcache "k8s.io/client-go/tools/cache"
-	kapiv1 "k8s.io/kubernetes/pkg/api/v1"
-	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
 
 	log "github.com/Sirupsen/logrus"
 )
 
-const archivedNamespaceLabel string = "archived-namespace"
+const (
+	archivedNamespaceLabel     string = "archived-namespace"
+	projectRequesterAnnotation string = "openshift.io/requester"
+)
 
 func NewClusterMonitor(archivistConfig config.ArchivistConfig, clusterConfig config.ClusterConfig,
-	oc oclient.Interface, kc kclientset.Interface, arkClient arkclientset.Interface) *ClusterMonitor {
+	bc buildclient.Interface, kc kubernetes.Interface, arkClient arkclientset.Interface) *ClusterMonitor {
 
 	buildLW := &kcache.ListWatch{
 		ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
-			return oc.Builds(kapiv1.NamespaceAll).List(options)
+			return bc.BuildV1().Builds(metav1.NamespaceAll).List(options)
 		},
 		WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
-			return oc.Builds(kapiv1.NamespaceAll).Watch(options)
+			return bc.BuildV1().Builds(metav1.NamespaceAll).Watch(options)
 		},
 	}
 
@@ -58,10 +59,10 @@ func NewClusterMonitor(archivistConfig config.ArchivistConfig, clusterConfig con
 
 	rcLW := &kcache.ListWatch{
 		ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
-			return kc.Core().ReplicationControllers(kapiv1.NamespaceAll).List(options)
+			return kc.Core().ReplicationControllers(metav1.NamespaceAll).List(options)
 		},
 		WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
-			return kc.CoreV1().ReplicationControllers(kapiv1.NamespaceAll).Watch(options)
+			return kc.CoreV1().ReplicationControllers(metav1.NamespaceAll).Watch(options)
 		},
 	}
 
@@ -152,7 +153,7 @@ func NewClusterMonitor(archivistConfig config.ArchivistConfig, clusterConfig con
 type ClusterMonitor struct {
 	cfg          config.ArchivistConfig
 	clusterCfg   config.ClusterConfig
-	kc           kclientset.Interface
+	kc           kubernetes.Interface
 	arkClient    arkclientset.Interface
 	buildIndexer kcache.Indexer
 	rcIndexer    kcache.Indexer
@@ -360,10 +361,10 @@ func (a *ClusterMonitor) archiveNamespace(namespace *kapiv1.Namespace) error {
 
 	snapVols := true // snapshot all associated volumes
 
-	requester, ok := namespace.Annotations[projectapi.ProjectRequester]
+	requester, ok := namespace.Annotations[projectRequesterAnnotation]
 	if !ok {
 		return fmt.Errorf("skipping archival, no %s annotation found on project: %s",
-			projectapi.ProjectRequester, namespace.Name)
+			projectRequesterAnnotation, namespace.Name)
 	}
 
 	labels := map[string]string{
@@ -372,7 +373,7 @@ func (a *ClusterMonitor) archiveNamespace(namespace *kapiv1.Namespace) error {
 
 	annotations := map[string]string{
 		// Storing the project requester in an annotation as it may not be a suitable string for a label
-		projectapi.ProjectRequester: requester,
+		projectRequesterAnnotation: requester,
 	}
 
 	backup := &arkapi.Backup{

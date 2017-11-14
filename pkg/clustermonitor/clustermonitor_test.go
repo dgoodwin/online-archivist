@@ -8,18 +8,17 @@ import (
 
 	"github.com/openshift/online-archivist/pkg/config"
 
-	buildapi "github.com/openshift/origin/pkg/build/apis/build"
-	otestclient "github.com/openshift/origin/pkg/client/testclient"
-	projectapi "github.com/openshift/origin/pkg/project/apis/project"
+	buildapi "github.com/openshift/api/build/v1"
+	fakebuildclient "github.com/openshift/client-go/build/clientset/versioned/fake"
 
+	kapiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ktestclient "k8s.io/client-go/kubernetes/fake"
 	ktesting "k8s.io/client-go/testing"
 	kcache "k8s.io/client-go/tools/cache"
-	kapiv1 "k8s.io/kubernetes/pkg/api/v1"
-	ktestclient "k8s.io/kubernetes/pkg/client/clientset_generated/clientset/fake"
 
 	arkv1 "github.com/heptio/ark/pkg/apis/ark/v1"
-	arktestclientset "github.com/heptio/ark/pkg/generated/clientset/fake"
+	arktestclientset "github.com/heptio/ark/pkg/generated/clientset/versioned/fake"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
@@ -48,7 +47,7 @@ func fakeNamespace(name string, projectRequester string) *kapiv1.Namespace {
 	}
 	if projectRequester != "" {
 		p.Annotations = map[string]string{
-			projectapi.ProjectRequester: projectRequester,
+			projectRequesterAnnotation: projectRequester,
 		}
 	}
 	return &p
@@ -175,12 +174,12 @@ func TestNamespaceLastActivity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			oc := &otestclient.Fake{}
 			kc := &ktestclient.Clientset{}
 
 			aConfig := config.NewDefaultArchivistConfig()
 			arkClient := arktestclientset.NewSimpleClientset()
-			cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], oc, kc, arkClient)
+			bc := fakebuildclient.NewSimpleClientset()
+			cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], bc, kc, arkClient)
 
 			// Building our indexers to bypass the Informer framework, which is more
 			// complicated to test and looks to involve sleeping until the informer
@@ -237,11 +236,11 @@ func assertNamespaces(t *testing.T, expected []string, archiveNamespaces []LastA
 }
 
 func TestArchiveNamespace(t *testing.T) {
-	oc := &otestclient.Fake{}
 	kc := &ktestclient.Clientset{}
 	aConfig := config.NewDefaultArchivistConfig()
 	arkClient := arktestclientset.NewSimpleClientset()
-	cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], oc, kc, arkClient)
+	bc := fakebuildclient.NewSimpleClientset()
+	cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], bc, kc, arkClient)
 
 	cm.nsIndexer = kcache.NewIndexer(kcache.MetaNamespaceKeyFunc, kcache.Indexers{})
 	cm.rcIndexer = kcache.NewIndexer(kcache.MetaNamespaceKeyFunc, kcache.Indexers{
@@ -365,7 +364,6 @@ func TestCheckCapacity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			oc := &otestclient.Fake{}
 			kc := &ktestclient.Clientset{}
 
 			aConfig := config.NewDefaultArchivistConfig()
@@ -375,7 +373,8 @@ func TestCheckCapacity(t *testing.T) {
 			aConfig.Clusters[0].MinInactiveDuration = tc.MinInactiveDuration
 
 			arkClient := arktestclientset.NewSimpleClientset()
-			cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], oc, kc, arkClient)
+			bc := fakebuildclient.NewSimpleClientset()
+			cm := NewClusterMonitor(aConfig, aConfig.Clusters[0], bc, kc, arkClient)
 
 			cm.nsIndexer = kcache.NewIndexer(kcache.MetaNamespaceKeyFunc, kcache.Indexers{})
 			cm.rcIndexer = kcache.NewIndexer(kcache.MetaNamespaceKeyFunc, kcache.Indexers{
@@ -429,7 +428,7 @@ func assertArkBackupsCreated(t *testing.T, expectedNamespaces []string, arkActio
 					assert.Equal(t, 1, len(backup.Spec.ExcludedResources))
 					assert.Equal(t, "projectrequests.project.openshift.io", backup.Spec.ExcludedResources[0])
 					assert.True(t, strings.HasPrefix(backup.Name, ens))
-					requester, ok := backup.Annotations[projectapi.ProjectRequester]
+					requester, ok := backup.Annotations[projectRequesterAnnotation]
 					if assert.True(t, ok) {
 						assert.Equal(t, testProjectRequester, requester)
 					}

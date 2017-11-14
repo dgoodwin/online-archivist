@@ -6,17 +6,16 @@ import (
 	"github.com/openshift/online-archivist/pkg/clustermonitor"
 	"github.com/openshift/online-archivist/pkg/config"
 
-	osclient "github.com/openshift/origin/pkg/client"
-	"github.com/openshift/origin/pkg/cmd/util/clientcmd"
+	buildclient "github.com/openshift/client-go/build/clientset/versioned"
 
+	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	kclientcmd "k8s.io/client-go/tools/clientcmd"
-	kclientset "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
+	//kclientcmd "k8s.io/client-go/tools/clientcmd"
 
 	log "github.com/Sirupsen/logrus"
 	arkclient "github.com/heptio/ark/pkg/client"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
+	//"github.com/spf13/pflag"
 )
 
 func init() {
@@ -31,7 +30,7 @@ var clusterMonitorCmd = &cobra.Command{
 		log.SetOutput(os.Stdout)
 		archivistCfg := loadConfig(cfgFile)
 
-		_, _, oc, kc, err := createClients()
+		restConfig, kc, err := createClients()
 
 		if err != nil {
 			log.Panicf("error creating OpenShift/Kubernetes clients: %s", err)
@@ -46,30 +45,25 @@ var clusterMonitorCmd = &cobra.Command{
 		}
 		log.Debugf("got ark client: %v", arkClient)
 
+		buildClient := buildclient.NewForConfigOrDie(restConfig)
+
 		activityMonitor := clustermonitor.NewClusterMonitor(archivistCfg, archivistCfg.Clusters[0],
-			oc, kc, arkClient)
+			buildClient, kc, arkClient)
 		activityMonitor.Run()
 
 		log.Infoln("cluster monitor running")
 	},
 }
 
-func createClients() (*restclient.Config, *clientcmd.Factory, osclient.Interface, kclientset.Interface, error) {
-	dcc := clientcmd.DefaultClientConfig(pflag.NewFlagSet("empty", pflag.ContinueOnError))
-	return CreateClientsForConfig(dcc)
+func createClients() (*restclient.Config, kubernetes.Interface, error) {
+	return CreateClientsForConfig()
 }
 
 // CreateClientsForConfig creates and returns OpenShift and Kubernetes clients (as well as other useful
 // client objects) for the given client config.
-// TODO: stop returning internalversion kclientset
-func CreateClientsForConfig(dcc kclientcmd.ClientConfig) (*restclient.Config, *clientcmd.Factory, osclient.Interface, kclientset.Interface, error) {
+func CreateClientsForConfig() (*restclient.Config, kubernetes.Interface, error) {
 
-	rawConfig, err := dcc.RawConfig()
-	log.Infoln("current kubeconfig context", rawConfig.CurrentContext)
-
-	clientFac := clientcmd.NewFactory(dcc)
-
-	clientConfig, err := dcc.ClientConfig()
+	clientConfig, err := restclient.InClusterConfig()
 	if err != nil {
 		log.Panicf("error creating cluster clientConfig: %s", err)
 	}
@@ -81,9 +75,8 @@ func CreateClientsForConfig(dcc kclientcmd.ClientConfig) (*restclient.Config, *c
 		"BearerToken": clientConfig.BearerToken,
 	}).Infoln("Created OpenShift client clientConfig:")
 
-	oc, _, err := clientFac.Clients()
-	kc := kclientset.NewForConfigOrDie(clientConfig)
-	return clientConfig, clientFac, oc, kc, err
+	kc := kubernetes.NewForConfigOrDie(clientConfig)
+	return clientConfig, kc, err
 }
 
 func loadConfig(configFile string) config.ArchivistConfig {
